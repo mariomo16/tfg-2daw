@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
+use App\Services\ReservationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -25,9 +26,11 @@ class ReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ReservationRequest $request): JsonResponse
+    public function store(ReservationRequest $request, ReservationService $service): JsonResponse
     {
         $reservation = $request->validated();
+
+        $reservation = $service->createReservation($request->validated());
 
         return response()->json(
             new ReservationResource($reservation->load(['computer', 'timeslot'])),
@@ -62,9 +65,9 @@ class ReservationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Reservation $reservation): Response
+    public function destroy(Reservation $reservation, ReservationService $service): Response
     {
-        $reservation->delete();
+        $reservation = $service->cancel($reservation);
 
         return response()->noContent();
     }
