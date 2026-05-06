@@ -20,9 +20,21 @@ class DatabaseSeeder extends Seeder
     {
         // Zonas
         $zones = [
-            ['name' => 'Standard', 'price' => 2.5],
-            ['name' => 'Bootcamp', 'price' => 3.5],
-            ['name' => 'Streaming', 'price' => 5.0],
+            [
+                'name' => 'Standard',
+                'price' => 2.5,
+                'description' => 'Cuenta con 70 ordenadores de alto rendimiento preparados para satisfacer tus necesidades'
+            ],
+            [
+                'name' => 'Bootcamp',
+                'price' => 3.5,
+                'description' => 'Ideal tanto para equipos como para los jugadores mas exigentes y en busca de un espacio mas privado'
+            ],
+            [
+                'name' => 'Streaming',
+                'price' => 5.0,
+                'description' => 'Si crear contenido es tu objetivo, este es el sitio que buscas, una sala de streaming equipada con todo lo necesario'
+            ],
         ];
 
         foreach ($zones as $zoneData) {
