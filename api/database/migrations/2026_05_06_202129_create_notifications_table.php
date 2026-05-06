@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->id()->autoIncrement();
             $table->foreignIdFor(User::class)->constrained();
             $table->text('message');
-            $table->timestamp('read_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
         });
     }
