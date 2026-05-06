@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ReservationController extends Controller
@@ -25,7 +25,7 @@ class ReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(ReservationRequest $request): JsonResponse
     {
         $reservation = $request->validated();
 
@@ -49,7 +49,7 @@ class ReservationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reservation $reservation): JsonResponse
+    public function update(ReservationRequest $request, Reservation $reservation): JsonResponse
     {
         $reservation->update($request->all());
 

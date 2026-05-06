@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ComputerRequest;
 use App\Http\Resources\ComputerResource;
 use App\Models\Computer;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ComputerController extends Controller
@@ -25,7 +25,7 @@ class ComputerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(ComputerRequest $request): JsonResponse
     {
         $computer = Computer::create($request->validated());
 
@@ -49,7 +49,7 @@ class ComputerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Computer $computer): JsonResponse
+    public function update(ComputerRequest $request, Computer $computer): JsonResponse
     {
         $computer->update($request->validated());
 

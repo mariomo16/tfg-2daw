@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TimeSlotRequest;
 use App\Http\Resources\TimeSlotResource;
 use App\Models\TimeSlot;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class TimeSlotController extends Controller
@@ -25,7 +25,7 @@ class TimeSlotController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(TimeSlotRequest $request): JsonResponse
     {
         $timeslot = TimeSlot::create($request->all());
 
@@ -49,7 +49,7 @@ class TimeSlotController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TimeSlot $timeSlot): JsonResponse
+    public function update(TimeSlotRequest $request, TimeSlot $timeSlot): JsonResponse
     {
         $timeSlot->update($request->all());
 

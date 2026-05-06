@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ZoneRequest;
 use App\Http\Resources\ZoneResource;
 use App\Models\Zone;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ZoneController extends Controller
@@ -25,7 +25,7 @@ class ZoneController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(ZoneRequest $request): JsonResponse
     {
         $zone = Zone::create($request->validated());
 
@@ -49,7 +49,7 @@ class ZoneController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Zone $zone): JsonResponse
+    public function update(ZoneRequest $request, Zone $zone): JsonResponse
     {
         $zone->update($request->validated());
 

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\NotificationRequest;
 use App\Http\Resources\NotificationResource;
 use App\Models\Notification;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class NotificationController extends Controller
@@ -25,7 +25,7 @@ class NotificationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(NotificationRequest $request): JsonResponse
     {
         $notification = Notification::create($request->all());
 
@@ -49,7 +49,7 @@ class NotificationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Notification $notification): JsonResponse
+    public function update(NotificationRequest $request, Notification $notification): JsonResponse
     {
         $notification->update($request->all());
 
