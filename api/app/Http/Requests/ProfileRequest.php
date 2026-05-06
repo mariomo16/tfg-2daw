@@ -24,7 +24,6 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'userId' => ['required', 'integer', Rule::exists('users', 'id')],
             'name' => ['required', 'string', 'max:40'],
             'email' => ['required', 'string', Rule::unique('users', 'email')->ignore(auth()->id())],
             'image' => ['nullable', 'image', 'mimes:webp,png,jpg', 'max:2048']
