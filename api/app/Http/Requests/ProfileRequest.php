@@ -38,7 +38,7 @@ class ProfileRequest extends FormRequest
             'email.unique' => 'Ya existe un usuario con ese correo electronico',
             'name.max' => 'Maximo 50 caracteres',
             'image.image' => 'Tiene que ser una imagen valida.',
-            'image.mimes' => 'Solo se aceptan imágenes png, jpg y gif',
+            'image.mimes' => 'Solo se aceptan imágenes webp, png y jpg',
             'image.max' => 'El tamaño máximo permitido de imagen es de 2 MB'
         ];
     }

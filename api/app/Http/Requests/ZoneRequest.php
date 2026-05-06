@@ -24,6 +24,8 @@ class ZoneRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
+            'description' => ['required', 'string', 'max:100'],
+            'image' => ['nullable', 'image', 'mimes:webp,png,jpg,gif', 'max:2048'],
             'price' => ['required', 'numeric', 'between:0,99.99']
         ];
     }
@@ -35,7 +37,10 @@ class ZoneRequest extends FormRequest
             'name.string' => 'El nombre de la zona debe ser una cadena de texto.',
             'price.required' => 'El precio/hora de la zona es necesario.',
             'price.numeric' => 'El precio/hora de la zona debe ser un número.',
-            'price.between' => 'El precio/hora de la zona debe ser entre 0 y 99.99.'
+            'price.between' => 'El precio/hora de la zona debe ser entre 0 y 99.99.',
+            'image.image' => 'Tiene que ser una imagen valida.',
+            'image.mimes' => 'Solo se aceptan imágenes webp, png y jpg',
+            'image.max' => 'El tamaño máximo permitido de imagen es de 2 MB'
         ];
     }
 }
