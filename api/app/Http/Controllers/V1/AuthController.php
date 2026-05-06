@@ -46,11 +46,6 @@ class AuthController extends Controller
         return response()->noContent();
     }
 
-    public function me(): JsonResponse
-    {
-        return response()->json(new UserResource(auth()->user()));
-    }
-
     private function generateToken(User $user): string
     {
         return $user->createToken('api-token')->plainTextToken;
