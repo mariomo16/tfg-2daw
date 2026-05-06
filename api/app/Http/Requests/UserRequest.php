@@ -27,7 +27,7 @@ class UserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:40'],
             'email' => ['required', 'string', Rule::unique('users', 'email')->ignore($this->route('user')?->id)],
-            'role' => ['required', 'in:client,employee,admin'],
+            'role' => ['required', 'in:client,staff'],
             'balance' => ['required', 'numeric', 'between:0,999.99'],
             'password' => ['nullable', 'string', Password::defaults()],
             'image' => ['nullable', 'image', 'mimes:webp,png,jpg,gif', 'max:2048']
