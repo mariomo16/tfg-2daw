@@ -19,8 +19,31 @@
 	--font-diablo: "bildad";
 	--font-diablo-light: "diablo_light";
 	--font-diablo-heavy: "diablo_heavy";
+
+	--color-surface-base: hsl(240, 10%, 4%);
+	--color-surface-card: hsl(240, 10%, 9%);
+	--color-surface-border: hsl(240, 5%, 15%);
+
+	--color-primary: hsl(270, 100%, 60%);
+	--color-primary-light: hsl(270, 100%, 70%);
+	--color-primary-glow: hsla(270, 100%, 60%, 0.3);
+
+	--color-success: hsl(150, 100%, 50%);
+	--color-success-light: hsl(150, 100%, 65%);
+
+	--color-error: hsl(0, 95%, 55%);
+
+	--color-info: hsl(190, 100%, 50%);
+
+	--color-warning: hsl(40, 100%, 55%);
+
+	--color-content-primary: hsl(0, 0%, 95%);
+	--color-content-secondary: hsl(240, 5%, 70%);
+	--color-content-muted: hsl(240, 5%, 45%);
 }
 
 :root {
 	font-family: sans-serif;
+	background-color: var(--color-surface-base);
+	color: whitesmoke;
 }
