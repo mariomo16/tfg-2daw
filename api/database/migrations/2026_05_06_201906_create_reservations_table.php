@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->foreignIdFor(TimeSlot::class)->constrained();
             $table->date('date');
             $table->enum('status', ['confirmed', 'pending', 'cancelled'])->default('pending');
-            $table->decimal('total_price', 4, 2);
+            $table->decimal('price', 4, 2);
             $table->timestamps();
             $table->softDeletes();
         });
