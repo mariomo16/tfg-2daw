@@ -27,13 +27,13 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): JsonResponse
     {
-        // https://www.youtube.com/watch?v=SvIxR9oacJs
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-        }
+        $data = $request->validated();
 
-        $data = [...$request->validated(), 'image' => $imagePath];
+        // https://www.youtube.com/watch?v=SvIxR9oacJs
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images', 'public');
+            $data = [...$data, 'image' => $path];
+        }
 
         $user = User::create($data);
 
@@ -59,13 +59,13 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user): JsonResponse
     {
-        // https://www.youtube.com/watch?v=SvIxR9oacJs
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-        }
+        $data = $request->validated();
 
-        $data = [...$request->validated(), 'image' => $imagePath];
+        // https://www.youtube.com/watch?v=SvIxR9oacJs
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images', 'public');
+            $data = [...$data, 'image' => $path];
+        }
 
         $user->update(array_filter($data));
 

@@ -27,7 +27,15 @@ class ZoneController extends Controller
      */
     public function store(ZoneRequest $request): JsonResponse
     {
-        $zone = Zone::create($request->validated());
+        $data = $request->validated();
+
+        // https://www.youtube.com/watch?v=SvIxR9oacJs
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('zones', 'public');
+            $data = [...$data, 'image' => $path];
+        }
+
+        $zone = Zone::create($data);
 
         return response()->json(
             new ZoneResource($zone->load('computers')),
@@ -51,7 +59,15 @@ class ZoneController extends Controller
      */
     public function update(ZoneRequest $request, Zone $zone): JsonResponse
     {
-        $zone->update($request->validated());
+        $data = $request->validated();
+
+        // https://www.youtube.com/watch?v=SvIxR9oacJs
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('zones', 'public');
+            $data = [...$data, 'image' => $path];
+        }
+
+        $zone->update(array_filter($data));
 
         return response()->json(
             new ZoneResource($zone->fresh()->load('computers')),
