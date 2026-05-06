@@ -16,8 +16,8 @@ class TimeSlotResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'start_time' => $this->start_time,
-            'end_time' => $this->end_time,
+            'start' => $this->start,
+            'end' => $this->end,
             'reservations' => $this->whenLoaded('reservations'),
         ];
     }

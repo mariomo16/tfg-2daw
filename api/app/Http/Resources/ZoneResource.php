@@ -17,7 +17,9 @@ class ZoneResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'price_per_slot' => $this->price_per_slot,
+            'description' => $this->description,
+            'image' => $this->image,
+            'price' => $this->price,
             'computers' => $this->whenLoaded('computers'),
         ];
     }

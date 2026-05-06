@@ -21,7 +21,7 @@ class ReservationResource extends JsonResource
             'time_slot_id' => $this->time_slot_id,
             'date' => $this->date,
             'status' => $this->status,
-            'total_price' => $this->total_price,
+            'price' => $this->price,
             'updated_at' => $this->updated_at,
             'computer' => $this->whenLoaded('computer'),
             'payment' => $this->whenLoaded('payment'),
