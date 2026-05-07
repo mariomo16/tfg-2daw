@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
 @font-face {
+	font-family: "cs_regular";
+	src: url("/fonts/cs_regular.ttf") format("truetype");
+}
+
+@font-face {
 	font-family: "bildad";
 	src: url("/fonts/diablo/bildad.woff2") format("woff2");
 }
@@ -16,6 +21,7 @@
 }
 
 @theme {
+  --font-cs: "cs_regular";
 	--font-diablo: "bildad";
 	--font-diablo-light: "diablo_light";
 	--font-diablo-heavy: "diablo_heavy";
