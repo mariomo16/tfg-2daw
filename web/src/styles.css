@@ -53,3 +53,7 @@
 	background-color: var(--color-surface-base);
 	color: whitesmoke;
 }
+
+html {
+  scroll-behavior: smooth;
+}
