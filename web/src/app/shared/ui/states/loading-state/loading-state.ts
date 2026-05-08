@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 
 @Component({
 	selector: "app-loading-state",
@@ -6,4 +6,6 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 	templateUrl: "./loading-state.html",
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadingState {}
+export class LoadingState {
+	readonly text = input<string | null>(null);
+}
