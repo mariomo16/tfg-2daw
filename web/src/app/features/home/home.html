@@ -6,17 +6,22 @@
     alt=""
     class="opacity-40 absolute h-full object-cover object-center top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-0 background"
   />
-  <main class="flex flex-col relative z-1 h-full w-full">
+  <main class="flex flex-col relative z-1 h-full w-full items-center">
     <div class="flex flex-col justify-center h-128">
       <h1 class="font-cs text-8xl tracking-wide">DOMINA LA PARTIDA</h1>
       <p class="text-4xl font-cs text-content-secondary">
         Aunque lo importante sea participar... o no.
       </p>
     </div>
+    <div class="flex gap-4">
+      <app-gaming-button label="VER ZONAS" href="#zones" [useRouterLink]="false" />
+      <app-gaming-button label="REGISTRARSE" href="/register" />
+    </div>
   </main>
 </section>
 
 <section
+  id="zones"
   class="w-screen h-screen flex flex-col gap-7 items-center text-center text-content-primary"
 >
   <header>
