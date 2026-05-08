@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { GamingButton } from "../../shared/ui/gaming-button/gaming-button";
+import { Footer } from "../../shared/ui/layout/footer/footer";
+import { Navbar } from "../../shared/ui/layout/navbar/navbar";
 
 @Component({
 	selector: "app-home",
-	imports: [GamingButton],
+	imports: [GamingButton, Navbar, Footer],
 	templateUrl: "./home.html",
 	styleUrl: "./home.css",
 	changeDetection: ChangeDetectionStrategy.OnPush,
