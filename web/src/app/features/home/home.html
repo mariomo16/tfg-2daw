@@ -39,7 +39,7 @@
   </header>
 
   <main class="flex gap-4 text-left">
-    @for (zone of zones; track $index) {
+    @for (zone of zoneResource.value(); track $index) {
       <div class="max-w-2xs shrink-0">
         <img
           [src]="zone.image"
