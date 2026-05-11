@@ -82,6 +82,7 @@ export class AuthService {
 				tap((response) => {
 					this.#saveToken(response.token);
 					this.#updateState({
+						user: response.user,
 						isLoading: false,
 					});
 				}),
