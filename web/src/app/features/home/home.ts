@@ -1,16 +1,29 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	inject,
+} from "@angular/core";
+import { AuthService } from "@core/auth/auth.service";
+import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
 import { GamingButton } from "../../shared/ui/gaming-button/gaming-button";
 import { Footer } from "../../shared/ui/layout/footer/footer";
 import { Navbar } from "../../shared/ui/layout/navbar/navbar";
 
 @Component({
 	selector: "app-home",
-	imports: [GamingButton, Navbar, Footer],
+	imports: [GamingButton, Navbar, Footer, LoadingState],
 	templateUrl: "./home.html",
 	styleUrl: "./home.css",
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home {
+	readonly #authService = inject(AuthService);
+	protected readonly isLoading = computed(() => this.#authService.isLoading());
+	protected readonly isLogged = computed(() =>
+		this.#authService.isAuthenticated(),
+	);
+
 	protected readonly zones = [
 		{
 			name: "Standard",

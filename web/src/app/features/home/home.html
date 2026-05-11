@@ -14,8 +14,14 @@
       </p>
     </div>
     <div class="flex gap-4">
-      <app-gaming-button label="VER ZONAS" href="#zones" [useRouterLink]="false" />
-      <app-gaming-button label="REGISTRARSE" href="/register" />
+      @if (isLoading()) {
+        <app-loading-state />
+      } @else if (!isLogged()) {
+        <app-gaming-button label="VER ZONAS" href="#zones" [useRouterLink]="false" />
+        <app-gaming-button label="REGISTRARSE" href="/register" />
+      } @else {
+        <app-gaming-button label="VER ZONAS" href="#zones" [useRouterLink]="false" />
+      }
     </div>
   </main>
 </section>
