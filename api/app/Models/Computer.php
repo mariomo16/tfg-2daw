@@ -13,6 +13,8 @@ class Computer extends Model
 {
     use SoftDeletes;
 
+    public $timestamps = false;
+
     public function zone(): BelongsTo
     {
         return $this->belongsTo(Zone::class);

@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->foreignIdFor(User::class)->constrained();
             $table->text('message');
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

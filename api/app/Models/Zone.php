@@ -12,6 +12,8 @@ class Zone extends Model
 {
     use SoftDeletes;
 
+    public $timestamps = false;
+
     public function computers(): HasMany
     {
         return $this->hasMany(Computer::class);

@@ -12,6 +12,8 @@ class TimeSlot extends Model
 {
     use SoftDeletes;
 
+    public $timestamps = false;
+
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);

@@ -22,6 +22,9 @@ Route::prefix('v1')->group(function () {
         ]);
     });
 
+    
+        Route::apiResource('users', UserController::class);
+
     Route::get('/zones', [ZoneController::class, 'index']);
     Route::get('/zones/{zone}', [ZoneController::class, 'show']);
     Route::get('/timeslots', [TimeSlotController::class, 'index']);
@@ -46,7 +49,7 @@ Route::prefix('v1')->group(function () {
 
         Route::get('/my-notifications', [AuthNotification::class, 'index']);
 
-        Route::apiResource('users', UserController::class);
+        // Route::apiResource('users', UserController::class);
         Route::apiResource('zones', ZoneController::class)->except(['index', 'show']);
         Route::apiResource('computers', ComputerController::class);
         Route::apiResource('timeslots', TimeSlotController::class)->except(['index']);
