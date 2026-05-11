@@ -1,1 +1,103 @@
-<p>register works!</p>
+<section class="min-h-screen w-full flex items-center justify-center p-4">
+  <img
+    src="https://images.igdb.com/igdb/image/upload/t_original/scsvjv.jpg"
+    alt="Background"
+    class="opacity-20 fixed inset-0 h-full w-full object-cover z-0"
+  />
+
+  <div
+    class="relative z-10 w-full max-w-md bg-surface-card border border-surface-border p-8 shadow-2xl backdrop-blur-sm"
+  >
+    <header class="text-center mb-8">
+      <h1 class="font-diablo text-4xl text-primary-light uppercase tracking-widest">
+        Crear Cuenta
+      </h1>
+    </header>
+
+    <form [formRoot]="form" (submit)="onSubmit()" class="flex flex-col gap-5">
+      <div class="flex flex-col gap-1.5">
+        <label for="name" class="text-sm font-medium text-content-primary">Nombre de usuario</label>
+        <input
+          id="name"
+          type="text"
+          [formField]="form.name"
+          placeholder="Ej: Mario Ortega"
+          class="bg-surface-base border border-surface-border p-3 rounded-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-content-primary"
+        />
+        @if (form.name().touched() && form.name().errors().length > 0) {
+          <span class="text-error text-xs">{{ form.name().errors()[0].message }}</span>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="email" class="text-sm font-medium text-content-primary"
+          >Correo Electrónico</label
+        >
+        <input
+          id="email"
+          type="email"
+          [formField]="form.email"
+          placeholder="tu@correo.com"
+          class="bg-surface-base border border-surface-border p-3 rounded-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-content-primary"
+        />
+        @if (form.email().touched() && form.email().errors().length > 0) {
+          <span class="text-error text-xs">{{ form.email().errors()[0].message }}</span>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="password" class="text-sm font-medium text-content-primary">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          [formField]="form.password"
+          placeholder="••••••••"
+          class="bg-surface-base border border-surface-border p-3 rounded-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-content-primary tracking-widest"
+        />
+        @if (form.password().touched() && form.password().errors().length > 0) {
+          <span class="text-error text-xs">{{ form.password().errors()[0].message }}</span>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="password_confirmation" class="text-sm font-medium text-content-primary"
+          >Confirmar Contraseña</label
+        >
+        <input
+          id="password_confirmation"
+          type="password"
+          [formField]="form.password_confirmation"
+          placeholder="••••••••"
+          class="bg-surface-base border border-surface-border p-3 rounded-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-content-primary tracking-widest"
+        />
+        @if (
+          form.password_confirmation().touched() && form.password_confirmation().errors().length > 0
+        ) {
+          <span class="text-error text-xs">{{ form.password().errors()[0].message }}</span>
+        } @else if (
+          form.password_confirmation().controlValue() !== form.password().controlValue()
+        ) {
+          <span class="text-error text-xs">Las contraseñas no coinciden</span>
+        }
+      </div>
+
+      <div class="mt-4 flex justify-center">
+        <app-gaming-button
+          label="REGISTRARSE"
+          type="submit"
+          class="w-full flex justify-center"
+          [asLink]="false"
+        />
+      </div>
+
+      <p class="text-center text-sm text-content-secondary mt-4">
+        ¿Ya tienes cuenta?
+        <a
+          routerLink="/login"
+          class="text-primary-light hover:underline font-medium transition-colors"
+          >Inicia sesión</a
+        >
+      </p>
+    </form>
+  </div>
+</section>
