@@ -35,6 +35,7 @@ export class AuthService {
 	});
 	readonly isAuthenticated = computed(() => !!this.#state().user);
 	readonly isLoading = computed(() => this.#state().isLoading);
+	readonly isStaff = computed(() => this.#state().user?.role === "staff");
 
 	constructor() {
 		this.checkAuth().pipe(takeUntilDestroyed()).subscribe();
