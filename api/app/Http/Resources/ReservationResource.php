@@ -23,6 +23,7 @@ class ReservationResource extends JsonResource
             'status' => $this->status,
             'price' => $this->price,
             'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at,
             'computer' => $this->whenLoaded('computer'),
             'payment' => $this->whenLoaded('payment'),
             'timeslot' => $this->whenLoaded('timeslot'),
