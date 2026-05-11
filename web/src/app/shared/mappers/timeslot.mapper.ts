@@ -4,6 +4,6 @@ import type { TimeSlot, TimeSlotResponse } from "@shared/models/timeslot.model";
 export function mapToTimeSlot(response: TimeSlotResponse): TimeSlot {
 	return {
 		...response,
-		reservations: response.reservations.map(mapToReservation),
+		reservations: response.reservations.map(mapToReservation) ?? [],
 	};
 }

@@ -7,8 +7,8 @@ export function mapToPayment(response: PaymentResponse): Payment {
 		...response,
 		userId: response.user_id,
 		reservationId: response.reservation_id,
-		user: mapToUser(response.user),
-		reservation: mapToReservation(response.reservation),
+		user: mapToUser(response.user) ?? [],
+		reservation: mapToReservation(response.reservation) ?? [],
 		createdAt: response.created_at,
 	};
 }

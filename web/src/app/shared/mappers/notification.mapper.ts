@@ -10,7 +10,7 @@ export function mapToNotification(
 	return {
 		...response,
 		userId: response.user_id,
-		user: mapToUser(response.user),
+		user: mapToUser(response.user) ?? [],
 		createdAt: response.created_at,
 	};
 }
