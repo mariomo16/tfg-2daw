@@ -1,3 +1,8 @@
+import type { Computer, ComputerResponse } from "./computer.model";
+import type { Payment, PaymentResponse } from "./payment.model";
+import type { TimeSlot, TimeSlotResponse } from "./timeslot.model";
+import type { User, UserResponse } from "./user.model";
+
 export type ReservationStatus = "confirmed" | "cancelled" | "pending";
 
 export interface ReservationResponse {
@@ -8,12 +13,36 @@ export interface ReservationResponse {
 	user_id: number;
 	computer_id: number;
 	time_slot_id: number;
-	user: unknown; // TODO: User interface
-	payment: unknown; // TODO: Payment interface
-	computer: unknown; // TODO: Computer interface
-	timeslot: unknown; // TODO: TimeSlot interface
+	user: UserResponse;
+	payment: PaymentResponse;
+	computer: ComputerResponse;
+	timeslot: TimeSlotResponse;
 	created_at: string;
 	updated_at: string;
+}
+
+export interface Reservation
+	extends Omit<
+		ReservationResponse,
+		| "user_id"
+		| "computer_id"
+		| "time_slot_id"
+		| "user"
+		| "payment"
+		| "computer"
+		| "timeslot"
+		| "created_at"
+		| "updated_at"
+	> {
+	userId: number;
+	computerId: number;
+	timeslotId: number;
+	user: User;
+	Payment: Payment;
+	Computer: Computer;
+	timeslot: TimeSlot;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface CreateReservationDto {

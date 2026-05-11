@@ -1,8 +1,14 @@
+import type { Reservation, ReservationResponse } from "./reservation.model";
+
 export interface TimeSlotResponse {
 	id: number;
 	start: string;
 	end: string;
-	reservations: unknown[]; // TODO: Reservation interface
+	reservations: ReservationResponse[];
+}
+
+export interface TimeSlot extends Omit<TimeSlotResponse, "reservations"> {
+	reservations: Reservation[];
 }
 
 export interface CreateTimeSlotDto {

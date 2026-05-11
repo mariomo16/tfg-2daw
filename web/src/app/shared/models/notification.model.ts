@@ -1,9 +1,18 @@
+import type { User, UserResponse } from "./user.model";
+
 export interface NotificationResponse {
 	id: number;
 	message: string;
 	user_id: number;
-	user: unknown[]; // TODO: User interface
+	user: UserResponse[];
 	created_at: string;
+}
+
+export interface Notification
+	extends Omit<NotificationResponse, "user_id" | "user" | "created_at"> {
+	userId: number;
+	user: User;
+	createdAt: string;
 }
 
 export interface CreateNotificationDto {

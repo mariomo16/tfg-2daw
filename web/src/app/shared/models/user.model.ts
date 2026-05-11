@@ -1,3 +1,7 @@
+import type { Notification, NotificationResponse } from "./notification.model";
+import type { PaymentResponse } from "./payment.model";
+import type { ReservationResponse } from "./reservation.model";
+
 export type UserRole = "staff" | "client";
 
 export interface UserResponse {
@@ -7,9 +11,9 @@ export interface UserResponse {
 	role: string;
 	balance: number;
 	image: string;
-	notifications: unknown[]; // TODO: Notification interface
-	payments: unknown[]; // TODO: Payment interface
-	reservations: unknown[]; // TODO: Reservation interface
+	notifications: NotificationResponse[];
+	payments: PaymentResponse[];
+	reservations: ReservationResponse[];
 	email_verified_at: string | null;
 	created_at: string;
 	updated_at: string;
@@ -19,8 +23,15 @@ export interface UserResponse {
 export interface User
 	extends Omit<
 		UserResponse,
-		"email_verified_at" | "created_at" | "updated_at" | "deleted_at"
+		| "email_verified_at"
+		| "created_at"
+		| "updated_at"
+		| "deleted_at"
+		| "notifications"
+		| "payments"
+		| "reservations"
 	> {
+	notifications: Notification[];
 	emailVerifiedAt: string;
 	createdAt: string;
 	updatedAt: string;
