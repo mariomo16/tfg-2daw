@@ -1,6 +1,6 @@
 import type { Notification, NotificationResponse } from "./notification.model";
-import type { PaymentResponse } from "./payment.model";
-import type { ReservationResponse } from "./reservation.model";
+import type { Payment, PaymentResponse } from "./payment.model";
+import type { Reservation, ReservationResponse } from "./reservation.model";
 
 export type UserRole = "staff" | "client";
 
@@ -32,10 +32,12 @@ export interface User
 		| "reservations"
 	> {
 	notifications: Notification[];
-	emailVerifiedAt: string;
+	payments: Payment[];
+	reservations: Reservation[];
+	emailVerifiedAt: string | null;
 	createdAt: string;
 	updatedAt: string;
-	deletedAt: string;
+	deletedAt: string | null;
 }
 
 export interface CreateUserDto {

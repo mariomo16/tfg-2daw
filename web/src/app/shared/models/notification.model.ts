@@ -4,7 +4,7 @@ export interface NotificationResponse {
 	id: number;
 	message: string;
 	user_id: number;
-	user: UserResponse[];
+	user: UserResponse;
 	created_at: string;
 }
 
