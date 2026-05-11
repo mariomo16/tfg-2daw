@@ -1,4 +1,4 @@
-export type ComputerStatus = "available" | "mainteinance" | "occupied";
+export type ComputerStatus = "available" | "maintenance" | "occupied";
 
 export interface ComputerResponse {
 	id: number;
