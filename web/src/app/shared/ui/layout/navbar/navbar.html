@@ -1,39 +1,17 @@
 <header class="h-16 max-h-16 w-screen flex justify-center fixed z-2 top-0">
   <div class="max-w-6xl w-full flex justify-between items-center px-2">
-    <a
-      href="/"
-      class="text-sm text-content-muted font-semibold hover:text-content-primary p-4 transition-colors duration-150"
-    >
+    <span>
       {{ appName }}
-    </a>
+    </span>
     <div class="flex gap-4">
-      <a
-        href="https://github.com/mariomo16/tfg-2daw"
-        title="Github link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <app-github-icon [size]="size" />
-      </a>
-      <a
-        href="https://discord.gg/umSwM4Z2ST"
-        title="Discord link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <app-discord-icon [size]="size" />
-      </a>
-      <a
-        href="https://www.instagram.com/ortegamario.02"
-        title="Instagran link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <app-instagram-icon [size]="size" />
-      </a>
-      <a href="https://x.com/mariomo16cs" title="X link" target="_blank" rel="noopener noreferrer">
-        <app-x-icon [size]="size" />
-      </a>
+      @for (link of navLinks; track $index) {
+        <a
+          class="text-content-secondary hover:cursor-pointer hover:text-primary-light transition-colors duration-150"
+          [routerLink]="link.path"
+          >{{ link.label }}</a
+        >
+      }
     </div>
+    <div></div>
   </div>
 </header>

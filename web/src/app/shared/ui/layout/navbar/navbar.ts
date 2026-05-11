@@ -1,21 +1,32 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { AuthService } from "@core/auth/auth.service";
 import { APP } from "../../../../core/constants/app.constants";
-import type { IconSize } from "../../../models/icon-size.model";
-import { DiscordIcon } from "../../icons/discord-icon/discord-icon";
-import { GithubIcon } from "../../icons/github-icon/github-icon";
-import { InstagramIcon } from "../../icons/instagram-icon/instagram-icon";
-import { XIcon } from "../../icons/x-icon/x-icon";
 
 @Component({
 	selector: "app-navbar",
-	imports: [XIcon, InstagramIcon, DiscordIcon, GithubIcon],
+	imports: [RouterLink],
 	templateUrl: "./navbar.html",
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
+	readonly #authService = inject(AuthService);
+
 	protected readonly appName = APP.name;
-	protected readonly size: IconSize = {
-		width: 24,
-		height: 24,
-	};
+
+	protected readonly isAuthenticated = this.#authService.isAuthenticated;
+	protected readonly isLoading = this.#authService.isLoading;
+	protected readonly user = this.#authService.user;
+	protected readonly isStaff = this.#authService.isStaff;
+
+	protected readonly navLinks = [
+		{
+			label: "Inicio",
+			path: "/",
+		},
+		{
+			label: "Zonas",
+			path: "/zones",
+		},
+	];
 }
