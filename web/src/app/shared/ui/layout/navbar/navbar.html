@@ -1,9 +1,9 @@
-<header class="h-16 max-h-16 w-screen flex justify-center fixed z-2 top-0">
-  <div class="max-w-6xl w-full flex justify-between items-center px-2">
-    <span>
+<header class="h-16 max-h-16 w-screen flex justify-center fixed z-2 top-0 bg-surface-card">
+  <div class="w-full flex items-center px-2">
+    <span class="flex-1 flex justify-start">
       {{ appName }}
     </span>
-    <div class="flex gap-4">
+    <div class="flex-1 flex justify-center gap-4">
       @for (link of navLinks; track $index) {
         <a
           class="text-content-secondary hover:cursor-pointer hover:text-primary-light transition-colors duration-150"
@@ -12,6 +12,15 @@
         >
       }
     </div>
-    <div></div>
+    <div class="flex-1 flex justify-end gap-2">
+      @if (isLoading()) {
+        <app-loading-state />
+      } @else if (isAuthenticated()) {
+        <app-user-menu />
+      } @else {
+        <app-normal-button label="Registrarse" href="/register" />
+        <app-normal-button label="Iniciar sesión" href="/login" />
+      }
+    </div>
   </div>
 </header>
