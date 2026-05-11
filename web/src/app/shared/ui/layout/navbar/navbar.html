@@ -1,9 +1,9 @@
-<header class="h-16 max-h-16 w-screen flex justify-center fixed z-2 top-0 bg-surface-card">
-  <div class="w-full flex items-center px-2">
+<header class="h-16 max-h-16 w-screen flex justify-center fixed z-2 top-0 bg-surface-base">
+  <div class="w-full flex items-center px-16">
     <span class="flex-1 flex justify-start">
       {{ appName }}
     </span>
-    <div class="flex-1 flex justify-center gap-4">
+    <div class="flex-1 flex justify-center gap-4 font-semibold">
       @for (link of navLinks; track $index) {
         <a
           class="text-content-secondary hover:cursor-pointer hover:text-primary-light transition-colors duration-150"
