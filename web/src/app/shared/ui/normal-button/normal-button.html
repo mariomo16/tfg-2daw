@@ -1,5 +1,5 @@
 @if (useRouterLink()) {
-  <a [routerLink]="href()" [class]="buttonStyle">{{ label() }}</a>
+  <a [routerLink]="href()">{{ label() }}</a>
 } @else {
-  <a [href]="href()" [class]="buttonStyle">{{ label() }}</a>
+  <a [href]="href()">{{ label() }}</a>
 }
