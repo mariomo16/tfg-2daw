@@ -8,16 +8,12 @@ a {
 	font-size: 0.875rem;
 	line-height: 1.25rem;
 	font-weight: 600;
-	color: #ffffff;
+	color: #fff;
 
 	transition-property: background-color;
 	transition-duration: 150ms;
 
 	border: none;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	text-decoration: none;
 }
 
 a:hover {
