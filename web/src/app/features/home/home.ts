@@ -7,6 +7,7 @@ import {
 import { rxResource } from "@angular/core/rxjs-interop";
 import { AuthService } from "@core/auth/auth.service";
 import { ZoneService } from "@shared/services/zone.service";
+import { EmptyState } from "@shared/ui/states/empty-state/empty-state";
 import { ErrorState } from "@shared/ui/states/error-state/error-state";
 import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
 import { GamingButton } from "../../shared/ui/gaming-button/gaming-button";
@@ -15,7 +16,7 @@ import { Navbar } from "../../shared/ui/layout/navbar/navbar";
 
 @Component({
 	selector: "app-home",
-	imports: [GamingButton, Navbar, Footer, LoadingState, ErrorState],
+	imports: [GamingButton, Navbar, Footer, LoadingState, ErrorState, EmptyState],
 	templateUrl: "./home.html",
 	styleUrl: "./home.css",
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +31,6 @@ export class Home {
 	);
 
 	protected readonly zoneResource = rxResource({
-		stream: () => this.#zoneService.getAll(),
+		stream: () => this.#zoneService.getAll() ?? [],
 	});
 }

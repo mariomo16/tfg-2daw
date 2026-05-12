@@ -38,7 +38,7 @@
     </p>
   </header>
 
-  <main class="flex gap-4 text-left h-full">
+  <main class="h-full flex gap-4">
     @if (zoneResource.isLoading()) {
       <app-loading-state />
     } @else if (zoneResource.error()) {
@@ -46,7 +46,7 @@
     }
     @if (zoneResource.value()) {
       @for (zone of zoneResource.value(); track zone.id) {
-        <div class="max-w-2xs shrink-0">
+        <div class="max-w-2xs shrink-0 text-left">
           <img
             [src]="zone.coverImage"
             alt="Imagen de la zona"
@@ -55,10 +55,12 @@
           <h2 class="mt-2 text-4xl font-diablo text-primary-light">{{ zone.name }}</h2>
           <p>{{ zone.description }}</p>
         </div>
+      } @empty {
+        <app-empty-state />
       }
-      <app-gaming-button label="VER PRECIOS" [asLink]="true" class="mt-8" />
     }
   </main>
+  <app-gaming-button label="VER PRECIOS" [asLink]="true" class="mb-24" />
 </section>
 
 <app-footer />
