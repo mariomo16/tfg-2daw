@@ -6,6 +6,7 @@ import type { User, UserResponse } from "@shared/models/user.model";
 export function mapToUser(response: UserResponse): User {
 	return {
 		...response,
+		avatarPath: response.avatar_path,
 		notifications: response.notifications.map(mapToNotification) ?? [],
 		payments: response.payments.map(mapToPayment) ?? [],
 		reservations: response.reservations.map(mapToReservation) ?? [],

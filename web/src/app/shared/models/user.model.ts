@@ -10,7 +10,7 @@ export interface UserResponse {
 	email: string;
 	role: string;
 	balance: number;
-	image: string;
+	avatar_path: string;
 	notifications: NotificationResponse[];
 	payments: PaymentResponse[];
 	reservations: ReservationResponse[];
@@ -23,14 +23,16 @@ export interface UserResponse {
 export interface User
 	extends Omit<
 		UserResponse,
+		| "avatar_path"
+		| "notifications"
+		| "payments"
+		| "reservations"
 		| "email_verified_at"
 		| "created_at"
 		| "updated_at"
 		| "deleted_at"
-		| "notifications"
-		| "payments"
-		| "reservations"
 	> {
+	avatarPath: string;
 	notifications: Notification[];
 	payments: Payment[];
 	reservations: Reservation[];
