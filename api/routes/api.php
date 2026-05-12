@@ -14,13 +14,13 @@ use App\Http\Controllers\V1\UserController;
 use App\Http\Controllers\V1\ZoneController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('v1')->group(function () {
+Route::get('/', function () {
+    return response()->json([
+        'status' => 'OK',
+    ]);
+});
 
-    Route::get('/', function () {
-        return response()->json([
-            'status' => 'OK',
-        ]);
-    });
+Route::prefix('v1')->group(function () {
 
     // Para pruebas por ahora, luego se eliminarán estas rutas
     Route::apiResource('users', UserController::class);
