@@ -39,24 +39,27 @@
   </header>
 
   <main class="h-full flex gap-4">
-    @if (zoneResource.isLoading()) {
-      <app-loading-state />
-    } @else if (zoneResource.error()) {
-      <app-error-state />
-    }
-    @if (zoneResource.value()) {
-      @for (zone of zoneResource.value(); track zone.id) {
-        <div class="max-w-2xs shrink-0 text-left">
-          <img
-            [src]="zone.coverImage"
-            alt="Imagen de la zona"
-            class="w-2xs select-none opacity-80 hover:opacity-100 transition-opacity duration-150"
-          />
-          <h2 class="mt-2 text-4xl font-diablo text-primary-light">{{ zone.name }}</h2>
-          <p>{{ zone.description }}</p>
-        </div>
-      } @empty {
-        <app-empty-state />
+    @switch (zoneResource.status()) {
+      @case ('loading') {
+        <app-loading-state />
+      }
+      @case ('error') {
+        <app-error-state />
+      }
+      @case ('resolved') {
+        @for (zone of zoneResource.value(); track zone.id) {
+          <div class="max-w-2xs shrink-0 text-left">
+            <img
+              [src]="zone.coverImage"
+              alt="Imagen de la zona"
+              class="w-2xs select-none opacity-80 hover:opacity-100 transition-opacity duration-150"
+            />
+            <h2 class="mt-2 text-4xl font-diablo text-primary-light">{{ zone.name }}</h2>
+            <p>{{ zone.description }}</p>
+          </div>
+        } @empty {
+          <app-empty-state />
+        }
       }
     }
   </main>
