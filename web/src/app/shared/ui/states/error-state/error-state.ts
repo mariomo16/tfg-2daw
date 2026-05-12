@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 
 @Component({
 	selector: "app-error-state",
@@ -6,4 +6,6 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 	templateUrl: "./error-state.html",
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ErrorState {}
+export class ErrorState {
+	readonly text = input<string | null>(null);
+}

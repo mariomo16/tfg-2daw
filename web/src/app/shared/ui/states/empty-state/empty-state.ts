@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 
 @Component({
 	selector: "app-empty-state",
@@ -6,4 +6,6 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 	templateUrl: "./empty-state.html",
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmptyState {}
+export class EmptyState {
+	readonly text = input<string | null>(null);
+}
