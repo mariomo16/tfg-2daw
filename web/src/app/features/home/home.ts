@@ -7,6 +7,7 @@ import {
 import { rxResource } from "@angular/core/rxjs-interop";
 import { AuthService } from "@core/auth/auth.service";
 import { ZoneService } from "@shared/services/zone.service";
+import { ErrorState } from "@shared/ui/states/error-state/error-state";
 import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
 import { GamingButton } from "../../shared/ui/gaming-button/gaming-button";
 import { Footer } from "../../shared/ui/layout/footer/footer";
@@ -14,7 +15,7 @@ import { Navbar } from "../../shared/ui/layout/navbar/navbar";
 
 @Component({
 	selector: "app-home",
-	imports: [GamingButton, Navbar, Footer, LoadingState],
+	imports: [GamingButton, Navbar, Footer, LoadingState, ErrorState],
 	templateUrl: "./home.html",
 	styleUrl: "./home.css",
 	changeDetection: ChangeDetectionStrategy.OnPush,
