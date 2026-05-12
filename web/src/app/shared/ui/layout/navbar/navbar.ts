@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { AuthService } from "@core/auth/auth.service";
-import { IconSize } from "@shared/models/icon-size.model";
+import type { IconSize } from "@shared/models/icon-size.model";
 import { Logo } from "@shared/ui/icons/logo/logo";
 import { NormalButton } from "@shared/ui/normal-button/normal-button";
 import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
 import { UserMenu } from "@shared/ui/user-menu/user-menu";
-import { APP } from "../../../../core/constants/app.constants";
 
 @Component({
 	selector: "app-navbar",
