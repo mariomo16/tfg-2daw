@@ -5,11 +5,12 @@ export interface ZoneResponse {
 	name: string;
 	description: string;
 	price: number;
-	image: string;
+	cover_image: string;
 	computers: ComputerResponse[];
 }
 
-export interface Zone extends Omit<ZoneResponse, "computers"> {
+export interface Zone extends Omit<ZoneResponse, "cover_image" | "computers"> {
+	coverImage: string;
 	computers: Computer[];
 }
 
@@ -17,7 +18,7 @@ export interface CreateZoneDto {
 	name: string;
 	description: string;
 	price: number;
-	image: File;
+	cover_image: string;
 }
 
 export interface UpdateZoneDto extends Partial<CreateZoneDto> {}
