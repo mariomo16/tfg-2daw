@@ -1,27 +1,22 @@
 @import "tailwindcss";
 
 @font-face {
-	font-family: "cs_regular";
-	src: url("/fonts/cs_regular.ttf") format("truetype");
-}
-
-@font-face {
 	font-family: "bildad";
-	src: url("/fonts/diablo/bildad.woff2") format("woff2");
+	src: url("/fonts/bildad.woff2") format("woff2");
 }
 
 @font-face {
 	font-family: "diablo_light";
-	src: url("/fonts/diablo/diablo_light.woff2") format("woff2");
+	src: url("/fonts/diablo_light.woff2") format("woff2");
 }
 
 @font-face {
 	font-family: "diablo_heavy";
-	src: url("/fonts/diablo/diablo_heavy.woff2") format("woff2");
+	src: url("/fonts/diablo_heavy.woff2") format("woff2");
 }
 
 @theme {
-  --font-cs: "cs_regular";
+	--font-cs: "cs_regular";
 	--font-diablo: "bildad";
 	--font-diablo-light: "diablo_light";
 	--font-diablo-heavy: "diablo_heavy";
@@ -55,5 +50,5 @@
 }
 
 html {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
