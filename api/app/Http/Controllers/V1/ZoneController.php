@@ -29,12 +29,6 @@ class ZoneController extends Controller
     {
         $data = $request->validated();
 
-        // https://www.youtube.com/watch?v=SvIxR9oacJs
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('zones', 'public');
-            $data = [...$data, 'image' => $path];
-        }
-
         $zone = Zone::create($data);
 
         return response()->json(
@@ -60,12 +54,6 @@ class ZoneController extends Controller
     public function update(ZoneRequest $request, Zone $zone): JsonResponse
     {
         $data = $request->validated();
-
-        // https://www.youtube.com/watch?v=SvIxR9oacJs
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('zones', 'public');
-            $data = [...$data, 'image' => $path];
-        }
 
         $zone->update(array_filter($data));
 

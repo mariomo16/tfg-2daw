@@ -25,7 +25,7 @@ class ZoneRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'description' => ['required', 'string', 'max:100'],
-            'image' => ['nullable', 'image', 'mimes:webp,png,jpg,gif', 'max:2048'],
+            'cover_image' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'between:0,99.99']
         ];
     }

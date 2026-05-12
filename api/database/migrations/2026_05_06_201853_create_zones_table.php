@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id()->autoIncrement();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('image')->nullable();
+            $table->string('cover_image')->nullable();
             $table->decimal('price', 4, 2);
             $table->softDeletes();
         });
