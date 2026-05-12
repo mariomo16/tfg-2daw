@@ -10,6 +10,10 @@ chown -R www-data:www-data /var/www/html/database
 chmod 775 /var/www/html/database
 chmod 664 /var/www/html/database/database.sqlite
 
+# Limpiar la configuracion por si acaso se bloquea el cors
+php artisan config:clear
+php artisan cache:clear
+
 # Ejecutar migraciones pendientes
 php artisan migrate --force --seed
 echo "Migraciones ejecutadas"
