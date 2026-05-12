@@ -2,7 +2,7 @@
 
 @font-face {
 	font-family: "inter";
-	src: url("/fonts/Inter.ttf") format("truetypes");
+	src: url("/fonts/Inter.woff2") format("woff2");
 }
 
 @font-face {
