@@ -33,7 +33,7 @@ export class Navbar {
 		},
 		{
 			label: "ZONAS",
-			path: "/zones",
+			path: "/info-zones",
 		},
 	];
 }
