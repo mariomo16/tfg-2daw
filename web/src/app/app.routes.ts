@@ -25,6 +25,14 @@ export const routes: Routes = [
 		title: "Iniciar sesión",
 	},
 	{
+		path: "info-zones",
+		loadComponent: () =>
+			import("@features/info-zones/info-zones").then(
+				(module) => module.InfoZones,
+			),
+		title: "Información de la zonas",
+	},
+	{
 		path: "**",
 		loadComponent: () =>
 			import("./shared/ui/not-found/not-found").then(
