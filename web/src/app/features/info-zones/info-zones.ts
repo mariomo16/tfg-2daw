@@ -1,4 +1,3 @@
-import { CurrencyPipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { rxResource } from "@angular/core/rxjs-interop";
 import { TimeSlotService } from "@shared/services/timeslot.service";
@@ -11,7 +10,7 @@ import { Navbar } from "../../shared/ui/layout/navbar/navbar";
 
 @Component({
 	selector: "app-info-zones",
-	imports: [Navbar, Footer, LoadingState, ErrorState, EmptyState, CurrencyPipe],
+	imports: [Navbar, Footer, LoadingState, ErrorState, EmptyState],
 	templateUrl: "./info-zones.html",
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
