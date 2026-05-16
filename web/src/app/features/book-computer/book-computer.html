@@ -1,0 +1,279 @@
+<app-navbar />
+
+<section class="w-full max-w-300 mx-auto py-20 px-6">
+  <header class="text-center mb-16">
+    <h1 class="font-diablo text-5xl text-primary mt-2">RESERVAR ORDENADOR</h1>
+    <p class="text-content-secondary mt-2 text-lg">
+      Selecciona tu zona, ordenador, fecha y franja horaria para reservar tu sesión gaming.
+    </p>
+  </header>
+
+  @if (currentStep() === 1) {
+    <div>
+      <h2 class="font-diablo text-3xl text-primary-light mb-6">1. Elige tu zona</h2>
+
+      @switch (zoneResource.status()) {
+        @case ('loading') {
+          <app-loading-state />
+        }
+        @case ('error') {
+          <app-error-state />
+        }
+        @case ('resolved') {
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+            @for (zone of zoneResource.value(); track zone.id) {
+              <button
+                type="button"
+                class="relative text-left bg-surface-card border p-0 overflow-hidden cursor-pointer hover:border-primary"
+                [class]="selectedZoneId() === zone.id ? 'border-primary' : 'border-surface-border'"
+                (click)="selectZone(zone.id)"
+              >
+                <div class="relative h-40 overflow-hidden">
+                  <img
+                    class="w-full h-full object-cover"
+                    [src]="zone.coverImage"
+                    [alt]="'Zona ' + zone.name"
+                  />
+                </div>
+
+                <div class="p-5">
+                  <h3 class="font-diablo text-2xl text-primary-light">{{ zone.name }}</h3>
+                  <p class="text-content-secondary text-sm mt-1">{{ zone.description }}</p>
+                  <div class="flex items-baseline gap-1.5 mt-3 pt-3 border-t border-surface-border">
+                    <span class="text-xl text-content-primary font-diablo-heavy">{{
+                      zone.price | currency: 'EUR' : 'symbol' : '1.2-2'
+                    }}</span>
+                    <span class="text-xs text-content-muted">/ hora</span>
+                  </div>
+                </div>
+              </button>
+            } @empty {
+              <app-empty-state />
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+
+  @if (currentStep() === 2) {
+    <div>
+      <h2 class="font-diablo text-3xl text-primary-light mb-6">2. Elige tu ordenador</h2>
+
+      @switch (computerResource.status()) {
+        @case ('loading') {
+          <app-loading-state />
+        }
+        @case ('error') {
+          <app-error-state />
+        }
+        @case ('resolved') {
+          @if (availableComputers().length === 0) {
+            <div
+              class="bg-surface-card border border-surface-border p-8 text-center text-content-muted"
+            >
+              <span class="text-3xl block mb-3">🖥️</span>
+              No hay ordenadores disponibles en esta zona.
+            </div>
+          } @else {
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+              @for (computer of availableComputers(); track computer.id) {
+                <button
+                  type="button"
+                  class="flex flex-col items-center gap-3 bg-surface-card border py-6 px-4 text-center cursor-pointer hover:border-primary"
+                  [class]="
+                    selectedComputerId() === computer.id
+                      ? 'border-primary'
+                      : 'border-surface-border'
+                  "
+                  (click)="selectComputer(computer.id)"
+                >
+                  <div class="text-3xl">🖥️</div>
+                  <span class="font-diablo-heavy text-lg text-content-primary">{{
+                    computer.name
+                  }}</span>
+                  <span
+                    class="text-xs uppercase tracking-wider px-2 py-0.5"
+                    [class]="
+                      computer.status === 'available'
+                        ? 'text-success bg-success/10'
+                        : 'text-info bg-info/10'
+                    "
+                  >
+                    {{
+                      computer.status === 'available'
+                        ? 'Disponible'
+                        : computer.status === 'maintenance'
+                          ? 'Mantenimiento'
+                          : 'Ocupado'
+                    }}
+                  </span>
+                </button>
+              }
+            </div>
+          }
+        }
+      }
+    </div>
+  }
+
+  @if (currentStep() === 3) {
+    <div>
+      <h2 class="font-diablo text-3xl text-primary-light mb-6">3. Elige la fecha</h2>
+
+      <div
+        class="bg-surface-card border border-surface-border p-8 flex flex-col items-center gap-6"
+      >
+        <label for="booking-date" class="text-content-secondary text-lg"
+          >Selecciona el día de tu sesión</label
+        >
+        <input
+          id="booking-date"
+          type="date"
+          class="bg-surface-base border border-surface-border p-3 text-content-primary focus:border-primary outline-none transition-all text-lg font-diablo-heavy w-full max-w-xs text-center"
+          [min]="minDate"
+          [value]="selectedDate()"
+          (change)="selectDate($event)"
+        />
+      </div>
+    </div>
+  }
+
+  @if (currentStep() === 4) {
+    <div>
+      <h2 class="font-diablo text-3xl text-primary-light mb-6">4. Elige tu franja horaria</h2>
+
+      @switch (timeSlotResource.status()) {
+        @case ('loading') {
+          <app-loading-state />
+        }
+        @case ('error') {
+          <app-error-state />
+        }
+        @case ('resolved') {
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
+            @for (slot of timeSlotResource.value(); track slot.id) {
+              <button
+                type="button"
+                class="flex flex-col items-center gap-2 bg-surface-card border py-6 px-4 text-center cursor-pointer hover:border-primary"
+                [class]="
+                  selectedTimeSlotId() === slot.id ? 'border-primary' : 'border-surface-border'
+                "
+                (click)="selectTimeSlot(slot.id)"
+              >
+                <div class="flex items-center gap-2">
+                  <span class="text-[1.4rem] text-content-primary font-diablo-heavy">{{
+                    slot.start.slice(0, 5)
+                  }}</span>
+                  <span class="text-primary-light text-[1.2rem]">—</span>
+                  <span class="text-[1.4rem] text-content-primary font-diablo-heavy">{{
+                    slot.end.slice(0, 5)
+                  }}</span>
+                </div>
+              </button>
+            } @empty {
+              <app-empty-state />
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+
+  @if (currentStep() === 5) {
+    <div>
+      <h2 class="font-diablo text-3xl text-primary-light mb-6">5. Confirma tu reserva</h2>
+
+      <div class="relative bg-surface-card border border-surface-border overflow-hidden">
+        <div class="p-8">
+          <h3 class="font-diablo text-2xl text-primary-light mb-6">Resumen de la reserva</h3>
+
+          <div class="flex flex-col gap-4">
+            <div class="flex justify-between items-center py-3 border-b border-surface-border">
+              <span class="text-content-muted text-sm uppercase tracking-wider">Zona</span>
+              <span class="text-content-primary font-diablo-heavy">{{ selectedZoneName() }}</span>
+            </div>
+
+            <div class="flex justify-between items-center py-3 border-b border-surface-border">
+              <span class="text-content-muted text-sm uppercase tracking-wider">Ordenador</span>
+              <span class="text-content-primary font-diablo-heavy">{{
+                selectedComputerName()
+              }}</span>
+            </div>
+
+            <div class="flex justify-between items-center py-3 border-b border-surface-border">
+              <span class="text-content-muted text-sm uppercase tracking-wider">Fecha</span>
+              <span class="text-content-primary font-diablo-heavy">{{ selectedDate() }}</span>
+            </div>
+
+            <div class="flex justify-between items-center py-3 border-b border-surface-border">
+              <span class="text-content-muted text-sm uppercase tracking-wider"
+                >Franja horaria</span
+              >
+              <span class="text-content-primary font-diablo-heavy">{{
+                selectedTimeSlotLabel()
+              }}</span>
+            </div>
+
+            <div class="flex justify-between items-center py-3">
+              <span class="text-content-muted text-sm uppercase tracking-wider">Precio</span>
+              <span class="text-[2rem] text-primary font-diablo-heavy">{{
+                selectedZonePrice() | currency: 'EUR' : 'symbol' : '1.2-2'
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        @if (bookingSuccess()) {
+          <div
+            class="mx-8 mb-6 p-4 bg-success/10 border border-success text-success text-sm text-center"
+          >
+            <span class="text-2xl block mb-2">🎮</span>
+            ¡Reserva confirmada con éxito! Nos vemos pronto.
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="flex justify-between items-center mt-10">
+    <div>
+      @if (currentStep() > 1 && !bookingSuccess()) {
+        <button
+          type="button"
+          class="bg-surface-card border border-surface-border px-6 py-3 text-content-secondary font-diablo-heavy text-sm uppercase tracking-wider cursor-pointer hover:border-primary hover:text-primary-light transition-all duration-200"
+          (click)="prevStep()"
+        >
+          Volver
+        </button>
+      }
+    </div>
+
+    <div>
+      @if (currentStep() < 5 && canAdvance()) {
+        <button
+          type="button"
+          class="bg-primary border border-primary px-6 py-3 text-surface-base font-diablo-heavy text-sm uppercase tracking-wider cursor-pointer hover:bg-primary-light transition-all duration-200"
+          (click)="nextStep()"
+        >
+          Siguiente
+        </button>
+      } @else if (currentStep() === 5 && !bookingSuccess()) {
+        <button
+          type="button"
+          class="bg-primary border border-primary px-8 py-3 text-surface-base font-diablo-heavy text-sm uppercase tracking-wider cursor-pointer hover:bg-primary-light transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          [disabled]="isSubmitting()"
+          (click)="confirmBooking()"
+        >
+          @if (isSubmitting()) {
+            Reservando...
+          } @else {
+            Confirmar Reserva
+          }
+        </button>
+      }
+    </div>
+  </div>
+</section>
+
+<app-footer />

@@ -1,4 +1,5 @@
 import type { Routes } from "@angular/router";
+import { authGuard } from "@core/guards/auth.guard";
 import { guestGuard } from "@core/guards/guest.guard";
 
 export const routes: Routes = [
@@ -31,6 +32,15 @@ export const routes: Routes = [
 				(module) => module.InfoZones,
 			),
 		title: "Información de la zonas",
+	},
+	{
+		path: "book-computer",
+		canActivate: [authGuard],
+		loadComponent: () =>
+			import("@features/book-computer/book-computer").then(
+				(module) => module.BookComputer,
+			),
+		title: "Reservar Ordenador",
 	},
 	{
 		path: "**",
