@@ -50,7 +50,6 @@ export class BookComputer {
 
 	// Estados de la reserva
 	protected readonly isSubmitting = signal(false);
-	protected readonly bookingError = signal<string | null>(null);
 	protected readonly bookingSuccess = signal(false);
 
 	// Fecha minima (hoyy)
@@ -149,7 +148,6 @@ export class BookComputer {
 		if (!userId) return;
 
 		this.isSubmitting.set(true);
-		this.bookingError.set(null);
 
 		this.#reservationService
 			.create({
@@ -167,10 +165,7 @@ export class BookComputer {
 				},
 				error: (err) => {
 					this.isSubmitting.set(false);
-					this.bookingError.set(
-						err?.error?.message ??
-							"Ha ocurrido un error al realizar la reserva. Inténtalo de nuevo.",
-					);
+					console.error("Ha ocurrido un error al realizar la reserva:", err);
 				},
 			});
 	}

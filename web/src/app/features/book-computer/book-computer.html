@@ -17,7 +17,7 @@
           <app-loading-state />
         }
         @case ('error') {
-          <app-error-state [text]="zoneResource.error()!.message" />
+          <app-error-state />
         }
         @case ('resolved') {
           <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
@@ -65,7 +65,7 @@
           <app-loading-state />
         }
         @case ('error') {
-          <app-error-state [text]="computerResource.error()!.message" />
+          <app-error-state />
         }
         @case ('resolved') {
           @if (availableComputers().length === 0) {
@@ -148,7 +148,7 @@
           <app-loading-state />
         }
         @case ('error') {
-          <app-error-state [text]="timeSlotResource.error()!.message" />
+          <app-error-state />
         }
         @case ('resolved') {
           <div class="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
@@ -228,7 +228,6 @@
           <div
             class="mx-8 mb-6 p-4 bg-success/10 border border-success text-success text-sm text-center"
           >
-            <span class="text-2xl block mb-2">🎮</span>
             ¡Reserva confirmada con éxito! Nos vemos pronto.
           </div>
         }
