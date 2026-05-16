@@ -1,5 +1,8 @@
-import type { Reservation, ReservationResponse } from "./reservation.model";
-import type { Zone, ZoneResponse } from "./zone.model";
+import type {
+	Reservation,
+	ReservationResponse,
+} from "@shared/models/reservation.model";
+import type { Zone, ZoneResponse } from "@shared/models/zone.model";
 
 export type ComputerStatus = "available" | "maintenance" | "occupied";
 

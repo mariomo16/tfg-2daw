@@ -1,4 +1,4 @@
-import type { User, UserResponse } from "./user.model";
+import type { User, UserResponse } from "@shared/models/user.model";
 
 export interface NotificationResponse {
 	id: number;

@@ -1,5 +1,8 @@
-import type { Reservation, ReservationResponse } from "./reservation.model";
-import type { User, UserResponse } from "./user.model";
+import type {
+	Reservation,
+	ReservationResponse,
+} from "@shared/models/reservation.model";
+import type { User, UserResponse } from "@shared/models/user.model";
 
 export type PaymentType = "payment" | "refund";
 

@@ -1,4 +1,4 @@
-import type { Computer, ComputerResponse } from "./computer.model";
+import type { Computer, ComputerResponse } from "@shared/models/computer.model";
 
 export interface ZoneResponse {
 	id: number;

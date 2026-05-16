@@ -1,4 +1,7 @@
-import type { Reservation, ReservationResponse } from "./reservation.model";
+import type {
+	Reservation,
+	ReservationResponse,
+} from "@shared/models/reservation.model";
 
 export interface TimeSlotResponse {
 	id: number;

@@ -1,7 +1,7 @@
-import type { Computer, ComputerResponse } from "./computer.model";
-import type { Payment, PaymentResponse } from "./payment.model";
-import type { TimeSlot, TimeSlotResponse } from "./timeslot.model";
-import type { User, UserResponse } from "./user.model";
+import type { Computer, ComputerResponse } from "@shared/models/computer.model";
+import type { Payment, PaymentResponse } from "@shared/models/payment.model";
+import type { TimeSlot, TimeSlotResponse } from "@shared/models/timeslot.model";
+import type { User, UserResponse } from "@shared/models/user.model";
 
 export type ReservationStatus = "confirmed" | "cancelled" | "pending";
 

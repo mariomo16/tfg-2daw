@@ -1,6 +1,12 @@
-import type { Notification, NotificationResponse } from "./notification.model";
-import type { Payment, PaymentResponse } from "./payment.model";
-import type { Reservation, ReservationResponse } from "./reservation.model";
+import type {
+	Notification,
+	NotificationResponse,
+} from "@shared/models/notification.model";
+import type { Payment, PaymentResponse } from "@shared/models/payment.model";
+import type {
+	Reservation,
+	ReservationResponse,
+} from "@shared/models/reservation.model";
 
 export type UserRole = "staff" | "client";
 
