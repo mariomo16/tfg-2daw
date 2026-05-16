@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $zones = [
             [
                 'name' => 'Standard',
-                'description' => 'Cuenta con 70 ordenadores de alto rendimiento preparados para satisfacer tus necesidades',
+                'description' => 'Cuenta con ordenadores de alto rendimiento preparados para satisfacer tus necesidades',
                 'cover_image' => 'https://images.igdb.com/igdb/image/upload/t_cover_big/cobpn7.webp',
                 'price' => 2.5,
             ],
