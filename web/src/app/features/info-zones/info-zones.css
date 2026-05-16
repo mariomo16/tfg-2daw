@@ -1,0 +1,279 @@
+/* ===== Hero Section ===== */
+.hero-section {
+	position: relative;
+	height: 45vh;
+	min-height: 320px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	overflow: hidden;
+}
+
+.hero-content {
+	position: relative;
+	z-index: 2;
+}
+
+.section-container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 5rem 1.5rem;
+}
+
+.section-header {
+	text-align: center;
+	margin-bottom: 3rem;
+}
+
+.section-tag {
+	display: inline-block;
+	font-size: 0.8rem;
+	letter-spacing: 0.25em;
+	text-transform: uppercase;
+	color: var(--color-primary-light);
+	border: 1px solid var(--color-primary);
+	padding: 0.3rem 1rem;
+	background: hsla(22, 95%, 48%, 0.08);
+}
+
+.pricing-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 1.5rem;
+	align-items: stretch;
+}
+
+.pricing-card {
+	position: relative;
+	background: var(--color-surface-card);
+	border: 1px solid var(--color-surface-border);
+	overflow: hidden;
+}
+
+.pricing-card:hover {
+	border-color: var(--color-primary);
+}
+
+.pricing-card-image {
+	position: relative;
+	height: 300px;
+	overflow: hidden;
+}
+
+.pricing-card-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.pricing-card-image-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		to top,
+		var(--color-surface-card) 0%,
+		transparent 50%
+	);
+}
+
+.pricing-card-body {
+	padding: 1.5rem;
+}
+
+.pricing-amount {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+	margin-top: 1.25rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid var(--color-surface-border);
+}
+
+.price {
+	font-size: 2.5rem;
+	color: var(--color-content-primary);
+	line-height: 1;
+}
+
+.price-period {
+	font-size: 0.9rem;
+}
+
+.pricing-features {
+	list-style: none;
+	padding: 0;
+	margin-top: 1.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.pricing-features li {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	color: var(--color-content-secondary);
+	font-size: 0.9rem;
+}
+
+.feature-icon {
+	color: var(--color-success);
+	font-weight: bold;
+	flex-shrink: 0;
+}
+
+.schedule-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
+}
+
+.schedule-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1rem;
+	width: 100%;
+}
+
+.schedule-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+	background: var(--color-surface-card);
+	border: 1px solid var(--color-surface-border);
+	padding: 1.5rem 1rem;
+	text-align: center;
+}
+
+.schedule-card:hover {
+	border-color: var(--color-primary);
+}
+
+.schedule-time {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.time-value {
+	font-size: 1.4rem;
+	color: var(--color-content-primary);
+}
+
+.time-separator {
+	color: var(--color-primary-light);
+	font-size: 1.2rem;
+}
+
+.schedule-label {
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+.schedule-info {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+	background: hsla(190, 100%, 50%, 0.05);
+	border: 1px solid hsla(190, 100%, 50%, 0.15);
+	padding: 1rem 1.25rem;
+	max-width: 600px;
+	width: 100%;
+}
+
+.info-icon {
+	font-size: 1.2rem;
+	flex-shrink: 0;
+}
+
+.specs-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 1rem;
+}
+
+.spec-card {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	background: var(--color-surface-card);
+	border: 1px solid var(--color-surface-border);
+	padding: 1.25rem;
+}
+
+.spec-card:hover {
+	border-color: var(--color-primary);
+}
+
+.spec-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+
+.spec-label {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+.recharge-section {
+	padding-bottom: 6rem;
+}
+
+.recharge-card {
+	position: relative;
+	background: var(--color-surface-card);
+	border: 1px solid var(--color-surface-border);
+	padding: 4rem 2rem;
+	text-align: center;
+	overflow: hidden;
+}
+
+.recharge-content {
+	position: relative;
+	z-index: 1;
+}
+
+.recharge-icon-container {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 5rem;
+	height: 5rem;
+	background: hsla(22, 95%, 48%, 0.1);
+	border: 2px solid var(--color-primary);
+	border-radius: 50%;
+	animation: float 3s ease-in-out infinite;
+}
+
+.recharge-icon {
+	font-size: 2rem;
+}
+
+.recharge-details {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1.5rem;
+	margin-top: 3rem;
+	text-align: center;
+}
+
+.recharge-detail-card {
+	padding: 1.5rem;
+	background: hsla(240, 10%, 4%, 0.5);
+	border: 1px solid var(--color-surface-border);
+}
+
+.recharge-detail-card:hover {
+	border-color: var(--color-primary);
+}
+
+.detail-icon {
+	font-size: 2rem;
+}

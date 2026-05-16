@@ -1,1 +1,150 @@
-<p>info-zones works!</p>
+<app-navbar />
+
+<section id="pricing" class="section-container">
+  <header class="section-header">
+    <h2 class="font-diablo text-5xl text-primary mt-2">ELIGE TU ZONA</h2>
+    <p class="text-content-secondary mt-2 text-lg">
+      Cada zona ofrece una experiencia única. Encuentra la que mejor se adapte a ti.
+    </p>
+  </header>
+
+  <div class="pricing-grid">
+    @switch (zoneResource.status()) {
+      @case ('loading') {
+        <app-loading-state />
+      }
+      @case ('error') {
+        <app-error-state />
+      }
+      @case ('resolved') {
+        @for (zone of zoneResource.value(); track zone.id) {
+          <article class="pricing-card">
+            <div class="pricing-card-image">
+              <img [src]="zone.coverImage" [alt]="'Imagen de zona' + zone.name" />
+              <div class="pricing-card-image-overlay"></div>
+            </div>
+            <div class="pricing-card-body">
+              <h3 class="font-diablo text-3xl text-primary-light">{{ zone.name }}</h3>
+              <p class="text-content-secondary mt-2">{{ zone.description }}</p>
+              <div class="pricing-amount">
+                <span class="price font-diablo-heavy">{{
+                  zone.price | currency: 'EUR' : 'symbol' : '1.2-2'
+                }}</span>
+                <span class="price-period text-content-muted">/ hora</span>
+              </div>
+              <ul class="pricing-features">
+                <li>
+                  <span class="feature-icon">✓</span>
+                  {{ zone.computers.length }} ordenadores disponibles
+                </li>
+                <li>
+                  <span class="feature-icon">✓</span>
+                  Periféricos premium incluidos
+                </li>
+                <li>
+                  <span class="feature-icon">✓</span>
+                  Conexión de fibra simétrica
+                </li>
+              </ul>
+            </div>
+          </article>
+        } @empty {
+          <app-empty-state />
+        }
+      }
+    }
+  </div>
+</section>
+
+<section id="schedule" class="section-container">
+  <header class="section-header">
+    <h2 class="font-diablo text-5xl text-primary mt-2">FRANJAS HORARIAS</h2>
+    <p class="text-content-secondary mt-2 text-lg">
+      Consulta las franjas disponibles para reservar tu sesión gaming.
+    </p>
+  </header>
+
+  <div class="schedule-container">
+    @switch (timeSlotResource.status()) {
+      @case ('loading') {
+        <app-loading-state />
+      }
+      @case ('error') {
+        <app-error-state />
+      }
+      @case ('resolved') {
+        <div class="schedule-grid">
+          @for (slot of timeSlotResource.value(); track slot.id) {
+            <div class="schedule-card">
+              <div class="schedule-time">
+                <span class="time-value font-diablo-heavy">{{ slot.start.slice(0, 5) }}</span>
+                <span class="time-separator">—</span>
+                <span class="time-value font-diablo-heavy">{{ slot.end.slice(0, 5) }}</span>
+              </div>
+            </div>
+          } @empty {
+            <app-empty-state />
+          }
+        </div>
+      }
+    }
+  </div>
+</section>
+
+<section id="specs" class="section-container">
+  <header class="section-header">
+    <h2 class="font-diablo text-5xl text-primary mt-2">SPECS DE CADA PC</h2>
+    <p class="text-content-secondary mt-2 text-lg">
+      Todas nuestras zonas están equipadas con el mismo hardware de última generación.
+    </p>
+  </header>
+
+  <div class="specs-grid">
+    @for (spec of specs; track spec.label) {
+      <div class="spec-card">
+        <div class="spec-info">
+          <span class="spec-label text-content-muted">{{ spec.label }}</span>
+          <span class="spec-value text-content-primary font-diablo-heavy">{{ spec.value }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<section id="recharge" class="section-container recharge-section">
+  <div class="recharge-card">
+    <div class="recharge-content">
+      <h2 class="font-diablo text-5xl text-primary-light mt-4">RECARGA DE SALDO</h2>
+      <p class="text-content-secondary text-lg mt-4 max-w-xl mx-auto">
+        La recarga de saldo se realiza exclusivamente de forma presencial en nuestro local. Acércate
+        al mostrador y uno de nuestros empleados te ayudará.
+      </p>
+
+      <div class="recharge-details">
+        <div class="recharge-detail-card">
+          <span class="detail-icon">🏪</span>
+          <h3 class="font-diablo text-xl text-primary-light mt-2">En el local</h3>
+          <p class="text-content-muted text-sm mt-1">
+            Dirígete al mostrador de recepción para recargar tu saldo en efectivo o tarjeta.
+          </p>
+        </div>
+        <div class="recharge-detail-card">
+          <span class="detail-icon">💰</span>
+          <h3 class="font-diablo text-xl text-primary-light mt-2">Métodos de pago</h3>
+          <p class="text-content-muted text-sm mt-1">
+            Aceptamos efectivo, tarjeta de crédito/débito y Bizum.
+          </p>
+        </div>
+        <div class="recharge-detail-card">
+          <span class="detail-icon">⚡</span>
+          <h3 class="font-diablo text-xl text-primary-light mt-2">Al instante</h3>
+          <p class="text-content-muted text-sm mt-1">
+            Tu saldo se actualiza inmediatamente después de la recarga. Sin esperas.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer />
