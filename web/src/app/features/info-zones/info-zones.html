@@ -1,14 +1,14 @@
 <app-navbar />
 
-<section id="pricing" class="section-container">
-  <header class="section-header">
+<section class="w-full max-w-300 mx-auto py-20 px-6">
+  <header class="text-center mb-12">
     <h2 class="font-diablo text-5xl text-primary mt-2">ELIGE TU ZONA</h2>
     <p class="text-content-secondary mt-2 text-lg">
       Cada zona ofrece una experiencia única. Encuentra la que mejor se adapte a ti.
     </p>
   </header>
 
-  <div class="pricing-grid">
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 items-stretch">
     @switch (zoneResource.status()) {
       @case ('loading') {
         <app-loading-state />
@@ -18,31 +18,37 @@
       }
       @case ('resolved') {
         @for (zone of zoneResource.value(); track zone.id) {
-          <article class="pricing-card">
-            <div class="pricing-card-image">
-              <img [src]="zone.coverImage" [alt]="'Imagen de zona' + zone.name" />
-              <div class="pricing-card-image-overlay"></div>
+          <article
+            class="relative bg-surface-card border border-surface-border overflow-hidden hover:border-primary"
+          >
+            <div class="relative h-75 overflow-hidden">
+              <img
+                class="w-full h-full object-cover"
+                [src]="zone.coverImage"
+                [alt]="'Imagen de zona' + zone.name"
+              />
+              <div class="absolute inset-0 bg-linear-to-t from-surface-card to-transparent"></div>
             </div>
-            <div class="pricing-card-body">
+            <div class="p-6">
               <h3 class="font-diablo text-3xl text-primary-light">{{ zone.name }}</h3>
               <p class="text-content-secondary mt-2">{{ zone.description }}</p>
-              <div class="pricing-amount">
-                <span class="price font-diablo-heavy">{{
+              <div class="flex items-baseline gap-2 mt-5 pt-5 border-t border-surface-border">
+                <span class="text-[2.5rem] text-content-primary leading-none font-diablo-heavy">{{
                   zone.price | currency: 'EUR' : 'symbol' : '1.2-2'
                 }}</span>
-                <span class="price-period text-content-muted">/ hora</span>
+                <span class="text-[0.9rem] text-content-muted">/ hora</span>
               </div>
-              <ul class="pricing-features">
-                <li>
-                  <span class="feature-icon">✓</span>
+              <ul class="list-none p-0 mt-5 flex flex-col gap-2.5">
+                <li class="flex items-center gap-2.5 text-content-secondary text-[0.9rem]">
+                  <span class="text-success font-bold shrink-0">✓</span>
                   {{ zone.computers.length }} ordenadores disponibles
                 </li>
-                <li>
-                  <span class="feature-icon">✓</span>
+                <li class="flex items-center gap-2.5 text-content-secondary text-[0.9rem]">
+                  <span class="text-success font-bold shrink-0">✓</span>
                   Periféricos premium incluidos
                 </li>
-                <li>
-                  <span class="feature-icon">✓</span>
+                <li class="flex items-center gap-2.5 text-content-secondary text-[0.9rem]">
+                  <span class="text-success font-bold shrink-0">✓</span>
                   Conexión de fibra simétrica
                 </li>
               </ul>
@@ -56,15 +62,15 @@
   </div>
 </section>
 
-<section id="schedule" class="section-container">
-  <header class="section-header">
+<section class="w-full max-w-300 mx-auto py-20 px-6">
+  <header class="text-center mb-12">
     <h2 class="font-diablo text-5xl text-primary mt-2">FRANJAS HORARIAS</h2>
     <p class="text-content-secondary mt-2 text-lg">
       Consulta las franjas disponibles para reservar tu sesión gaming.
     </p>
   </header>
 
-  <div class="schedule-container">
+  <div class="flex flex-col items-center gap-8">
     @switch (timeSlotResource.status()) {
       @case ('loading') {
         <app-loading-state />
@@ -73,13 +79,19 @@
         <app-error-state />
       }
       @case ('resolved') {
-        <div class="schedule-grid">
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 w-full">
           @for (slot of timeSlotResource.value(); track slot.id) {
-            <div class="schedule-card">
-              <div class="schedule-time">
-                <span class="time-value font-diablo-heavy">{{ slot.start.slice(0, 5) }}</span>
-                <span class="time-separator">—</span>
-                <span class="time-value font-diablo-heavy">{{ slot.end.slice(0, 5) }}</span>
+            <div
+              class="flex flex-col items-center gap-2 bg-surface-card border border-surface-border py-6 px-4 text-center hover:border-primary"
+            >
+              <div class="flex items-center gap-2">
+                <span class="text-[1.4rem] text-content-primary font-diablo-heavy">{{
+                  slot.start.slice(0, 5)
+                }}</span>
+                <span class="text-primary-light text-[1.2rem]">—</span>
+                <span class="text-[1.4rem] text-content-primary font-diablo-heavy">{{
+                  slot.end.slice(0, 5)
+                }}</span>
               </div>
             </div>
           } @empty {
@@ -91,52 +103,62 @@
   </div>
 </section>
 
-<section id="specs" class="section-container">
-  <header class="section-header">
+<section class="w-full max-w-300 mx-auto py-20 px-6">
+  <header class="text-center mb-12">
     <h2 class="font-diablo text-5xl text-primary mt-2">SPECS DE CADA PC</h2>
     <p class="text-content-secondary mt-2 text-lg">
       Todas nuestras zonas están equipadas con el mismo hardware de última generación.
     </p>
   </header>
 
-  <div class="specs-grid">
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
     @for (spec of specs; track spec.label) {
-      <div class="spec-card">
-        <div class="spec-info">
-          <span class="spec-label text-content-muted">{{ spec.label }}</span>
-          <span class="spec-value text-content-primary font-diablo-heavy">{{ spec.value }}</span>
+      <div
+        class="flex items-center gap-4 bg-surface-card border border-surface-border p-5 hover:border-primary"
+      >
+        <div class="flex flex-col gap-0.5">
+          <span class="text-xs uppercase tracking-wider text-content-muted">{{ spec.label }}</span>
+          <span class="text-content-primary font-diablo-heavy">{{ spec.value }}</span>
         </div>
       </div>
     }
   </div>
 </section>
 
-<section id="recharge" class="section-container recharge-section">
-  <div class="recharge-card">
-    <div class="recharge-content">
+<section class="w-full max-w-300 mx-auto py-20 px-6 pb-24">
+  <div
+    class="relative bg-surface-card border border-surface-border py-16 px-8 text-center overflow-hidden"
+  >
+    <div class="relative z-1">
       <h2 class="font-diablo text-5xl text-primary-light mt-4">RECARGA DE SALDO</h2>
       <p class="text-content-secondary text-lg mt-4 max-w-xl mx-auto">
         La recarga de saldo se realiza exclusivamente de forma presencial en nuestro local. Acércate
         al mostrador y uno de nuestros empleados te ayudará.
       </p>
 
-      <div class="recharge-details">
-        <div class="recharge-detail-card">
-          <span class="detail-icon">🏪</span>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6 mt-12 text-center">
+        <div
+          class="p-6 bg-[hsla(240,10%,4%,0.5)] border border-surface-border hover:border-primary"
+        >
+          <span class="text-[2rem]">🏪</span>
           <h3 class="font-diablo text-xl text-primary-light mt-2">En el local</h3>
           <p class="text-content-muted text-sm mt-1">
             Dirígete al mostrador de recepción para recargar tu saldo en efectivo o tarjeta.
           </p>
         </div>
-        <div class="recharge-detail-card">
-          <span class="detail-icon">💰</span>
+        <div
+          class="p-6 bg-[hsla(240,10%,4%,0.5)] border border-surface-border hover:border-primary"
+        >
+          <span class="text-[2rem]">💰</span>
           <h3 class="font-diablo text-xl text-primary-light mt-2">Métodos de pago</h3>
           <p class="text-content-muted text-sm mt-1">
             Aceptamos efectivo, tarjeta de crédito/débito y Bizum.
           </p>
         </div>
-        <div class="recharge-detail-card">
-          <span class="detail-icon">⚡</span>
+        <div
+          class="p-6 bg-[hsla(240,10%,4%,0.5)] border border-surface-border hover:border-primary"
+        >
+          <span class="text-[2rem]">⚡</span>
           <h3 class="font-diablo text-xl text-primary-light mt-2">Al instante</h3>
           <p class="text-content-muted text-sm mt-1">
             Tu saldo se actualiza inmediatamente después de la recarga. Sin esperas.

@@ -13,7 +13,6 @@ import { Navbar } from "../../shared/ui/layout/navbar/navbar";
 	selector: "app-info-zones",
 	imports: [Navbar, Footer, LoadingState, ErrorState, EmptyState, CurrencyPipe],
 	templateUrl: "./info-zones.html",
-	styleUrl: "./info-zones.css",
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoZones {
