@@ -145,18 +145,30 @@ export class BookComputer {
 
 	confirmBooking(): void {
 		const userId = this.#authService.user()?.id;
-		if (!userId) return;
+		const selectedZonePrice = this.selectedZonePrice();
+		const selectedComputerId = this.selectedComputerId();
+		const selectedDate = this.selectedDate();
+		const selectedTimeSlotId = this.selectedTimeSlotId();
+
+		if (
+			!userId ||
+			!selectedZonePrice ||
+			!selectedComputerId ||
+			!selectedDate ||
+			!selectedTimeSlotId
+		)
+			return;
 
 		this.isSubmitting.set(true);
 
 		this.#reservationService
 			.create({
-				date: this.selectedDate(),
+				date: selectedDate,
 				status: "pending",
-				price: this.selectedZonePrice() ?? 0,
+				price: selectedZonePrice,
 				user_id: userId,
-				computer_id: this.selectedComputerId() ?? 0,
-				time_slot_id: this.selectedTimeSlotId() ?? 0,
+				computer_id: selectedComputerId,
+				time_slot_id: selectedTimeSlotId,
 			})
 			.subscribe({
 				next: () => {
