@@ -1,5 +1,5 @@
 import type { Reservation, ReservationResponse } from "./reservation.model";
-import type { Zone } from "./zone.model";
+import type { Zone, ZoneResponse } from "./zone.model";
 
 export type ComputerStatus = "available" | "maintenance" | "occupied";
 
@@ -7,7 +7,7 @@ export interface ComputerResponse {
 	id: number;
 	name: string;
 	status: ComputerStatus;
-	zone: Zone;
+	zone: ZoneResponse;
 	reservations: ReservationResponse[];
 }
 
