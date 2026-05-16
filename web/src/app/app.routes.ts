@@ -43,6 +43,13 @@ export const routes: Routes = [
 		title: "Reservar Ordenador",
 	},
 	{
+		path: "profile",
+		canActivate: [authGuard],
+		loadComponent: () =>
+			import("@features/profile/profile").then((module) => module.Profile),
+		title: "Mi perfil",
+	},
+	{
 		path: "**",
 		loadComponent: () =>
 			import("./shared/ui/not-found/not-found").then(
