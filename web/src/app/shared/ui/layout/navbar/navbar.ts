@@ -35,5 +35,9 @@ export class Navbar {
 			label: "ZONAS",
 			path: "/info-zones",
 		},
+		{
+			label: "RESERVAR",
+			path: "/book-computer",
+		},
 	];
 }
