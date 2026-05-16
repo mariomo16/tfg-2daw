@@ -1,10 +1,10 @@
 import { mapToComputer } from "@shared/mappers/computer.mapper";
 import type { Zone, ZoneResponse } from "@shared/models/zone.model";
 
-export function mapToZone(response: ZoneResponse): Zone {
+export function mapToZone(res: ZoneResponse): Zone {
 	return {
-		...response,
-		coverImage: response.cover_image,
-		computers: response.computers?.map(mapToComputer) ?? [],
+		...res,
+		coverImage: res.cover_image,
+		computers: res.computers ? res.computers.map(mapToComputer) : undefined,
 	};
 }

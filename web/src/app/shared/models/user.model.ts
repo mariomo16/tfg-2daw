@@ -33,9 +33,9 @@ export interface User
 		| "deleted_at"
 	> {
 	avatarPath: string;
-	notifications: Notification[];
-	payments: Payment[];
-	reservations: Reservation[];
+	notifications: Notification[] | undefined;
+	payments: Payment[] | undefined;
+	reservations: Reservation[] | undefined;
 	emailVerifiedAt: string | null;
 	createdAt: string;
 	updatedAt: string;

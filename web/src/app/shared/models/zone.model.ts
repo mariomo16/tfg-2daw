@@ -11,7 +11,7 @@ export interface ZoneResponse {
 
 export interface Zone extends Omit<ZoneResponse, "cover_image" | "computers"> {
 	coverImage: string;
-	computers: Computer[];
+	computers: Computer[] | undefined;
 }
 
 export interface CreateZoneDto {

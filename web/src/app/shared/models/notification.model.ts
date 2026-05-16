@@ -11,7 +11,7 @@ export interface NotificationResponse {
 export interface Notification
 	extends Omit<NotificationResponse, "user_id" | "user" | "created_at"> {
 	userId: number;
-	user: User;
+	user: User | undefined;
 	createdAt: string;
 }
 

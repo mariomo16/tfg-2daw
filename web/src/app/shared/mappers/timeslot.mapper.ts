@@ -1,9 +1,11 @@
 import { mapToReservation } from "@shared/mappers/reservation.mapper";
 import type { TimeSlot, TimeSlotResponse } from "@shared/models/timeslot.model";
 
-export function mapToTimeSlot(response: TimeSlotResponse): TimeSlot {
+export function mapToTimeSlot(res: TimeSlotResponse): TimeSlot {
 	return {
-		...response,
-		reservations: response.reservations.map(mapToReservation) ?? [],
+		...res,
+		reservations: res.reservations
+			? res.reservations.map(mapToReservation)
+			: undefined,
 	};
 }

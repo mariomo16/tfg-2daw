@@ -3,18 +3,20 @@ import { mapToPayment } from "@shared/mappers/payment.mapper";
 import { mapToReservation } from "@shared/mappers/reservation.mapper";
 import type { User, UserResponse } from "@shared/models/user.model";
 
-export function mapToUser(response: UserResponse): User {
+export function mapToUser(res: UserResponse): User {
 	return {
-		...response,
-		avatarPath: response.avatar_path,
-		notifications: response.notifications.map(mapToNotification) ?? [],
-		payments: response.payments.map(mapToPayment) ?? [],
-		reservations: response.reservations.map(mapToReservation) ?? [],
-		emailVerifiedAt: response.email_verified_at
-			? response.email_verified_at
-			: null,
-		createdAt: response.created_at,
-		updatedAt: response.updated_at,
-		deletedAt: response.deleted_at ? response.deleted_at : null,
+		...res,
+		avatarPath: res.avatar_path,
+		notifications: res.notifications
+			? res.notifications.map(mapToNotification)
+			: undefined,
+		payments: res.notifications ? res.payments.map(mapToPayment) : undefined,
+		reservations: res.notifications
+			? res.reservations.map(mapToReservation)
+			: undefined,
+		emailVerifiedAt: res.email_verified_at ? res.email_verified_at : null,
+		createdAt: res.created_at,
+		updatedAt: res.updated_at,
+		deletedAt: res.deleted_at,
 	};
 }

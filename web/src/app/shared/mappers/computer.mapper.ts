@@ -1,11 +1,13 @@
 import { mapToReservation } from "@shared/mappers/reservation.mapper";
+import { mapToZone } from "@shared/mappers/zone.mapper";
 import type { Computer, ComputerResponse } from "@shared/models/computer.model";
-import { mapToZone } from "./zone.mapper";
 
 export function mapToComputer(response: ComputerResponse): Computer {
 	return {
 		...response,
-		zone: mapToZone(response.zone) ?? [],
-		reservations: response.reservations?.map(mapToReservation) ?? [],
+		zone: response.zone ? mapToZone(response.zone) : undefined,
+		reservations: response.reservations
+			? response.reservations.map(mapToReservation)
+			: undefined,
 	};
 }

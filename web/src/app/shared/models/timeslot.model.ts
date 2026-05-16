@@ -8,7 +8,7 @@ export interface TimeSlotResponse {
 }
 
 export interface TimeSlot extends Omit<TimeSlotResponse, "reservations"> {
-	reservations: Reservation[];
+	reservations: Reservation[] | undefined;
 }
 
 export interface CreateTimeSlotDto {

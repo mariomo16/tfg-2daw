@@ -7,17 +7,17 @@ import type {
 	ReservationResponse,
 } from "@shared/models/reservation.model";
 
-export function mapToReservation(response: ReservationResponse): Reservation {
+export function mapToReservation(res: ReservationResponse): Reservation {
 	return {
-		...response,
-		userId: response.user_id,
-		computerId: response.computer_id,
-		timeslotId: response.time_slot_id,
-		user: mapToUser(response.user) ?? [],
-		Payment: mapToPayment(response.payment) ?? [],
-		Computer: mapToComputer(response.computer) ?? [],
-		timeslot: mapToTimeSlot(response.timeslot) ?? [],
-		createdAt: response.created_at,
-		updatedAt: response.updated_at,
+		...res,
+		userId: res.user_id,
+		computerId: res.computer_id,
+		timeslotId: res.time_slot_id,
+		user: res.user ? mapToUser(res.user) : undefined,
+		Payment: res.payment ? mapToPayment(res.payment) : undefined,
+		Computer: res.computer ? mapToComputer(res.computer) : undefined,
+		timeslot: res.timeslot ? mapToTimeSlot(res.timeslot) : undefined,
+		createdAt: res.created_at,
+		updatedAt: res.updated_at,
 	};
 }

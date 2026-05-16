@@ -21,8 +21,8 @@ export interface Payment
 	> {
 	userId: number;
 	reservationId: number;
-	user: User;
-	reservation: Reservation;
+	user: User | undefined;
+	reservation: Reservation | undefined;
 	createdAt: string;
 }
 

@@ -13,8 +13,8 @@ export interface ComputerResponse {
 
 export interface Computer
 	extends Omit<ComputerResponse, "zone" | "reservations"> {
-	zone: Zone;
-	reservations: Reservation[];
+	zone: Zone | undefined;
+	reservations: Reservation[] | undefined;
 }
 
 export interface CreateComputerDto {

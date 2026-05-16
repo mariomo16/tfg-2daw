@@ -37,10 +37,10 @@ export interface Reservation
 	userId: number;
 	computerId: number;
 	timeslotId: number;
-	user: User;
-	Payment: Payment;
-	Computer: Computer;
-	timeslot: TimeSlot;
+	user: User | undefined;
+	Payment: Payment | undefined;
+	Computer: Computer | undefined;
+	timeslot: TimeSlot | undefined;
 	createdAt: string;
 	updatedAt: string;
 }
