@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['name', 'status', 'zone_id'])]
+#[Fillable(['user_id', 'reservation_id', 'amount', 'type', 'created_at'])]
 class Payment extends Model
 {
     use SoftDeletes;
+
+    public $timestamps = false;
 
     public function user(): BelongsTo
     {
