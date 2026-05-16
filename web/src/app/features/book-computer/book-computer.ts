@@ -94,7 +94,7 @@ export class BookComputer {
 	protected readonly selectedTimeSlotLabel = computed(() => {
 		const slots = this.timeSlotResource.value() ?? [];
 		const slot = slots.find((s) => s.id === this.selectedTimeSlotId());
-		return slot ? `${slot.start.slice(0, 5)} — ${slot.end.slice(0, 5)}` : "—";
+		return `${slot?.start.slice(0, 5)} — ${slot?.end.slice(0, 5)}`;
 	});
 
 	protected readonly canAdvance = computed(() => {
