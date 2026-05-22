@@ -20,7 +20,6 @@
             <img
               [src]="user.avatarPath"
               class="size-28 rounded-full border-2 border-primary object-cover"
-              alt="Avatar usuario"
             />
           } @else {
             <div
@@ -86,7 +85,7 @@
     <div>
       @if (activeTab() === 'reservations') {
         <div>
-          @if (user.reservations!.length === 0) {
+          @if (!user.reservations) {
             <app-empty-state />
           } @else {
             <div class="grid grid-cols-1 gap-4">
