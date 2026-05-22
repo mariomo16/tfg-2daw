@@ -88,8 +88,8 @@ export class Profile {
 
 	onFileSelected(event: Event): void {
 		const input = event.target as HTMLInputElement;
-		if (input.files && input.files.length > 0) {
-			const file = input.files[0];
+		if (input.files) {
+			const file = input.files?.[0];
 			this.selectedFile.set(file);
 
 			const reader = new FileReader();
@@ -125,9 +125,9 @@ export class Profile {
 			},
 			error: (err) => {
 				this.isSubmitting.set(false);
-				const errorMsg =
-					err.error?.message || "Ha ocurrido un error al actualizar el perfil.";
-				this.errorMessage.set(errorMsg);
+				this.errorMessage.set(
+					`Ha ocurrido un error al actualizar el perfil: ${err}`,
+				);
 			},
 		});
 	}
