@@ -16,7 +16,7 @@ export function mapToReservation(res: ReservationResponse): Reservation {
 		user: res.user ? mapToUser(res.user) : undefined,
 		Payment: res.payment ? mapToPayment(res.payment) : undefined,
 		Computer: res.computer ? mapToComputer(res.computer) : undefined,
-		timeslot: res.timeslot ? mapToTimeSlot(res.timeslot) : undefined,
+		timeslot: res.time_slot ? mapToTimeSlot(res.time_slot) : undefined,
 		createdAt: res.created_at,
 		updatedAt: res.updated_at,
 	};

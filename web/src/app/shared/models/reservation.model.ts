@@ -16,7 +16,7 @@ export interface ReservationResponse {
 	user: UserResponse;
 	payment: PaymentResponse;
 	computer: ComputerResponse;
-	timeslot: TimeSlotResponse;
+	time_slot: TimeSlotResponse;
 	created_at: string;
 	updated_at: string;
 }
