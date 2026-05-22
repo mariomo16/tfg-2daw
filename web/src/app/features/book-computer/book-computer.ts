@@ -1,4 +1,3 @@
-import { CurrencyPipe } from "@angular/common";
 import {
 	ChangeDetectionStrategy,
 	Component,
@@ -21,7 +20,7 @@ import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
 
 @Component({
 	selector: "app-book-computer",
-	imports: [Navbar, Footer, LoadingState, ErrorState, EmptyState, CurrencyPipe],
+	imports: [Navbar, Footer, LoadingState, ErrorState, EmptyState],
 	templateUrl: "./book-computer.html",
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
