@@ -40,9 +40,9 @@
                   <h3 class="font-diablo text-2xl text-primary-light">{{ zone.name }}</h3>
                   <p class="text-content-secondary text-sm mt-1">{{ zone.description }}</p>
                   <div class="flex items-baseline gap-1.5 mt-3 pt-3 border-t border-surface-border">
-                    <span class="text-xl text-content-primary font-diablo-heavy">{{
-                      zone.price | currency: 'EUR' : 'symbol' : '1.2-2'
-                    }}</span>
+                    <span class="text-xl text-content-primary font-diablo-heavy"
+                      >{{ zone.price }} creditos</span
+                    >
                     <span class="text-xs text-content-muted">/ hora</span>
                   </div>
                 </div>
@@ -217,9 +217,9 @@
 
             <div class="flex justify-between items-center py-3">
               <span class="text-content-muted text-sm uppercase tracking-wider">Precio</span>
-              <span class="text-[2rem] text-primary font-diablo-heavy">{{
-                selectedZonePrice() | currency: 'EUR' : 'symbol' : '1.2-2'
-              }}</span>
+              <span class="text-[2rem] text-primary font-diablo-heavy"
+                >{{ selectedZonePrice() }} creditos</span
+              >
             </div>
           </div>
         </div>
