@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from "@angular/common";
+import { DatePipe } from "@angular/common";
 import {
 	ChangeDetectionStrategy,
 	Component,
@@ -29,7 +29,6 @@ type navigationTab = "reservations" | "payments" | "edit";
 		Navbar,
 		Footer,
 		ReactiveFormsModule,
-		CurrencyPipe,
 		DatePipe,
 		LoadingState,
 		EmptyState,
