@@ -53,7 +53,7 @@ export interface CreateUserDto {
 	email: string;
 	role: UserRole;
 	balance: number;
-	image: string;
+	avatar_path: File;
 	password: string;
 }
 
@@ -62,6 +62,6 @@ export interface UpdateUserDto {
 	email: string;
 	role?: UserRole;
 	balance?: number;
-	image?: string;
+	avatar_path?: File;
 	password?: string;
 }

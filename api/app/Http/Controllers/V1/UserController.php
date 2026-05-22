@@ -30,9 +30,9 @@ class UserController extends Controller
         $data = $request->validated();
 
         // https://www.youtube.com/watch?v=SvIxR9oacJs
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('images', 'public');
-            $data = [...$data, 'image' => $path];
+        if ($request->hasFile('avatar_path')) {
+            $path = $request->file('avatar_path')->store('images', 'public');
+            $data = [...$data, 'avatar_path' => $path];
         }
 
         $user = User::create($data);
@@ -62,9 +62,9 @@ class UserController extends Controller
         $data = $request->validated();
 
         // https://www.youtube.com/watch?v=SvIxR9oacJs
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('images', 'public');
-            $data = [...$data, 'image' => $path];
+        if ($request->hasFile('avatar_path')) {
+            $path = $request->file('avatar_path')->store('images', 'public');
+            $data = [...$data, 'avatar_path' => $path];
         }
 
         $user->update(array_filter($data));

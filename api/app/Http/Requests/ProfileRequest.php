@@ -26,7 +26,7 @@ class ProfileRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:40'],
             'email' => ['required', 'string', Rule::unique('users', 'email')->ignore(auth()->id())],
-            'image' => ['nullable', 'image', 'mimes:webp,png,jpg', 'max:2048']
+            'avatar_path' => ['nullable', 'image', 'mimes:webp,png,jpg', 'max:2048']
         ];
     }
 
@@ -37,9 +37,9 @@ class ProfileRequest extends FormRequest
             'string' => 'Has introducido datos no válidos',
             'email.unique' => 'Ya existe un usuario con ese correo electronico',
             'name.max' => 'Maximo 50 caracteres',
-            'image.image' => 'Tiene que ser una imagen valida.',
-            'image.mimes' => 'Solo se aceptan imágenes webp, png y jpg',
-            'image.max' => 'El tamaño máximo permitido de imagen es de 2 MB'
+            'avatar_path.image' => 'Tiene que ser una imagen valida.',
+            'avatar_path.mimes' => 'Solo se aceptan imágenes webp, png y jpg',
+            'avatar_path.max' => 'El tamaño máximo permitido de imagen es de 2 MB'
         ];
     }
 }
