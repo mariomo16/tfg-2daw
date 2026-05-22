@@ -65,7 +65,6 @@ export class Profile {
 	protected readonly avatarPreview = signal<string | null>(null);
 
 	protected readonly isSubmitting = signal(false);
-	protected readonly successMessage = signal<string | null>(null);
 	protected readonly errorMessage = signal<string | null>(null);
 
 	protected readonly cancellingReservationId = signal<number | null>(null);
@@ -84,7 +83,6 @@ export class Profile {
 
 	changeTab(tab: navigationTab): void {
 		this.activeTab.set(tab);
-		this.successMessage.set(null);
 		this.errorMessage.set(null);
 	}
 
@@ -109,7 +107,6 @@ export class Profile {
 		}
 
 		this.isSubmitting.set(true);
-		this.successMessage.set(null);
 		this.errorMessage.set(null);
 
 		const formData = new FormData();
@@ -118,13 +115,12 @@ export class Profile {
 
 		const file = this.selectedFile();
 		if (file) {
-			formData.append("image", file);
+			formData.append("avatar_path", file);
 		}
 
 		this.#authService.updateProfile(formData).subscribe({
 			next: () => {
 				this.isSubmitting.set(false);
-				this.successMessage.set("¡Perfil actualizado con éxito!");
 				this.selectedFile.set(null);
 			},
 			error: (err) => {
