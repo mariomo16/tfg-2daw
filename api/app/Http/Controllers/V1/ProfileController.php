@@ -15,7 +15,7 @@ class ProfileController extends Controller
     public function show()
     {
         return response()->json(
-            new UserResource(auth()->user()->load(["reservations", "payments", "notifications"])),
+            new UserResource(auth()->user()->load(["reservations.computer.zone", "reservations.timeSlot", "payments", "notifications"])),
             200
         );
     }
@@ -36,7 +36,7 @@ class ProfileController extends Controller
         $user->update(array_filter($data));
 
         return response()->json(
-            new UserResource($user->fresh()->load(['reservations', 'payments', 'notifications'])),
+            new UserResource($user->fresh()->load(['reservations.computer.zone', 'reservations.timeSlot', 'payments', 'notifications'])),
             200
         );
     }
