@@ -38,9 +38,7 @@ class ZoneRequest extends FormRequest
             'price.required' => 'El precio/hora de la zona es necesario.',
             'price.numeric' => 'El precio/hora de la zona debe ser un número.',
             'price.between' => 'El precio/hora de la zona debe ser entre 0 y 99.99.',
-            'image.image' => 'Tiene que ser una imagen valida.',
-            'image.mimes' => 'Solo se aceptan imágenes webp, png y jpg',
-            'image.max' => 'El tamaño máximo permitido de imagen es de 2 MB'
+            'cover_image.string' => 'La imagen de la zona debe ser una URL.'
         ];
     }
 }
