@@ -177,7 +177,7 @@
                       }
                     </div>
 
-                    @if (res.status !== 'cancelled') {
+                    @if (res.status !== 'cancelled' && canCancel(res)) {
                       <div>
                         <button
                           type="button"
@@ -192,6 +192,8 @@
                           }
                         </button>
                       </div>
+                    } @else if (res.status !== 'cancelled') {
+                      <span class="text-content-muted text-xs italic">No cancelable</span>
                     }
                   </div>
                 </div>

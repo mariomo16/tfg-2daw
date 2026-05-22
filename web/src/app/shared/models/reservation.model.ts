@@ -30,7 +30,7 @@ export interface Reservation
 		| "user"
 		| "payment"
 		| "computer"
-		| "timeslot"
+		| "time_slot"
 		| "created_at"
 		| "updated_at"
 	> {
