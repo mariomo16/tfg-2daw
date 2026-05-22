@@ -20,6 +20,7 @@ import { Footer } from "@shared/ui/layout/footer/footer";
 import { Navbar } from "@shared/ui/layout/navbar/navbar";
 import { EmptyState } from "@shared/ui/states/empty-state/empty-state";
 import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
+import { Temporal } from "temporal-polyfill";
 
 type navigationTab = "reservations" | "payments" | "edit";
 
@@ -143,6 +144,18 @@ export class Profile {
 				console.error("Error al cancelar la reserva:", err);
 			},
 		});
+	}
+
+	canCancel(res: { date: string; timeslot?: { start: string } }): boolean {
+		if (!res.timeslot?.start) return false;
+		const start = Temporal.PlainDateTime.from(
+			`${res.date}T${res.timeslot.start}`,
+		);
+		const now = Temporal.Now.plainDateTimeISO();
+		return (
+			Temporal.PlainDateTime.compare(start, now) > 0 &&
+			now.until(start).total("hours") >= 1
+		);
 	}
 
 	protected readonly navigationButtons = [
