@@ -289,17 +289,9 @@
                   class="relative size-24 rounded-full border-2 border-surface-border overflow-hidden shrink-0"
                 >
                   @if (avatarPreview()) {
-                    <img
-                      [src]="avatarPreview()"
-                      class="w-full h-full object-cover"
-                      alt="Avatar temporal"
-                    />
+                    <img [src]="avatarPreview()" class="w-full h-full object-cover" />
                   } @else if (user.avatarPath) {
-                    <img
-                      [src]="user.avatarPath"
-                      class="w-full h-full object-cover"
-                      alt="Avatar usuario"
-                    />
+                    <img [src]="user.avatarPath" class="w-full h-full object-cover" />
                   } @else {
                     <div
                       class="w-full h-full bg-surface-base flex items-center justify-center text-content-muted text-2xl font-bold font-diablo-light"
@@ -343,7 +335,7 @@
                 id="name"
                 type="text"
                 formControlName="name"
-                class="bg-surface-base border border-surface-border p-3 text-content-primary focus:border-primary focus:shadow-[0_0_10px_var(--color-primary-glow)] outline-none transition-all duration-200"
+                class="bg-surface-base border border-surface-border p-3 text-content-primary focus:border-primary outline-none"
                 [class.border-error]="
                   profileForm.controls.name.invalid && profileForm.controls.name.touched
                 "
@@ -363,7 +355,7 @@
                 id="email"
                 type="email"
                 formControlName="email"
-                class="bg-surface-base border border-surface-border p-3 text-content-primary focus:border-primary focus:shadow-[0_0_10px_var(--color-primary-glow)] outline-none transition-all duration-200"
+                class="bg-surface-base border border-surface-border p-3 text-content-primary focus:border-primary outline-none"
                 [class.border-error]="
                   profileForm.controls.email.invalid && profileForm.controls.email.touched
                 "
@@ -377,7 +369,7 @@
 
             <button
               type="submit"
-              class="bg-primary border border-primary px-6 py-3.5 text-surface-base font-diablo-heavy text-sm uppercase tracking-wider cursor-pointer hover:bg-primary-light hover:border-primary-light transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_10px_var(--color-primary-glow)] hover:shadow-[0_0_20px_var(--color-primary-glow)]"
+              class="bg-primary border border-primary px-6 py-3.5 text-surface-base font-diablo-heavy text-sm uppercase tracking-wider cursor-pointer hover:bg-primary-light hover:border-primary-light disabled:opacity-50 disabled:cursor-not-allowed"
               [disabled]="isSubmitting() || profileForm.invalid"
             >
               @if (isSubmitting()) {
