@@ -57,6 +57,19 @@ export class AuthService {
 			.pipe(tap(() => this.#clearToken()));
 	}
 
+	updateProfile(formData: FormData): Observable<UserResponse> {
+		this.#updateState({ isLoading: true });
+		return this.#http
+			.post<UserResponse>(`${this.#baseUrl}/profile`, formData)
+			.pipe(
+				tap((user) => this.#updateState({ user, isLoading: false })),
+				catchError((err) => {
+					this.#updateState({ isLoading: false });
+					throw err;
+				}),
+			);
+	}
+
 	checkAuth(): Observable<UserResponse | null> {
 		if (!this.#cookies.get(this.#TOKEN_KEY)) {
 			this.#updateState({ user: null, isLoading: false });
