@@ -111,7 +111,7 @@
                         <span
                           class="text-xs uppercase px-2 py-0.5 tracking-wider font-semibold bg-surface-base border border-surface-border rounded text-primary-light"
                         >
-                          {{ res.Computer?.zone?.name }}
+                          {{ res.Computer?.zone?.name || 'Error' }}
                         </span>
                       </div>
                       <p class="text-content-secondary text-xs mt-1">Reserva #{{ res.id }}</p>
