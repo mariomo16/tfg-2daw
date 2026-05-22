@@ -10,8 +10,8 @@ export function mapToUser(res: UserResponse): User {
 		notifications: res.notifications
 			? res.notifications.map(mapToNotification)
 			: undefined,
-		payments: res.notifications ? res.payments.map(mapToPayment) : undefined,
-		reservations: res.notifications
+		payments: res.payments ? res.payments.map(mapToPayment) : undefined,
+		reservations: res.reservations
 			? res.reservations.map(mapToReservation)
 			: undefined,
 		emailVerifiedAt: res.email_verified_at ? res.email_verified_at : null,
