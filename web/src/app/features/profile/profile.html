@@ -85,7 +85,7 @@
     <div>
       @if (activeTab() === 'reservations') {
         <div>
-          @if (!user.reservations) {
+          @if (!user.reservations || user.reservations.length < 1) {
             <app-empty-state />
           } @else {
             <div class="grid grid-cols-1 gap-4">
@@ -203,7 +203,7 @@
 
       @if (activeTab() === 'payments') {
         <div>
-          @if (!user.payments) {
+          @if (!user.payments || user.payments.length < 1) {
             <app-empty-state />
           } @else {
             <div
