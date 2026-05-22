@@ -30,7 +30,7 @@ class UserRequest extends FormRequest
             'role' => ['required', 'in:client,staff'],
             'balance' => ['required', 'numeric', 'between:0,999.99'],
             'password' => ['nullable', 'string', Password::defaults()],
-            'image' => ['nullable', 'image', 'mimes:webp,png,jpg,gif', 'max:2048']
+            'avatar_path' => ['nullable', 'image', 'mimes:webp,png,jpg', 'max:2048']
         ];
     }
 
@@ -44,9 +44,9 @@ class UserRequest extends FormRequest
             'between' => 'El valor debe estar entre :min y :max',
             'name.max' => 'Maximo 50 caracteres',
             'role.in' => 'Has introducido un rol no valido',
-            'image.image' => 'Tiene que ser una imagen valida.',
-            'image.mimes' => 'Solo se aceptan imágenes webp, png y jpg',
-            'image.max' => 'El tamaño máximo permitido de imagen es de 2 MB'
+            'avatar_path.image' => 'Tiene que ser una imagen valida.',
+            'avatar_path.mimes' => 'Solo se aceptan imágenes webp, png y jpg',
+            'avatar_path.max' => 'El tamaño máximo permitido de imagen es de 2 MB'
         ];
     }
 }
