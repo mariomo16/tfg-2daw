@@ -1,15 +1,23 @@
-@if (reservationsResource.isLoading()) {
-  <app-loading-state />
-} @else if (reservationsResource.error()) {
-  <app-error-state />
-} @else {
-  <app-data-table
-    title="Reservas"
-    description="Gestiona las reservas de los usuarios"
-    [columns]="columns"
-    [actions]="actions"
-    [isEmpty]="!reservationsResource.value()?.length"
-  >
+<app-data-table
+  title="Reservas"
+  description="Gestiona las reservas de los usuarios"
+  [columns]="columns"
+  [actions]="actions"
+  [isEmpty]="!reservationsResource.isLoading() && !reservationsResource.value()?.length"
+>
+  @if (reservationsResource.isLoading()) {
+    <tr>
+      <td [attr.colspan]="columns.length">
+        <app-loading-state />
+      </td>
+    </tr>
+  } @else if (reservationsResource.error()) {
+    <tr>
+      <td [attr.colspan]="columns.length">
+        <app-error-state />
+      </td>
+    </tr>
+  } @else {
     @for (reservation of reservationsResource.value(); track reservation.id) {
       <tr class="hover:bg-surface-card/30 transition-colors">
         <td class="px-6 py-4 text-sm text-content-secondary">{{ reservation.id }}</td>
@@ -43,5 +51,5 @@
         </td>
       </tr>
     }
-  </app-data-table>
-}
+  }
+</app-data-table>
