@@ -16,6 +16,8 @@ class PaymentController extends Controller
      */
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Payment::class);
+
         return response()->json(
             PaymentResource::collection(Payment::with(['user', 'reservation'])->get()),
             200
@@ -40,6 +42,8 @@ class PaymentController extends Controller
      */
     public function show(Payment $payment): JsonResponse
     {
+        $this->authorize('view', $payment);
+
         return response()->json(
             new PaymentResource($payment->load(['user', 'reservation'])),
             200

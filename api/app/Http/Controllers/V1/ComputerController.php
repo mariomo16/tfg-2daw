@@ -27,6 +27,8 @@ class ComputerController extends Controller
      */
     public function store(ComputerRequest $request): JsonResponse
     {
+        $this->authorize('create', Computer::class);
+
         $computer = Computer::create($request->validated());
 
         return response()->json(
@@ -51,6 +53,8 @@ class ComputerController extends Controller
      */
     public function update(ComputerRequest $request, Computer $computer): JsonResponse
     {
+        $this->authorize('update', $computer);
+
         $computer->update($request->validated());
 
         return response()->json(
@@ -64,6 +68,8 @@ class ComputerController extends Controller
      */
     public function destroy(Computer $computer): Response
     {
+        $this->authorize('delete', $computer);
+
         $computer->delete();
 
         return response()->noContent();

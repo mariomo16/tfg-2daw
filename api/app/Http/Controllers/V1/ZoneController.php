@@ -27,6 +27,8 @@ class ZoneController extends Controller
      */
     public function store(ZoneRequest $request): JsonResponse
     {
+        $this->authorize('create', Zone::class);
+
         $data = $request->validated();
 
         $zone = Zone::create($data);
@@ -53,6 +55,8 @@ class ZoneController extends Controller
      */
     public function update(ZoneRequest $request, Zone $zone): JsonResponse
     {
+        $this->authorize('update', $zone);
+
         $data = $request->validated();
 
         $zone->update(array_filter($data));
@@ -68,6 +72,8 @@ class ZoneController extends Controller
      */
     public function destroy(Zone $zone): Response
     {
+        $this->authorize('delete', $zone);
+
         $zone->delete();
 
         return response()->noContent();

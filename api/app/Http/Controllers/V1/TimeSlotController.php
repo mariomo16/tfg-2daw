@@ -27,6 +27,8 @@ class TimeSlotController extends Controller
      */
     public function store(TimeSlotRequest $request): JsonResponse
     {
+        $this->authorize('create', TimeSlot::class);
+
         $timeslot = TimeSlot::create($request->all());
 
         return response()->json(
@@ -51,6 +53,8 @@ class TimeSlotController extends Controller
      */
     public function update(TimeSlotRequest $request, TimeSlot $timeSlot): JsonResponse
     {
+        $this->authorize('update', $timeSlot);
+
         $timeSlot->update($request->all());
 
         return response()->json(
@@ -64,6 +68,8 @@ class TimeSlotController extends Controller
      */
     public function destroy(TimeSlot $timeSlot): Response
     {
+        $this->authorize('delete', $timeSlot);
+
         $timeSlot->delete();
 
         return response()->noContent();

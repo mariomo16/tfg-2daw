@@ -17,6 +17,8 @@ class ReservationController extends Controller
      */
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Reservation::class);
+
         return response()->json(
             ReservationResource::collection(Reservation::with(['user', 'computer', 'timeSlot', 'payment'])->get()),
             200
@@ -28,6 +30,8 @@ class ReservationController extends Controller
      */
     public function store(ReservationRequest $request, ReservationService $service): JsonResponse
     {
+        $this->authorize('create', Reservation::class);
+
         $reservation = $request->validated();
 
         $reservation = $service->createReservation($request->validated());
@@ -43,6 +47,8 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation): JsonResponse
     {
+        $this->authorize('view', $reservation);
+
         return response()->json(
             new ReservationResource($reservation->load(['user', 'payment', 'computer', 'timeSlot'])),
             200
@@ -67,6 +73,8 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation, ReservationService $service): Response
     {
+        $this->authorize('cancel', $reservation);
+
         $reservation = $service->cancel($reservation);
 
         return response()->noContent();
