@@ -50,6 +50,7 @@ export class BookComputer {
 	// Estados de la reserva
 	protected readonly isSubmitting = signal(false);
 	protected readonly bookingSuccess = signal(false);
+	protected readonly bookingError = signal(false);
 
 	// Fecha minima (hoyy)
 	protected readonly minDate = new Date().toISOString().split("T")[0];
@@ -176,6 +177,7 @@ export class BookComputer {
 				},
 				error: (err) => {
 					this.isSubmitting.set(false);
+					this.bookingError.set(true);
 					console.error("Ha ocurrido un error al realizar la reserva:", err);
 				},
 			});

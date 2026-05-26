@@ -231,6 +231,12 @@
             ¡Reserva confirmada con éxito! Nos vemos pronto.
           </div>
         }
+
+        @if (bookingError()) {
+          <div class="mx-8 mb-6 p-4 bg-error/10 border border-error text-error text-sm text-center">
+            Ha habido un problema al reservar el ordenador
+          </div>
+        }
       </div>
     </div>
   }
