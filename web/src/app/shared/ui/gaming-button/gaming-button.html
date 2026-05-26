@@ -1,0 +1,13 @@
+@if (!asLink() && type()) {
+  <button type="button" [type]="type()">
+    <p class="font-diablo-heavy">{{ label() }}</p>
+  </button>
+} @else if (useRouterLink()) {
+  <a [routerLink]="href()">
+    <p class="font-diablo-heavy">{{ label() }}</p>
+  </a>
+} @else {
+  <a [href]="href()">
+    <p class="font-diablo-heavy">{{ label() }}</p>
+  </a>
+}

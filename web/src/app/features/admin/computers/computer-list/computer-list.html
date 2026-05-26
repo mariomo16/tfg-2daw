@@ -1,0 +1,44 @@
+@if (computersResource.isLoading()) {
+  <app-loading-state />
+} @else if (computersResource.error()) {
+  <app-error-state />
+} @else {
+  <app-data-table
+    title="Ordenadores"
+    description="Gestiona los equipos del local"
+    actionLabel="+ Nuevo ordenador"
+    actionRoute="/admin/computers/new"
+    [columns]="columns"
+    [actions]="actions"
+    [isEmpty]="!computersResource.value()?.length"
+  >
+    @for (computer of computersResource.value(); track computer.id) {
+      <tr class="hover:bg-surface-card/30 transition-colors">
+        <td class="px-6 py-4 text-sm text-content-secondary">{{ computer.id }}</td>
+        <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ computer.name }}</td>
+        <td class="px-6 py-4 text-sm text-content-secondary">
+          {{ computer.zone?.name ?? 'Zona eliminada' }}
+        </td>
+        <td class="px-6 py-4">
+          <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-xs">
+            {{ getComputerStatus(computer.status) }}
+          </span>
+        </td>
+        <td class="px-6 py-4 text-right">
+          <a
+            [routerLink]="['/admin/computers', computer.id, 'edit']"
+            class="text-sm text-primary-light hover:text-primary transition-colors mr-3"
+            >Editar</a
+          >
+          <button
+            (click)="onDelete(computer.id)"
+            type="button"
+            class="text-sm text-error hover:text-error/80 transition-colors cursor-pointer"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    }
+  </app-data-table>
+}

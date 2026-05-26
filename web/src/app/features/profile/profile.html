@@ -1,0 +1,394 @@
+<app-navbar />
+
+@let user = currentUser();
+
+<main class="w-full max-w-6xl mx-auto py-16 px-6 min-h-screen">
+  @if (user) {
+    <div
+      class="relative bg-surface-card border border-surface-border p-8 rounded-lg flex flex-col md:flex-row items-center justify-between gap-8 mb-2 mt-4"
+    >
+      <div
+        class="relative flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left z-10"
+      >
+        <div class="relative group">
+          @if (avatarPreview()) {
+            <img
+              [src]="avatarPreview()"
+              class="size-28 rounded-full border-2 border-primary object-cover"
+            />
+          } @else if (user.avatarPath) {
+            <img
+              [src]="user.avatarPath"
+              class="size-28 rounded-full border-2 border-primary object-cover"
+            />
+          } @else {
+            <div
+              class="rounded-full bg-primary-light size-28 font-bold text-5xl flex items-center justify-center font-diablo-light text-surface-base"
+            >
+              {{ user.name.slice(0, 1).toUpperCase() }}
+            </div>
+          }
+        </div>
+
+        <div>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-2">
+            <h1 class="font-diablo text-3xl text-content-primary tracking-wide">{{ user.name }}</h1>
+            <span
+              class="px-2.5 py-0.5 rounded text-xs uppercase tracking-wider font-bold inline-block self-center sm:self-auto"
+              [class]="
+                user.role === 'staff'
+                  ? 'text-primary bg-primary/15 border border-primary/30'
+                  : 'text-info bg-info/10 border border-info/20'
+              "
+            >
+              {{ user.role === 'staff' ? 'Administrador' : 'Cliente' }}
+            </span>
+          </div>
+          <p
+            class="text-content-secondary text-sm flex items-center justify-center sm:justify-start gap-1"
+          >
+            {{ user.email }}
+          </p>
+          <p class="text-content-muted text-xs mt-1">
+            Miembro desde el {{ user.createdAt | date: 'dd/MM/yyyy' }}
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="relative flex flex-col items-center md:items-end gap-1 bg-surface-base border border-surface-border py-4 px-8 rounded-md z-10 w-full sm:w-auto text-center md:text-right"
+      >
+        <span class="text-content-muted text-xs uppercase tracking-wider font-bold">Creditos</span>
+        <span class="text-3xl text-primary font-diablo-heavy tracking-wide">{{
+          user.balance
+        }}</span>
+      </div>
+    </div>
+
+    <div class="flex border-b border-surface-border mb-8 overflow-x-auto">
+      @for (item of navigationButtons; track $index) {
+        <button
+          type="button"
+          class="px-6 py-4 border-b-2 font-diablo-heavy text-sm uppercase tracking-wider cursor-pointer whitespace-nowrap transition-colors duration-200"
+          [class]="
+            activeTab() === item.name
+              ? 'border-primary text-primary-light'
+              : 'border-transparent text-content-muted hover:text-content-secondary'
+          "
+          (click)="changeTab(item.name)"
+        >
+          {{ item.label }}
+        </button>
+      }
+    </div>
+
+    <div>
+      @if (activeTab() === 'reservations') {
+        <div>
+          @if (!user.reservations || user.reservations.length < 1) {
+            <app-empty-state />
+          } @else {
+            <div class="grid grid-cols-1 gap-4">
+              @for (res of user.reservations; track res.id) {
+                <div
+                  class="bg-surface-card border rounded-lg p-5 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md hover:border-primary/40"
+                  [class]="
+                    res.status === 'cancelled'
+                      ? 'border-surface-border opacity-70'
+                      : 'border-surface-border'
+                  "
+                >
+                  <div class="flex items-center gap-4">
+                    <div class="text-3xl bg-surface-base p-3 rounded border border-surface-border">
+                      🖥️
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-3">
+                        <h3 class="font-diablo-heavy text-lg text-content-primary">
+                          {{ res.Computer?.name || 'PC-' + res.computerId }}
+                        </h3>
+                        <span
+                          class="text-xs uppercase px-2 py-0.5 tracking-wider font-semibold bg-surface-base border border-surface-border rounded text-primary-light"
+                        >
+                          {{ res.Computer?.zone?.name || 'Error' }}
+                        </span>
+                      </div>
+                      <p class="text-content-secondary text-xs mt-1">Reserva #{{ res.id }}</p>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-2 md:flex md:items-center gap-4 md:gap-12">
+                    <div>
+                      <span
+                        class="text-content-muted text-[10px] uppercase tracking-wider block font-bold"
+                        >Fecha</span
+                      >
+                      <span class="text-content-primary font-diablo-heavy text-sm">{{
+                        res.date | date: 'dd/MM/yyyy'
+                      }}</span>
+                    </div>
+                    <div>
+                      <span
+                        class="text-content-muted text-[10px] uppercase tracking-wider block font-bold"
+                        >Horario</span
+                      >
+                      <span class="text-content-primary font-diablo-heavy text-sm">
+                        {{
+                          res.timeslot?.start?.slice(0, 5) + ' — ' + res.timeslot?.end?.slice(0, 5)
+                        }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="flex items-center justify-between md:justify-end gap-6 border-t md:border-t-0 pt-4 md:pt-0 border-surface-border"
+                  >
+                    <div class="text-right">
+                      <span
+                        class="text-content-muted text-[10px] uppercase tracking-wider block font-bold"
+                        >Creditos</span
+                      >
+                      <span class="text-primary font-diablo-heavy text-lg">{{ res.price }}</span>
+                    </div>
+
+                    <div>
+                      @switch (res.status) {
+                        @case ('confirmed') {
+                          <span
+                            class="px-3 py-1 rounded text-xs uppercase tracking-wider font-bold bg-success/15 border border-success/30 text-success-light"
+                          >
+                            Confirmada
+                          </span>
+                        }
+                        @case ('pending') {
+                          <span
+                            class="px-3 py-1 rounded text-xs uppercase tracking-wider font-bold bg-warning/15 border border-warning/30 text-warning"
+                          >
+                            Pendiente
+                          </span>
+                        }
+                        @case ('cancelled') {
+                          <span
+                            class="px-3 py-1 rounded text-xs uppercase tracking-wider font-bold bg-surface-border/55 border border-surface-border/80 text-content-muted"
+                          >
+                            Cancelada
+                          </span>
+                        }
+                      }
+                    </div>
+
+                    @if (res.status !== 'cancelled' && canCancel(res)) {
+                      <div>
+                        <button
+                          type="button"
+                          class="px-4 py-2 border border-error text-error hover:bg-error/10 text-xs font-diablo-heavy uppercase tracking-wider cursor-pointer transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                          [disabled]="cancellingReservationId() === res.id"
+                          (click)="cancelReservation(res.id)"
+                        >
+                          @if (cancellingReservationId() === res.id) {
+                            Cancelando...
+                          } @else {
+                            Cancelar
+                          }
+                        </button>
+                      </div>
+                    } @else if (res.status !== 'cancelled') {
+                      <span class="text-content-muted text-xs italic">No cancelable</span>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      @if (activeTab() === 'payments') {
+        <div>
+          @if (!user.payments || user.payments.length < 1) {
+            <app-empty-state />
+          } @else {
+            <div
+              class="bg-surface-card border border-surface-border rounded-lg shadow-md overflow-hidden"
+            >
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr
+                      class="bg-surface-base border-b border-surface-border text-content-muted text-xs uppercase tracking-wider"
+                    >
+                      <th class="p-4 font-diablo-heavy">Transacción</th>
+                      <th class="p-4 font-diablo-heavy">Fecha y Hora</th>
+                      <th class="p-4 font-diablo-heavy">Descripción</th>
+                      <th class="p-4 font-diablo-heavy text-right">Cantidad</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-surface-border">
+                    @for (pay of user.payments; track pay.id) {
+                      <tr class="hover:bg-surface-base/30 transition-colors">
+                        <td class="p-4 font-mono text-sm text-content-primary">#{{ pay.id }}</td>
+                        <td class="p-4 text-sm text-content-secondary">
+                          {{ pay.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                        </td>
+                        <td class="p-4 text-sm text-content-primary flex items-center gap-2">
+                          @if (pay.type === 'refund') {
+                            <span
+                              class="text-xs bg-success/15 border border-success/30 text-success-light px-1.5 py-0.5 rounded uppercase font-bold"
+                              >Reembolso</span
+                            >
+                            <span>De Reserva #{{ pay.reservationId }}</span>
+                          } @else {
+                            <span
+                              class="text-xs bg-primary/15 border border-primary/30 text-primary-light px-1.5 py-0.5 rounded uppercase font-bold"
+                              >Pago</span
+                            >
+                            <span>De Reserva #{{ pay.reservationId }}</span>
+                          }
+                        </td>
+                        <td
+                          class="p-4 text-md font-diablo-heavy text-right"
+                          [class]="pay.type === 'refund' ? 'text-success-light' : 'text-primary'"
+                        >
+                          {{ pay.type === 'refund' ? '+' : '-' }}{{ pay.amount }}
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (activeTab() === 'edit') {
+        <div class="max-w-xl mx-auto">
+          <form
+            [formGroup]="profileForm"
+            (ngSubmit)="onSubmit()"
+            class="bg-surface-card border border-surface-border p-8 rounded-lg shadow-lg flex flex-col gap-6"
+          >
+            <h3
+              class="font-diablo text-2xl text-primary-light border-b border-surface-border pb-4 mb-2"
+            >
+              Editar mis datos
+            </h3>
+
+            @if (errorMessage()) {
+              <div
+                class="bg-error/10 border border-error text-content-primary p-4 rounded text-sm text-center"
+              >
+                {{ errorMessage() }}
+              </div>
+            }
+
+            <div class="flex flex-col items-center gap-4">
+              <span class="text-content-secondary text-sm self-start font-bold"
+                >Foto de Perfil</span
+              >
+              <div class="flex items-center gap-6 w-full">
+                <div
+                  class="relative size-24 rounded-full border-2 border-surface-border overflow-hidden shrink-0"
+                >
+                  @if (avatarPreview()) {
+                    <img [src]="avatarPreview()" class="w-full h-full object-cover" />
+                  } @else if (user.avatarPath) {
+                    <img [src]="user.avatarPath" class="w-full h-full object-cover" />
+                  } @else {
+                    <div
+                      class="w-full h-full bg-surface-base flex items-center justify-center text-content-muted text-2xl font-bold font-diablo-light"
+                    >
+                      ?
+                    </div>
+                  }
+                </div>
+
+                <div class="flex-1">
+                  <label
+                    for="avatar-input"
+                    class="inline-block bg-surface-base border border-surface-border px-4 py-2.5 text-xs text-content-secondary font-diablo-heavy tracking-wider hover:border-primary hover:text-primary-light cursor-pointer"
+                  >
+                    SELECCIONAR IMAGEN
+                  </label>
+                  <input
+                    id="avatar-input"
+                    type="file"
+                    accept="image/webp, image/png, image/jpeg"
+                    class="hidden"
+                    (change)="onFileSelected($event)"
+                  />
+                  <p class="text-content-muted text-sm mt-2 uppercase">
+                    Formatos: WEBP, PNG, JPG (Máx. 2MB)
+                  </p>
+                  @if (selectedFile()) {
+                    <p class="text-success-light text-xs font-semibold mt-1">
+                      Archivo seleccionado: {{ selectedFile()?.name }}
+                    </p>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="name" class="text-content-secondary text-sm font-bold"
+                >Nombre Completo</label
+              >
+              <input
+                id="name"
+                type="text"
+                formControlName="name"
+                class="bg-surface-base border border-surface-border p-3 text-content-primary focus:border-primary outline-none"
+                [class.border-error]="
+                  profileForm.controls.name.invalid && profileForm.controls.name.touched
+                "
+              />
+              @if (profileForm.controls.name.invalid && profileForm.controls.name.touched) {
+                <span class="text-error text-xs font-semibold"
+                  >El nombre es obligatorio (Máx. 40 caracteres)</span
+                >
+              }
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="email" class="text-content-secondary text-sm font-bold"
+                >Correo Electrónico</label
+              >
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                class="bg-surface-base border border-surface-border p-3 text-content-primary focus:border-primary outline-none"
+                [class.border-error]="
+                  profileForm.controls.email.invalid && profileForm.controls.email.touched
+                "
+              />
+              @if (profileForm.controls.email.invalid && profileForm.controls.email.touched) {
+                <span class="text-error text-xs font-semibold"
+                  >Introduce un correo electrónico válido</span
+                >
+              }
+            </div>
+
+            <button
+              type="submit"
+              class="bg-primary border border-primary px-6 py-3.5 text-surface-base font-diablo-heavy text-sm uppercase tracking-wider cursor-pointer hover:bg-primary-light hover:border-primary-light disabled:opacity-50 disabled:cursor-not-allowed"
+              [disabled]="isSubmitting() || profileForm.invalid"
+            >
+              @if (isSubmitting()) {
+                Guardando cambios...
+              } @else {
+                Guardar Cambios
+              }
+            </button>
+          </form>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="flex flex-col items-center justify-center py-20">
+      <app-loading-state />
+    </div>
+  }
+</main>
+
+<app-footer />

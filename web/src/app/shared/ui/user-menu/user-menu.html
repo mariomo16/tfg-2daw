@@ -1,0 +1,21 @@
+@let user = loggedUser();
+<div class="flex gap-4">
+  <a
+    routerLink="/profile"
+    class="flex gap-3 items-center hover:bg-surface-card rounded-md p-2 transition-colors duration-150"
+  >
+    @if (user?.avatarPath) {
+      <img [src]="user?.avatarPath" class="rounded-full size-8 shrink-0 object-cover" />
+    } @else {
+      <div
+        class="rounded-full bg-primary-light size-8 font-bold text-3xl flex items-center justify-center font-diablo-light"
+      >
+        ?
+      </div>
+    }
+    <p class="font-bold">{{ user?.name }}</p>
+  </a>
+  <button class="hover:cursor-pointer px-2 rounded-md hover:bg-surface-card" (click)="onLogout()">
+    CERRAR SESION
+  </button>
+</div>

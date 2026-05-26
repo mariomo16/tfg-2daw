@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Http\Controllers\V1;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\TimeSlotRequest;
+use App\Http\Resources\TimeSlotResource;
+use App\Models\TimeSlot;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+
+class TimeSlotController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): JsonResponse
+    {
+        return response()->json(
+            TimeSlotResource::collection(TimeSlot::with('reservations')->get()),
+            200
+        );
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(TimeSlotRequest $request): JsonResponse
+    {
+        $this->authorize('create', TimeSlot::class);
+
+        $timeslot = TimeSlot::create($request->all());
+
+        return response()->json(
+            new TimeSlotResource($timeslot->load('reservations')),
+            201
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(TimeSlot $timeSlot): JsonResponse
+    {
+        return response()->json(
+            new TimeSlotResource($timeSlot->load('reservations')),
+            200
+        );
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(TimeSlotRequest $request, TimeSlot $timeSlot): JsonResponse
+    {
+        $this->authorize('update', $timeSlot);
+
+        $timeSlot->update($request->all());
+
+        return response()->json(
+            new TimeSlotResource($timeSlot->fresh()->load('reservations')),
+            200
+        );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(TimeSlot $timeSlot): Response
+    {
+        $this->authorize('delete', $timeSlot);
+
+        $timeSlot->delete();
+
+        return response()->noContent();
+    }
+}

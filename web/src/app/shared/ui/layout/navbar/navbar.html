@@ -1,0 +1,37 @@
+<header
+  class="h-16 max-h-16 w-screen flex justify-center fixed z-999 top-0 bg-surface-base border-b border-surface-border"
+>
+  <div class="w-full flex items-center max-w-7xl px-4">
+    <span class="flex-1 flex justify-start">
+      <app-logo [size]="size" />
+    </span>
+    <div class="flex-1 flex justify-center font-semibold">
+      @for (link of navLinks; track $index) {
+        @if (link.label !== 'RESERVAR' || user()) {
+          <a
+            class="text-content-secondary hover:cursor-pointer hover:text-primary-light transition-colors duration-150 p-4"
+            [routerLink]="link.path"
+            >{{ link.label }}</a
+          >
+        }
+      }
+      @if (user()?.role === 'staff') {
+        <a
+          class="text-content-secondary hover:cursor-pointer hover:text-primary-light transition-colors duration-150 p-4"
+          routerLink="/admin"
+          >ADMIN</a
+        >
+      }
+    </div>
+    <div class="flex-1 flex justify-end gap-2">
+      @if (isLoading()) {
+        <app-loading-state />
+      } @else if (isAuthenticated()) {
+        <app-user-menu />
+      } @else {
+        <app-normal-button label="Registrarse" href="/register" />
+        <app-normal-button label="Iniciar sesión" href="/login" />
+      }
+    </div>
+  </div>
+</header>

@@ -1,3 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
 
-@import 'tailwindcss';
+@font-face {
+	font-family: "inter";
+	src: url("/fonts/Inter.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "bildad";
+	src: url("/fonts/bildad.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "diablo_light";
+	src: url("/fonts/diablo_light.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "diablo_heavy";
+	src: url("/fonts/diablo_heavy.woff2") format("woff2");
+}
+
+@theme {
+	--font-diablo: "bildad";
+	--font-diablo-light: "diablo_light";
+	--font-diablo-heavy: "diablo_heavy";
+	--font-inter: "Inter";
+
+	--color-surface-base: hsl(240, 10%, 4%);
+	--color-surface-card: hsl(240, 10%, 9%);
+	--color-surface-border: hsl(240, 5%, 15%);
+
+	--color-primary: hsl(22, 95%, 48%);
+	--color-primary-light: hsl(30, 100%, 60%);
+	--color-primary-glow: hsla(22, 95%, 48%, 0.3);
+
+	--color-success: hsl(150, 100%, 50%);
+	--color-success-light: hsl(150, 100%, 65%);
+
+	--color-error: hsl(0, 95%, 55%);
+
+	--color-info: hsl(190, 100%, 50%);
+
+	--color-warning: hsl(40, 100%, 55%);
+
+	--color-content-primary: hsl(0, 0%, 95%);
+	--color-content-secondary: hsl(240, 5%, 70%);
+	--color-content-muted: hsl(240, 5%, 45%);
+}
+
+:root {
+	font-family: var(--font-inter);
+	background-color: var(--color-surface-base);
+	color: whitesmoke;
+}
+
+html {
+	scroll-behavior: smooth;
+}

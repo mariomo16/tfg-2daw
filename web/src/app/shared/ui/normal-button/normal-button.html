@@ -1,0 +1,5 @@
+@if (useRouterLink()) {
+  <a [routerLink]="href()">{{ label() }}</a>
+} @else {
+  <a [href]="href()">{{ label() }}</a>
+}
