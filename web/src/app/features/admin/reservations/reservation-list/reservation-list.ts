@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from "@angular/common";
+import { DatePipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { rxResource } from "@angular/core/rxjs-interop";
 import { ReservationService } from "@shared/services/reservation.service";
@@ -8,7 +8,7 @@ import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
 
 @Component({
 	selector: "app-reservation-list",
-	imports: [DatePipe, CurrencyPipe, DataTable, LoadingState, ErrorState],
+	imports: [DatePipe, DataTable, LoadingState, ErrorState],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: "./reservation-list.html",
 })
