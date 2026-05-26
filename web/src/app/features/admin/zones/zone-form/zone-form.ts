@@ -13,7 +13,7 @@ import {
 	Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import type { CreateZoneDto, UpdateZoneDto } from "@shared/models/zone.model";
+import type { CreateZoneDto } from "@shared/models/zone.model";
 import { ZoneService } from "@shared/services/zone.service";
 import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
 import { of } from "rxjs";
@@ -42,6 +42,8 @@ export class ZoneForm {
 	protected readonly form = this.#formBuilder.group({
 		name: ["", [Validators.required]],
 		pricePerSlot: ["", [Validators.required, Validators.min(0)]],
+		description: ["", [Validators.required]],
+		coverImage: ["", [Validators.required]],
 	});
 
 	protected readonly zoneResource = rxResource({
@@ -57,6 +59,8 @@ export class ZoneForm {
 			this.form.patchValue({
 				name: zone.name,
 				pricePerSlot: String(zone.price),
+				description: zone.description,
+				coverImage: String(zone.coverImage),
 			});
 		});
 	}
