@@ -71,13 +71,14 @@ export class ZoneForm {
 			return;
 		}
 
-		const { name, pricePerSlot } = this.form.getRawValue();
+		const { name, pricePerSlot, description, coverImage } =
+			this.form.getRawValue();
 
 		const dto: CreateZoneDto = {
 			name: name,
 			price: Number(pricePerSlot),
-			description: "Hola",
-			cover_image: "",
+			description: description,
+			cover_image: coverImage,
 		};
 
 		const action$ = this.#zoneId
