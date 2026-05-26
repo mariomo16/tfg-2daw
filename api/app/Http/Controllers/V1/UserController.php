@@ -16,6 +16,7 @@ class UserController extends Controller
      */
     public function index(): JsonResponse
     {
+        \info(auth()->user()->role);
         $this->authorize('viewAny', User::class);
 
         return response()->json(
