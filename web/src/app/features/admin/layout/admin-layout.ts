@@ -1,21 +1,8 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	computed,
-	inject,
-} from "@angular/core";
-import { toSignal } from "@angular/core/rxjs-interop";
-import {
-	NavigationEnd,
-	Router,
-	RouterLink,
-	RouterLinkActive,
-	RouterOutlet,
-} from "@angular/router";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { AuthService } from "@core/auth/auth.service";
 import { APP } from "@core/constants/app.constants";
 import { UserMenu } from "@shared/ui/user-menu/user-menu";
-import { filter, map } from "rxjs";
 
 interface Catalog {
 	name: string;
