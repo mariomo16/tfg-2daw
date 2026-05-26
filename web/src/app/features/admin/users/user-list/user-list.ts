@@ -39,10 +39,6 @@ export class UserList {
 
 	protected readonly actions = true;
 
-	getUserRole(role: UserRole) {
-		return USER_ROLE_LABEL[role];
-	}
-
 	protected onDelete(id: number): void {
 		this.#userService
 			.delete(id)
