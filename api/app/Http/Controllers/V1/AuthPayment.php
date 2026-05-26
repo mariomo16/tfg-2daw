@@ -4,8 +4,6 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PaymentResource;
-use App\Models\Reservation;
-use Illuminate\Http\Request;
 
 class AuthPayment extends Controller
 {
