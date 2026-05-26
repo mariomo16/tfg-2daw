@@ -7,8 +7,6 @@ import {
 } from "@angular/core";
 import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterLink } from "@angular/router";
-import { USER_ROLE_LABEL } from "@shared/constants/user.constants";
-import type { UserRole } from "@shared/models/user.model";
 import { UserService } from "@shared/services/user.service";
 import { DataTable } from "@shared/ui/data-table/data-table";
 import { ErrorState } from "@shared/ui/states/error-state/error-state";
