@@ -29,13 +29,13 @@ export class UserService {
 			.pipe(map(mapToUser));
 	}
 
-	create(data: CreateUserDto): Observable<User> {
+	create(data: CreateUserDto | FormData): Observable<User> {
 		return this.#http
 			.post<UserResponse>(this.#resourceUrl, data)
 			.pipe(map(mapToUser));
 	}
 
-	update(id: number, data: UpdateUserDto): Observable<User> {
+	update(id: number, data: UpdateUserDto | FormData): Observable<User> {
 		return this.#http
 			.put<UserResponse>(`${this.#resourceUrl}/${id}`, data)
 			.pipe(map(mapToUser));

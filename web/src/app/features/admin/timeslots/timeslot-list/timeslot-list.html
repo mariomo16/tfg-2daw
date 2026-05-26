@@ -1,0 +1,37 @@
+@if (timeslotsResource.isLoading()) {
+  <app-loading-state />
+} @else if (timeslotsResource.error()) {
+  <app-error-state />
+} @else {
+  <app-data-table
+    title="Franjas horarias"
+    description="Gestiona los horarios disponibles"
+    actionLabel="+ Nueva franja"
+    actionRoute="/admin/timeslots/new"
+    [columns]="columns"
+    [actions]="actions"
+    [isEmpty]="!timeslotsResource.value()?.length"
+  >
+    @for (timeslot of timeslotsResource.value(); track timeslot.id) {
+      <tr class="hover:bg-zinc-800/30 transition-colors">
+        <td class="px-6 py-4 text-sm text-zinc-400">{{ timeslot.id }}</td>
+        <td class="px-6 py-4 text-sm font-medium text-zinc-100">{{ timeslot.start }}</td>
+        <td class="px-6 py-4 text-sm text-zinc-400">{{ timeslot.end }}</td>
+        <td class="px-6 py-4 text-right">
+          <a
+            [routerLink]="['/admin/timeslots', timeslot.id, 'edit']"
+            class="text-sm text-primary-light hover:text-primary transition-colors mr-3"
+            >Editar</a
+          >
+          <button
+            (click)="onDelete(timeslot.id)"
+            type="button"
+            class="text-sm text-error hover:text-error/80 transition-colors cursor-pointer"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    }
+  </app-data-table>
+}

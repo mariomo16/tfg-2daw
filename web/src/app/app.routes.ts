@@ -1,4 +1,5 @@
 import type { Routes } from "@angular/router";
+import { adminGuard } from "@core/guards/admin.guard";
 import { authGuard } from "@core/guards/auth.guard";
 import { guestGuard } from "@core/guards/guest.guard";
 
@@ -48,6 +49,14 @@ export const routes: Routes = [
 		loadComponent: () =>
 			import("@features/profile/profile").then((module) => module.Profile),
 		title: "Mi perfil",
+	},
+	{
+		path: "admin",
+		canActivate: [adminGuard],
+		loadChildren: () =>
+			import("@features/admin/admin.routes").then(
+				(module) => module.ADMIN_ROUTES,
+			),
 	},
 	{
 		path: "**",
