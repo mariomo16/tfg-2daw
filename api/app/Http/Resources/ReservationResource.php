@@ -26,7 +26,7 @@ class ReservationResource extends JsonResource
             'created_at' => $this->created_at,
             'computer' => $this->whenLoaded('computer'),
             'payment' => $this->whenLoaded('payment'),
-            'timeslot' => $this->whenLoaded('timeslot'),
+            'time_slot' => $this->whenLoaded('timeSlot'),
             'user' => $this->whenLoaded('user'),
         ];
     }

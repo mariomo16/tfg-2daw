@@ -18,7 +18,7 @@ class ReservationController extends Controller
     public function index(): JsonResponse
     {
         return response()->json(
-            ReservationResource::collection(Reservation::with(['user', 'computer', 'timeslot', 'payment'])->get()),
+            ReservationResource::collection(Reservation::with(['user', 'computer', 'timeSlot', 'payment'])->get()),
             200
         );
     }
@@ -33,7 +33,7 @@ class ReservationController extends Controller
         $reservation = $service->createReservation($request->validated());
 
         return response()->json(
-            new ReservationResource($reservation->load(['computer', 'timeslot'])),
+            new ReservationResource($reservation->load(['computer', 'timeSlot'])),
             201
         );
     }
@@ -44,7 +44,7 @@ class ReservationController extends Controller
     public function show(Reservation $reservation): JsonResponse
     {
         return response()->json(
-            new ReservationResource($reservation->load(['user', 'payment', 'computer', 'timeslot'])),
+            new ReservationResource($reservation->load(['user', 'payment', 'computer', 'timeSlot'])),
             200
         );
     }
@@ -57,7 +57,7 @@ class ReservationController extends Controller
         $reservation->update($request->all());
 
         return response()->json(
-            new ReservationResource($reservation->fresh()->load(['user', 'payment', 'computer', 'timeslot'])),
+            new ReservationResource($reservation->fresh()->load(['user', 'payment', 'computer', 'timeSlot'])),
             200
         );
     }
