@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Computer;
+use App\Models\Notification;
+use App\Models\Payment;
+use App\Models\Reservation;
 use App\Models\TimeSlot;
 use App\Models\User;
 use App\Models\Zone;
@@ -18,60 +21,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Zonas
-        $zones = [
-            [
-                'name' => 'Standard',
-                'description' => 'Cuenta con ordenadores de alto rendimiento preparados para satisfacer tus necesidades',
-                'cover_image' => 'https://images.igdb.com/igdb/image/upload/t_cover_big/cobpn7.webp',
-                'price' => 2.5,
-            ],
-            [
-                'name' => 'Bootcamp',
-                'description' => 'Ideal tanto para equipos como para los jugadores mas exigentes y en busca de un espacio mas privado',
-                'cover_image' => 'https://images.igdb.com/igdb/image/upload/t_cover_big/coaczd.webp',
-                'price' => 3.5,
-            ],
-            [
-                'name' => 'Streaming',
-                'description' => 'Si crear contenido es tu objetivo, este es el sitio que buscas, una sala de streaming equipada con todo lo necesario',
-                'cover_image' => 'https://images.igdb.com/igdb/image/upload/t_cover_big/co9xwv.webp',
-                'price' => 5.0,
-            ],
-        ];
-
-        foreach ($zones as $zoneData) {
-            Zone::create($zoneData);
-        }
-
-        // Ordenadores
-        $zoneIds = Zone::pluck('id');
-        $computerNumber = 1;
-        foreach ($zoneIds as $zoneId) {
-            for ($i = 1; $i <= 5; $i++) {
-                Computer::create([
-                    'name' => 'PC-' . $computerNumber++,
-                    'zone_id' => $zoneId,
-                ]);
-            }
-        }
-
-        // Franjas horarias (10:00 - 22:00)
-        for ($i = 10; $i < 22; $i++) {
-            TimeSlot::create([
-                'start' => \sprintf('%02d:00:00', $i),
-                'end' => \sprintf('%02d:00:00', $i + 1),
+        $zones = ['Zona Gaming', 'Zona Torneo', 'Zona VIP'];
+        foreach ($zones as $name) {
+            Zone::create([
+                'name' => $name,
+                'price_per_slot' => match ($name) {
+                    'Zona Gaming' => 2.5,
+                    'Zona Torneo' => 3.5,
+                    'Zona VIP' => 5.0
+                },
             ]);
         }
-
-        // Usuario 
-        User::create([
-            'name' => 'Mario Ortega',
-            'email' => "admin@tfg.es",
-            'role' => 'staff',
-            'balance' => 999,
-            'email_verified_at' => now(),
-            'password' => \Hash::make('admin123'),
-        ]);
+        Computer::factory(15)->create();
+        TimeSlot::factory(14)->create();
+        User::factory(10)->create();
+        Reservation::factory(20)->create();
+        Payment::factory(15)->create();
+        Notification::factory(10)->create();
     }
 }

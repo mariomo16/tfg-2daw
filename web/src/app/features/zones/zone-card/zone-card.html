@@ -1,0 +1,47 @@
+<div
+  class="bg-zinc-900/30 rounded border border-zinc-800/50 overflow-hidden flex flex-col h-full hover:border-zinc-700/80 hover:bg-zinc-900/50"
+>
+  @let currentZone = zone();
+
+  <div class="h-1 shadow-sm" [style.background-color]="currentZone.accent"></div>
+
+  <div class="p-5 flex flex-col h-full">
+    <div class="flex items-start gap-4 mb-5">
+      <div
+        class="size-14 rounded-lg bg-zinc-950/50 border border-zinc-800/50 flex items-center justify-center text-3xl"
+      >
+        <app-icon
+          [name]="currentZone.icon"
+          extraClass="size-8"
+          [filled]="true"
+          [style.color]="currentZone.accent"
+        />
+      </div>
+      <div>
+        <h3 class="text-xl font-bold text-zinc-100 mb-0.5">
+          {{ currentZone.name }}
+        </h3>
+        <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+          Disponibles:
+          <span class="text-zinc-400"
+            >{{ currentZone.availableComputers }} / {{ currentZone.totalComputers }}</span
+          >
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-baseline gap-1 mt-auto mb-6">
+      <span class="text-2xl font-bold text-zinc-100">
+        {{ currentZone.pricePerSlot | currency: 'EUR' : 'symbol' : '1.2-2' }}
+      </span>
+      <span class="text-xs font-medium text-zinc-500 uppercase">/ hora</span>
+    </div>
+
+    <a
+      [routerLink]="['/zones', currentZone.id]"
+      class="w-full py-2.5 text-sm font-bold text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-lg hover:bg-zinc-800 hover:text-white transition-colors text-center"
+    >
+      Ver equipos
+    </a>
+  </div>
+</div>

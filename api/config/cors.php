@@ -2,36 +2,32 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
-    |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-    |
-    */
+  /*
+  |--------------------------------------------------------------------------
+  | Cross-Origin Resource Sharing (CORS) Configuration
+  |--------------------------------------------------------------------------
+  |
+  | Here you may configure your settings for cross-origin resource sharing
+  | or "CORS". This determines what cross-origin operations may execute
+  | in web browsers. You are free to adjust these settings as needed.
+  |
+  | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+  |
+  */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+  'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+  'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
-        'http://localhost:4200',
-        'https://tfg-2daw.vercel.app',
-        'https://tfg-2daw-git-develop-ortegamario.vercel.app'
-    ],
+  'allowed_origins' => ['http://localhost:4200', 'https://ortegamario-tfg-web.up.railway.app', 'https://ortegamario-tfg-web.vercel.app'],
 
-    'allowed_origins_patterns' => [],
+  'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+  'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+  'exposed_headers' => [],
 
-    'max_age' => 0,
+  'max_age' => 0,
 
-    'supports_credentials' => false,
+  'supports_credentials' => true,
 ];

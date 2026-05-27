@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -17,37 +17,52 @@ class AuthController extends Controller
     {
         $user = User::create($request->validated());
 
-        return response()->json([
-            'token' => $this->generateToken($user),
-            'user' => new UserResource($user),
-        ], 201);
+        return response()
+            ->json(['user' => $user], 201)
+            ->withCookie($this->makeTokenCookie($user->createToken('api-token')->plainTextToken));
     }
 
-    public function login(LoginRequest $request): JsonResponse
+    public function login(LoginRequest $request)
     {
         $user = User::where('email', $request->validated('email'))->first();
 
         if (!$user || !Hash::check($request->validated('password'), $user->password)) {
-            return response()->json([
-                'email' => 'No existe ningún usuario con esas credenciales.',
+            throw ValidationException::withMessages([
+                'email' => [__('auth.failed')],
             ]);
         }
 
-        return response()->json([
-            'token' => $this->generateToken($user),
-            'user' => new UserResource($user),
-        ], 200);
+        return response()
+            ->json(['user' => $user])
+            ->withCookie($this->makeTokenCookie($user->createToken('api-token')->plainTextToken));
     }
 
-    public function logout(): Response
+    public function logout(Request $request)
     {
-        auth()->user()->currentAccessToken()->delete();
+        $request->user()->currentAccessToken()->delete();
 
-        return response()->noContent();
+        return response()
+            ->json(['message' => __('auth.logout')])
+            ->withCookie(Cookie::forget('token'));
     }
 
-    private function generateToken(User $user): string
+    public function user(Request $request)
     {
-        return $user->createToken('api-token')->plainTextToken;
+        return response()->json($request->user());
+    }
+
+    private function makeTokenCookie(string $token)
+    {
+        return Cookie::make(
+            name: 'token',
+            value: $token,
+            minutes: config('sanctum.expiration'),
+            path: '/',
+            domain: null,
+            secure: true,
+            httpOnly: true,
+            raw: false,
+            sameSite: 'None',
+        );
     }
 }

@@ -1,40 +1,92 @@
-@if (zonesResource.isLoading()) {
-  <app-loading-state />
-} @else if (zonesResource.error()) {
-  <app-error-state />
-} @else {
-  <app-data-table
-    title="Zonas"
-    description="Gestiona las zonas del local"
-    actionLabel="+ Nueva zona"
-    actionRoute="/admin/zones/new"
-    [columns]="columns"
-    [actions]="actions"
-    [isEmpty]="!zonesResource.value()?.length"
-  >
-    @for (zone of zonesResource.value(); track zone.id) {
-      <tr class="hover:bg-surface-card/30 transition-colors">
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ zone.id }}</td>
-        <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ zone.name }}</td>
-        <td class="px-6 py-4 text-sm text-content-secondary">
-          {{ zone.price }}
-        </td>
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ zone.computers?.length }}</td>
-        <td class="px-6 py-4 text-right">
-          <a
-            [routerLink]="['/admin/zones', zone.id, 'edit']"
-            class="text-sm text-primary-light hover:text-primary transition-colors mr-3"
-            >Editar</a
-          >
-          <button
-            (click)="onDelete(zone.id)"
-            type="button"
-            class="text-sm text-error hover:text-error/80 transition-colors cursor-pointer"
-          >
-            Eliminar
-          </button>
-        </td>
-      </tr>
-    }
-  </app-data-table>
-}
+<div class="max-w-[1600px] mx-auto p-8 space-y-8">
+  <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-zinc-100 tracking-tight">Zonas</h1>
+      <p class="text-zinc-500 mt-2">Gestiona las zonas del local</p>
+    </div>
+    <a
+      routerLink="/admin/zones/new"
+      class="px-4 py-2 text-sm font-medium text-zinc-900 bg-zinc-100 hover:bg-zinc-200 rounded-md transition-colors cursor-pointer inline-flex items-center justify-center"
+    >
+      + Nueva zona
+    </a>
+  </header>
+
+  <section class="bg-zinc-900/30 border border-zinc-800 rounded-md overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-zinc-800 bg-zinc-900/50">
+            @for (column of columns; track $index) {
+              <th class="px-6 py-4 text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                {{ column.label }}
+              </th>
+            }
+            <th
+              class="px-6 py-4 text-right text-xs font-medium text-zinc-500 uppercase tracking-wider"
+            >
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-800">
+          @if (zonesResource.isLoading()) {
+            <tr>
+              <td colspan="5" class="px-6 py-12">
+                <div class="flex justify-center text-zinc-500">
+                  <span [innerHTML]="loadingIcon | safeHtml"></span>
+                </div>
+              </td>
+            </tr>
+          } @else if (zonesResource.error()) {
+            <tr>
+              <td colspan="5" class="px-6 py-12">
+                <div class="flex flex-col items-center gap-3">
+                  <p class="text-sm text-red-400">Error al cargar las zonas.</p>
+                  <button
+                    type="button"
+                    class="px-4 py-2 text-sm font-medium text-zinc-900 bg-zinc-100 rounded-md hover:bg-zinc-200 transition-colors cursor-pointer"
+                    (click)="zonesResource.reload()"
+                  >
+                    Reintentar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @else {
+            @for (zone of zonesResource.value(); track zone.id) {
+              <tr class="hover:bg-zinc-800/30 transition-colors">
+                <td class="px-6 py-4 text-sm text-zinc-400">{{ zone.id }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-zinc-100">{{ zone.name }}</td>
+                <td class="px-6 py-4 text-sm text-zinc-400">
+                  {{ zone.pricePerSlot | currency: 'EUR' : 'symbol' : '1.2-2' }}
+                </td>
+                <td class="px-6 py-4 text-sm text-zinc-400">{{ zone.computers.length }}</td>
+                <td class="px-6 py-4 text-right">
+                  <a
+                    [routerLink]="['/admin/zones', zone.id, 'edit']"
+                    class="text-sm text-indigo-400 hover:text-indigo-300 transition-colors mr-3"
+                    >Editar</a
+                  >
+                  <button
+                    (click)="onDelete(zone.id)"
+                    type="button"
+                    class="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="px-6 py-12 text-center text-sm text-zinc-500">
+                  No hay zonas registradas.
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

@@ -2,76 +2,36 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ComputerRequest;
-use App\Http\Resources\ComputerResource;
 use App\Models\Computer;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class ComputerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): JsonResponse
+    public function index()
     {
-        return response()->json(
-            ComputerResource::collection(Computer::with(['zone', 'reservations'])->get()),
-            200
-        );
+        return response()->json(Computer::with(['zone', 'reservations'])->get());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(ComputerRequest $request): JsonResponse
+    public function store(Request $request)
     {
-        $this->authorize('create', Computer::class);
-
-        $computer = Computer::create($request->validated());
-
-        return response()->json(
-            new ComputerResource($computer->load(['zone', 'reservations'])),
-            201
-        );
+        $computer = Computer::create($request->all()); // TODO: Hacer FormRequest
+        return response()->json($computer->load(['zone', 'reservations']));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Computer $computer): JsonResponse
+    public function show(Computer $computer)
     {
-        return response()->json(
-            new ComputerResource($computer->load(['zone', 'reservations'])),
-            200
-        );
+        return response()->json($computer->load(['zone', 'reservations']));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(ComputerRequest $request, Computer $computer): JsonResponse
+    public function update(Request $request, Computer $computer)
     {
-        $this->authorize('update', $computer);
-
-        $computer->update($request->validated());
-
-        return response()->json(
-            new ComputerResource($computer->fresh()->load(['zone', 'reservations'])),
-            200
-        );
+        $computer->update($request->all()); // TODO: Hacer FormRequest
+        return response()->json($computer->fresh()->load(['zone', 'reservations']));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Computer $computer): Response
+    public function destroy(Computer $computer)
     {
-        $this->authorize('delete', $computer);
-
         $computer->delete();
-
-        return response()->noContent();
     }
 }

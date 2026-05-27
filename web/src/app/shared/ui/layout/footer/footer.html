@@ -1,33 +1,21 @@
-<footer class="h-16 w-screen border-t border-surface-border flex justify-center">
-  <div class="max-w-6xl w-full flex justify-between items-center px-2">
-    <p class="text-sm text-content-muted font-semibold">Hecho con Angular v21</p>
-    <div class="flex gap-4">
+<footer class="bg-[#09090b] border-t border-zinc-800">
+  <div
+    class="max-w-7xl mx-auto px-6 h-16 flex flex-col sm:flex-row items-center justify-between gap-6"
+  >
+    <div class="flex items-center gap-3">
+      <span class="text-sm font-game text-zinc-100">{{ app.name }}</span>
+      <span class="text-zinc-700">/</span>
+      <span class="text-xs text-zinc-500 font-medium">v{{ app.version }}</span>
+    </div>
+
+    <div class="flex items-center gap-6">
       <a
-        href="https://github.com/mariomo16/tfg-2daw"
-        title="Github link"
+        href="https://github.com/mariomo16/tfg-web"
         target="_blank"
         rel="noopener noreferrer"
+        class="text-sm font-medium text-zinc-500 hover:text-zinc-100"
       >
-        <app-github-icon [size]="size" />
-      </a>
-      <a
-        href="https://discord.gg/umSwM4Z2ST"
-        title="Discord link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <app-discord-icon [size]="size" />
-      </a>
-      <a
-        href="https://www.instagram.com/ortegamario.02"
-        title="Instagran link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <app-instagram-icon [size]="size" />
-      </a>
-      <a href="https://x.com/mariomo16cs" title="X link" target="_blank" rel="noopener noreferrer">
-        <app-x-icon [size]="size" />
+        GitHub
       </a>
     </div>
   </div>

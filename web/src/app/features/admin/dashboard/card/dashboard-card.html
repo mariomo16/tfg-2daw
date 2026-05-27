@@ -1,0 +1,21 @@
+<div class="bg-zinc-900/50 border border-zinc-800 p-6 rounded-md flex items-center justify-between">
+  <div class="min-h-[60px] flex flex-col justify-end">
+    <p class="text-xs font-medium text-zinc-500 uppercase">{{ data().title }}</p>
+
+    @if (data().isLoading()) {
+      <p class="text-2xl font-bold text-indigo-500 mt-2 animate-pulse">...</p>
+    } @else if (data().error()) {
+      <p class="text-2xl font-bold text-rose-500 mt-2">...</p>
+    } @else {
+      <p class="text-2xl font-bold text-zinc-100 mt-2">{{ data().info() }}</p>
+    }
+  </div>
+  <a
+    aria-label="create-resource"
+    [routerLink]="data().linkRoute"
+    class="group flex items-center gap-3 p-4 rounded-lg border border-zinc-800 transition-all"
+    [class]="data().linkColor"
+  >
+    <app-icon name="document-plus" [class]="data().iconColor" extraClass="size-6" />
+  </a>
+</div>

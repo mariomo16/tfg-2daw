@@ -3,17 +3,18 @@ import {
 	Component,
 	DestroyRef,
 	inject,
+	resource,
 } from "@angular/core";
-import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterLink } from "@angular/router";
-import { TimeSlotService } from "@shared/services/timeslot.service";
-import { DataTable } from "@shared/ui/data-table/data-table";
-import { ErrorState } from "@shared/ui/states/error-state/error-state";
-import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
+import { firstValueFrom } from "rxjs";
+import { LoadingIcons } from "../../../../shared/icons/icons";
+import { SafeHtmlPipe } from "../../../../shared/pipes/safe-html.pipe";
+import { TimeSlotService } from "../../../time-slots/timeslot.service";
 
 @Component({
 	selector: "app-timeslot-list",
-	imports: [DataTable, RouterLink, LoadingState, ErrorState],
+	imports: [RouterLink, SafeHtmlPipe],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: "./timeslot-list.html",
 })
@@ -21,13 +22,18 @@ export class TimeslotList {
 	readonly #timeslotService = inject(TimeSlotService);
 	readonly #destroyRef = inject(DestroyRef);
 
-	protected readonly timeslotsResource = rxResource({
-		stream: () => this.#timeslotService.getAll(),
+	protected readonly loadingIcon = LoadingIcons.spinner;
+
+	protected readonly timeslotsResource = resource({
+		loader: () => firstValueFrom(this.#timeslotService.getAll()),
 	});
 
-	protected readonly columns: string[] = ["ID", "HORA INICIO", "HORA FIN"];
-
-	protected readonly actions = true;
+	protected readonly columns = [
+		{ key: "id", label: "ID" },
+		{ key: "startTime", label: "HORA INICIO" },
+		{ key: "endTime", label: "HORA FIN" },
+		{ key: "duration", label: "DURACIÓN" },
+	] as const;
 
 	protected onDelete(id: number): void {
 		this.#timeslotService

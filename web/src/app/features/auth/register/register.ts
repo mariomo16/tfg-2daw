@@ -5,81 +5,53 @@ import {
 	signal,
 } from "@angular/core";
 import {
-	email,
-	FormField,
-	FormRoot,
-	form,
-	maxLength,
-	minLength,
-	required,
-} from "@angular/forms/signals";
+	NonNullableFormBuilder,
+	ReactiveFormsModule,
+	Validators,
+} from "@angular/forms";
 import { Router, RouterLink } from "@angular/router";
-import { AuthService } from "@core/auth/auth.service";
-import type { RegisterDto } from "@shared/models/auth.model";
-import { GamingButton } from "@shared/ui/gaming-button/gaming-button";
+import { Icon } from "../../../shared/components/icon/icon";
+import { AuthService } from "../auth.service";
 
 @Component({
 	selector: "app-register",
-	imports: [GamingButton, RouterLink, FormField, FormRoot],
-	templateUrl: "./register.html",
+	imports: [RouterLink, Icon, ReactiveFormsModule],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	templateUrl: "./register.html",
 })
 export class Register {
+	readonly #fb = inject(NonNullableFormBuilder);
 	readonly #authService = inject(AuthService);
 	readonly #router = inject(Router);
 
-	protected readonly isLoading = this.#authService.isLoading;
+	readonly isLoading = this.#authService.isLoading;
+	readonly error = signal<string | null>(null);
 
-	// https://dev.to/abp_io/signal-based-forms-in-angular-21-why-youll-never-miss-reactive-forms-again-n7l
-	// https://angular.dev/guide/forms/signals/validation
-	protected readonly registerModel = signal<RegisterDto>({
-		name: "",
-		email: "",
-		password: "",
-		password_confirmation: "",
-	});
-
-	protected readonly form = form(this.registerModel, (schemaPath) => {
-		required(schemaPath.name, { message: "El nombre es obligatorio" });
-		minLength(schemaPath.name, 3, {
-			message: "El nombre debe tener al menos 3 caracteres",
-		});
-		maxLength(schemaPath.name, 40, {
-			message: "El nombre no puede superar los 40 caracteres",
-		});
-
-		required(schemaPath.email, { message: "El correo es obligatorio" });
-		email(schemaPath.email, {
-			message: "Introduce una dirección de correo válida",
-		});
-
-		required(schemaPath.password, {
-			message: "La contraseña no puede estar vacía",
-		});
-		minLength(schemaPath.password, 8, {
-			message: "La contraseña debe tener al menos 8 caracteres",
-		});
-
-		required(schemaPath.password_confirmation, {
-			message: "Por favor, repite tu contraseña",
-		});
+	readonly form = this.#fb.group({
+		name: ["", [Validators.required, Validators.minLength(3)]],
+		email: ["", [Validators.required, Validators.email]],
+		password: ["", [Validators.required, Validators.minLength(8)]],
+		password_confirmation: ["", Validators.required],
 	});
 
 	onSubmit(): void {
-		if (!this.form().valid()) {
-			this.form().markAsTouched();
+		this.error.set(null);
+
+		if (this.form.invalid) {
+			this.form.markAllAsTouched();
 			return;
 		}
 
-		const data = this.form().value();
-
+		const data = this.form.getRawValue();
 		if (data.password !== data.password_confirmation) {
+			this.error.set("Las contraseñas no coinciden");
 			return;
 		}
 
 		this.#authService.register(data).subscribe({
 			next: () => this.#router.navigate(["/"]),
-			error: (err) => console.error("Error al crear la cuenta:", err),
+			error: (err) =>
+				this.error.set(err.error?.message || "Error al crear la cuenta"),
 		});
 	}
 }

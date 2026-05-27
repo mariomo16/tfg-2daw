@@ -1,8 +1,8 @@
 import { inject } from "@angular/core";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { type CanActivateFn, Router } from "@angular/router";
-import { AuthService } from "@core/auth/auth.service";
 import { filter, map, take } from "rxjs";
+import { AuthService } from "../../features/auth/auth.service";
 
 export const authGuard: CanActivateFn = () => {
 	const auth = inject(AuthService);

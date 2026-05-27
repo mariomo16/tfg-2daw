@@ -5,80 +5,66 @@ import {
 	DestroyRef,
 	effect,
 	inject,
+	model,
+	resource,
 } from "@angular/core";
-import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import {
-	NonNullableFormBuilder,
-	ReactiveFormsModule,
-	Validators,
-} from "@angular/forms";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import type { CreateZoneDto } from "@shared/models/zone.model";
-import { ZoneService } from "@shared/services/zone.service";
-import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
-import { of } from "rxjs";
+import { firstValueFrom } from "rxjs";
+import { Icon } from "../../../../shared/components/icon/icon";
+import { LoadingIcons } from "../../../../shared/icons/icons";
+import { SafeHtmlPipe } from "../../../../shared/pipes/safe-html.pipe";
+import type {
+	CreateZoneDto,
+	UpdateZoneDto,
+	ZoneName,
+} from "../../../zones/zone.model";
+import { ZoneService } from "../../../zones/zone.service";
 
 @Component({
 	selector: "app-zone-form",
-	imports: [RouterLink, ReactiveFormsModule, LoadingState],
+	imports: [RouterLink, SafeHtmlPipe, FormsModule, Icon],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: "./zone-form.html",
 })
 export class ZoneForm {
-	readonly #destroyRef = inject(DestroyRef);
+	readonly #zoneService = inject(ZoneService);
 	readonly #route = inject(ActivatedRoute);
 	readonly #router = inject(Router);
-	readonly #formBuilder = inject(NonNullableFormBuilder);
-	readonly #zoneService = inject(ZoneService);
+	readonly #destroyRef = inject(DestroyRef);
 
 	readonly #zoneId = Number(this.#route.snapshot.paramMap.get("id")) || null;
 
-	protected readonly isEditing = this.#zoneId !== null;
+	protected readonly isEditing = computed(() => this.#zoneId !== null);
 
-	protected readonly isLoadingData = computed(
-		() => this.isEditing && this.zoneResource.isLoading(),
-	);
+	protected readonly loadingIcon = LoadingIcons.spinner;
 
-	protected readonly form = this.#formBuilder.group({
-		name: ["", [Validators.required]],
-		pricePerSlot: ["", [Validators.required, Validators.min(0)]],
-		description: ["", [Validators.required]],
-		coverImage: ["", [Validators.required]],
-	});
+	protected readonly name = model<ZoneName | "">("");
+	protected readonly pricePerSlot = model<number | "">("");
 
-	protected readonly zoneResource = rxResource({
-		stream: () =>
-			this.#zoneId ? this.#zoneService.getById(this.#zoneId) : of(null),
+	protected readonly zoneResource = resource({
+		loader: () =>
+			this.#zoneId
+				? firstValueFrom(this.#zoneService.getById(this.#zoneId))
+				: Promise.resolve(null),
 	});
 
 	constructor() {
 		effect(() => {
 			const zone = this.zoneResource.value();
 			if (!zone) return;
-
-			this.form.patchValue({
-				name: zone.name,
-				pricePerSlot: String(zone.price),
-				description: zone.description,
-				coverImage: String(zone.coverImage),
-			});
+			this.name.set(zone.name);
+			this.pricePerSlot.set(zone.pricePerSlot);
 		});
 	}
 
 	protected onSubmit(): void {
-		if (this.form.invalid) {
-			this.form.markAllAsTouched();
-			return;
-		}
+		if (!this.name() || this.pricePerSlot() === "") return;
 
-		const { name, pricePerSlot, description, coverImage } =
-			this.form.getRawValue();
-
-		const dto: CreateZoneDto = {
-			name: name,
-			price: Number(pricePerSlot),
-			description: description,
-			cover_image: coverImage,
+		const dto: CreateZoneDto | UpdateZoneDto = {
+			name: this.name() as ZoneName,
+			price_per_slot: Number(this.pricePerSlot()),
 		};
 
 		const action$ = this.#zoneId
@@ -87,7 +73,7 @@ export class ZoneForm {
 
 		action$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe({
 			next: () => this.#router.navigate(["/admin/zones"]),
-			error: (err) => console.error("Error al guardar la zona:", err),
+			error: (err) => console.error("No se ha podido enviar,", err),
 		});
 	}
 }

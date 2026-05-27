@@ -2,76 +2,36 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\TimeSlotRequest;
-use App\Http\Resources\TimeSlotResource;
 use App\Models\TimeSlot;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class TimeSlotController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): JsonResponse
+    public function index()
     {
-        return response()->json(
-            TimeSlotResource::collection(TimeSlot::with('reservations')->get()),
-            200
-        );
+        return response()->json(TimeSlot::with('reservations')->get());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(TimeSlotRequest $request): JsonResponse
+    public function store(Request $request)
     {
-        $this->authorize('create', TimeSlot::class);
-
-        $timeslot = TimeSlot::create($request->all());
-
-        return response()->json(
-            new TimeSlotResource($timeslot->load('reservations')),
-            201
-        );
+        $timeslot = TimeSlot::create($request->all()); // TODO: Hacer FormRequest
+        return response()->json($timeslot->load('reservations'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TimeSlot $timeSlot): JsonResponse
+    public function show(TimeSlot $timeslot)
     {
-        return response()->json(
-            new TimeSlotResource($timeSlot->load('reservations')),
-            200
-        );
+        return response()->json($timeslot->load('reservations'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(TimeSlotRequest $request, TimeSlot $timeSlot): JsonResponse
+    public function update(Request $request, TimeSlot $timeslot)
     {
-        $this->authorize('update', $timeSlot);
-
-        $timeSlot->update($request->all());
-
-        return response()->json(
-            new TimeSlotResource($timeSlot->fresh()->load('reservations')),
-            200
-        );
+        $timeslot->update($request->all()); // TODO: Hacer FormRequest
+        return response()->json($timeslot->fresh()->load('reservations'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TimeSlot $timeSlot): Response
+    public function destroy(TimeSlot $timeslot)
     {
-        $this->authorize('delete', $timeSlot);
-
-        $timeSlot->delete();
-
-        return response()->noContent();
+        $timeslot->delete();
     }
 }

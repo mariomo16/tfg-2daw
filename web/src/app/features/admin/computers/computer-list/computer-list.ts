@@ -3,19 +3,18 @@ import {
 	Component,
 	DestroyRef,
 	inject,
+	resource,
 } from "@angular/core";
-import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterLink } from "@angular/router";
-import { COMPUTER_STATUS_LABELS } from "@shared/constants/computer.constants";
-import type { ComputerStatus } from "@shared/models/computer.model";
-import { ComputerService } from "@shared/services/computer.service";
-import { DataTable } from "@shared/ui/data-table/data-table";
-import { ErrorState } from "@shared/ui/states/error-state/error-state";
-import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
+import { firstValueFrom } from "rxjs";
+import { LoadingIcons } from "../../../../shared/icons/icons";
+import { SafeHtmlPipe } from "../../../../shared/pipes/safe-html.pipe";
+import { ComputerService } from "../../../computers/computer.service";
 
 @Component({
 	selector: "app-computer-list",
-	imports: [RouterLink, DataTable, LoadingState, ErrorState],
+	imports: [RouterLink, SafeHtmlPipe],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: "./computer-list.html",
 })
@@ -23,17 +22,19 @@ export class ComputerList {
 	readonly #computerService = inject(ComputerService);
 	readonly #destroyRef = inject(DestroyRef);
 
-	protected readonly computersResource = rxResource({
-		stream: () => this.#computerService.getAll(),
+	protected readonly loadingIcon = LoadingIcons.spinner;
+
+	protected readonly computersResource = resource({
+		loader: () => firstValueFrom(this.#computerService.getAll()) ?? [],
 	});
 
-	protected readonly columns: string[] = ["ID", "NOMBRE", "ZONA", "ESTADO"];
-
-	protected readonly actions = true;
-
-	getComputerStatus(status: ComputerStatus) {
-		return COMPUTER_STATUS_LABELS[status];
-	}
+	protected readonly columns = [
+		{ key: "id", label: "ID" },
+		{ key: "name", label: "NOMBRE" },
+		{ key: "zone", label: "ZONA" },
+		{ key: "status", label: "ESTADO" },
+		{ key: "specs", label: "SPECS" },
+	] as const;
 
 	protected onDelete(id: number): void {
 		this.#computerService

@@ -5,89 +5,79 @@ import {
 	DestroyRef,
 	effect,
 	inject,
+	model,
+	resource,
 } from "@angular/core";
-import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import {
-	NonNullableFormBuilder,
-	ReactiveFormsModule,
-	Validators,
-} from "@angular/forms";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { firstValueFrom } from "rxjs";
+import { Icon } from "../../../../shared/components/icon/icon";
+import { LoadingIcons } from "../../../../shared/icons/icons";
+import { SafeHtmlPipe } from "../../../../shared/pipes/safe-html.pipe";
 import type {
 	ComputerStatus,
 	CreateComputerDto,
-} from "@shared/models/computer.model";
-import { ComputerService } from "@shared/services/computer.service";
-import { ZoneService } from "@shared/services/zone.service";
-import { of } from "rxjs";
+	UpdateComputerDto,
+} from "../../../computers/computer.model";
+import { ComputerService } from "../../../computers/computer.service";
+import { ZoneService } from "../../../zones/zone.service";
 
 @Component({
 	selector: "app-computer-form",
-	imports: [RouterLink, ReactiveFormsModule],
+	imports: [RouterLink, SafeHtmlPipe, FormsModule, Icon],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: "./computer-form.html",
 })
 export class ComputerForm {
-	readonly #destroyRef = inject(DestroyRef);
-	readonly #route = inject(ActivatedRoute);
-	readonly #router = inject(Router);
-	readonly #formBuilder = inject(NonNullableFormBuilder);
 	readonly #computerService = inject(ComputerService);
 	readonly #zoneService = inject(ZoneService);
+	readonly #route = inject(ActivatedRoute);
+	readonly #router = inject(Router);
+	readonly #destroyRef = inject(DestroyRef);
 
 	readonly #computerId =
 		Number(this.#route.snapshot.paramMap.get("id")) || null;
 
-	protected readonly isEditing = this.#computerId !== null;
+	protected readonly isEditing = computed(() => this.#computerId !== null);
 
-	protected readonly computerResource = rxResource({
-		stream: () =>
+	protected readonly loadingIcon = LoadingIcons.spinner;
+
+	protected readonly name = model<string>("");
+	protected readonly zoneId = model<number | "">("");
+	protected readonly status = model<ComputerStatus>("available");
+	protected readonly specs = model<string>("");
+
+	protected readonly zonesResource = resource({
+		loader: () => firstValueFrom(this.#zoneService.getAll()),
+	});
+
+	protected readonly computerResource = resource({
+		loader: () =>
 			this.#computerId
-				? this.#computerService.getById(this.#computerId)
-				: of(null),
-	});
-
-	protected readonly zonesResource = rxResource({
-		stream: () => this.#zoneService.getAll(),
-	});
-
-	protected readonly isLoadingData = computed(
-		() =>
-			(this.isEditing && this.computerResource.isLoading()) ||
-			(this.isEditing && this.zonesResource.isLoading()),
-	);
-
-	protected readonly form = this.#formBuilder.group({
-		name: ["", [Validators.required, Validators.minLength(4)]],
-		zoneId: [0, [Validators.required, Validators.min(1)]],
-		status: ["available", [Validators.required]],
+				? firstValueFrom(this.#computerService.getById(this.#computerId))
+				: Promise.resolve(null),
 	});
 
 	constructor() {
 		effect(() => {
 			const computer = this.computerResource.value();
 			if (!computer) return;
-
-			this.form.patchValue({
-				name: computer.name,
-				zoneId: computer.zone?.id,
-				status: computer.status,
-			});
+			this.name.set(computer.name);
+			this.zoneId.set(computer.zone_id);
+			this.status.set(computer.statusRaw);
+			this.specs.set(computer.specs);
 		});
 	}
 
 	protected onSubmit(): void {
-		if (this.form.invalid) {
-			this.form.markAllAsTouched();
-			return;
-		}
+		if (!this.name() || !this.zoneId() || !this.status()) return;
 
-		const { name, zoneId, status } = this.form.getRawValue();
-
-		const dto: CreateComputerDto = {
-			name,
-			zone_id: zoneId,
-			status: status as ComputerStatus,
+		const dto: CreateComputerDto | UpdateComputerDto = {
+			name: this.name(),
+			zone_id: Number(this.zoneId()),
+			status: this.status(),
+			specs: this.specs(),
 		};
 
 		const action$ = this.#computerId
@@ -96,7 +86,7 @@ export class ComputerForm {
 
 		action$.pipe(takeUntilDestroyed(this.#destroyRef)).subscribe({
 			next: () => this.#router.navigate(["/admin/computers"]),
-			error: (err) => console.error("Error al guardar el ordenador:", err),
+			error: (err) => console.error("No se ha podido enviar,", err),
 		});
 	}
 }

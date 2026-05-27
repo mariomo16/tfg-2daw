@@ -14,9 +14,8 @@ return new class extends Migration {
             $table->id()->autoIncrement();
             $table->string('name');
             $table->string('email')->unique();
-            $table->enum('role', ['staff', 'client'])->default('client');
+            $table->enum('role', ['client', 'employee', 'admin'])->default('client');
             $table->decimal('balance', 5, 2)->default(0);
-            $table->string('avatar_path')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

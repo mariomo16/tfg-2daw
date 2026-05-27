@@ -2,33 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['user_id', 'computer_id', 'time_slot_id', 'date', 'status', 'price'])]
 class Reservation extends Model
 {
-    use SoftDeletes;
+    /** @use HasFactory<\Database\Factories\ReservationFactory> */
+    use HasFactory, SoftDeletes;
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function computer(): BelongsTo
+    public function computer()
     {
         return $this->belongsTo(Computer::class);
     }
 
-    public function timeSlot(): BelongsTo
+    public function timeSlot()
     {
         return $this->belongsTo(TimeSlot::class);
     }
 
-    public function payment(): HasOne
+    public function payment()
     {
         return $this->hasOne(Payment::class);
     }

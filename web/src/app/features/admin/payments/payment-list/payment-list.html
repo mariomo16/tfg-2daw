@@ -1,41 +1,90 @@
-@if (paymentsResource.isLoading()) {
-  <app-loading-state />
-} @else if (paymentsResource.error()) {
-  <app-error-state />
-} @else {
-  <app-data-table
-    title="Pagos"
-    description="Gestiona el historial de transacciones"
-    [columns]="columns"
-    [actions]="actions"
-    [isEmpty]="!paymentsResource.value()?.length"
-  >
-    @for (payment of paymentsResource.value(); track payment.id) {
-      <tr class="hover:bg-surface-card/30 transition-colors">
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ payment.id }}</td>
-        <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ payment.user?.name }}</td>
-        <td class="px-6 py-4 text-sm text-content-secondary">#{{ payment.reservationId }}</td>
-        <td
-          class="px-6 py-4 text-sm font-medium"
-          [class.text-error]="payment.type === 'refund'"
-          [class.text-success-light]="payment.type === 'payment'"
-        >
-          {{ payment.type === 'payment' ? '+' : '-' }}{{ payment.amount }} creditos
-        </td>
-        <td class="px-6 py-4 text-sm text-zinc-400">
-          <span
-            class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-xs"
-            [class]="
-              payment.type === 'payment'
-                ? 'bg-primary/10 text-primary-light border border-primary/20'
-                : 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
-            "
-          >
-            {{ payment.type === 'payment' ? 'Pago' : 'Reembolso' }}
-          </span>
-        </td>
-        <td class="px-6 py-4 text-sm text-content-muted">{{ payment.createdAt | date }}</td>
-      </tr>
-    }
-  </app-data-table>
-}
+<div class="max-w-[1600px] mx-auto p-8 space-y-8">
+  <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-zinc-100 tracking-tight">Pagos</h1>
+      <p class="text-zinc-500 mt-2">Gestiona el historial de transacciones</p>
+    </div>
+  </header>
+
+  <section class="bg-zinc-900/30 border border-zinc-800 rounded-md overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-zinc-800 bg-zinc-900/50">
+            @for (column of columns; track $index) {
+              <th class="px-6 py-4 text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                {{ column.label }}
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-800">
+          @if (paymentsResource.isLoading()) {
+            <tr>
+              <td colspan="6" class="px-6 py-12">
+                <div class="flex justify-center text-zinc-500">
+                  <span [innerHTML]="loadingIcon | safeHtml"></span>
+                </div>
+              </td>
+            </tr>
+          } @else if (paymentsResource.error()) {
+            <tr>
+              <td colspan="6" class="px-6 py-12">
+                <div class="flex flex-col items-center gap-3">
+                  <p class="text-sm text-red-400">Error al cargar los pagos.</p>
+                  <button
+                    type="button"
+                    class="px-4 py-2 text-sm font-medium text-zinc-900 bg-zinc-100 rounded-md hover:bg-zinc-200 transition-colors cursor-pointer"
+                    (click)="paymentsResource.reload()"
+                  >
+                    Reintentar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @else {
+            @let payments = paymentsResource.value();
+            @for (payment of payments; track payment.id) {
+              <tr class="hover:bg-zinc-800/30 transition-colors">
+                <td class="px-6 py-4 text-sm text-zinc-400">{{ payment.id }}</td>
+                <td class="px-6 py-4 text-sm font-medium text-zinc-100">
+                  {{ payment.user?.name }}
+                </td>
+                <td class="px-6 py-4 text-sm text-zinc-400">#{{ payment.reservationId }}</td>
+                <td
+                  class="px-6 py-4 text-sm font-medium"
+                  [class.text-red-400]="payment.type === 'refund'"
+                  [class.text-green-400]="payment.type === 'payment'"
+                >
+                  {{ payment.type === 'payment' ? '+' : '-'
+                  }}{{ payment.amount | currency: 'EUR' : 'symbol' : '1.2-2' }}
+                </td>
+                <td class="px-6 py-4 text-sm text-zinc-400">
+                  <span
+                    class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full"
+                    [class]="
+                      payment.type === 'payment'
+                        ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
+                        : 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
+                    "
+                  >
+                    {{ payment.type === 'payment' ? 'Pago' : 'Reembolso' }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-sm text-zinc-500">
+                  {{ payment.createdAt | date: 'mediumDate' }}
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="px-6 py-12 text-center text-sm text-zinc-500">
+                  No hay transacciones registradas.
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

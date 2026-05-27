@@ -1,69 +1,119 @@
 <app-navbar />
 
-<section class="w-screen h-screen items-center text-center text-content-primary">
-  <img
-    src="https://images.igdb.com/igdb/image/upload/t_720p/scsvjv.webp"
-    alt="Hero background"
-    class="opacity-50 absolute h-full object-cover object-center top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-0 background"
-  />
-  <main class="flex flex-col relative z-1 h-full w-full items-center">
-    <div class="flex flex-col justify-center h-128">
-      <h1 class="font-diablo-heavy text-8xl tracking-tighter uppercase">Domina la partida</h1>
-      <p class="text-2xl font-diablo-light text-content-secondary uppercase">
-        Aunque lo importante sea participar... o no.
-      </p>
+<!-- SECCION HERO -->
+<section
+  class="relative min-h-screen flex items-center justify-center bg-[#09090b] overflow-hidden"
+>
+  <div
+    class="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-400/80 rounded-full blur-[120px] animate-pulse"
+  ></div>
+  <div
+    class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/80 rounded-full blur-[120px] animate-pulse"
+  ></div>
+
+  <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+    <h1
+      class="font-game text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-100 leading-[1.4] tracking-tight uppercase"
+    >
+      Reserva tu equipo<br />
+      <span class="bg-clip-text text-transparent bg-linear-to-r from-indigo-400 to-purple-400"
+        >en segundos</span
+      >
+    </h1>
+
+    <p class="mt-8 text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+      Gestiona tus reservas de forma rápida y sencilla. <br />
+      Elige zona, equipo y horario desde nuestro panel unificado.
+    </p>
+
+    <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
+      <a
+        href="#zones"
+        class="px-8 py-4 text-sm font-semibold text-zinc-900 bg-zinc-100 rounded-xl hover:bg-zinc-200 transition-all shadow-lg shadow-zinc-100/10"
+      >
+        Explorar equipos
+      </a>
+      <a
+        routerLink="/auth/register"
+        class="px-8 py-4 text-sm font-semibold text-zinc-100 bg-zinc-800/50 border border-zinc-700/50 rounded-xl hover:bg-zinc-800 transition-all"
+      >
+        Crear cuenta
+      </a>
     </div>
-    <div class="flex gap-4">
-      @if (isLoading()) {
-        <app-loading-state />
-      } @else if (!isLogged()) {
-        <app-gaming-button label="VER ZONAS" href="#zones" [useRouterLink]="false" />
-        <app-gaming-button label="REGISTRARSE" href="/register" />
-      } @else {
-        <app-gaming-button label="VER ZONAS" href="#zones" [useRouterLink]="false" />
-      }
-    </div>
-  </main>
+  </div>
+
+  <div class="absolute bottom-2 left-1/2 -translate-x-1/2 animate-bounce">
+    <app-icon name="arrow-down" class="text-text-muted" extraClass="size-6" />
+  </div>
 </section>
 
-<section
-  id="zones"
-  class="w-screen h-screen flex flex-col gap-7 items-center text-center text-content-primary"
->
-  <header class="mt-16">
-    <h1 class="mt-7 text-6xl font-diablo">ZONAS GAMING</h1>
-    <p class="text-lg text-content-secondary">
-      Desde jugar con tus amigos, entrenar como los mejores, o realizar tus propios streams, tu
-      eliges
-    </p>
-  </header>
+<!-- SECCION ZONAS -->
+<section id="zones" class="bg-[#09090b] py-24 relative">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+      <div class="max-w-2xl">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="h-px w-8 bg-indigo-500"></div>
+          <span class="text-xs font-bold text-indigo-500 tracking-widest uppercase"
+            >Disponibilidad</span
+          >
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-bold text-zinc-100 tracking-tight">Nuestras zonas</h2>
+        <p class="mt-6 text-lg text-zinc-400 leading-relaxed">
+          Cada zona está diseñada para una experiencia diferente. <br />
+          Encuentra la que mejor se adapte a ti.
+        </p>
+      </div>
+    </div>
 
-  <main class="h-full flex gap-4">
-    @switch (zoneResource.status()) {
-      @case ('loading') {
-        <app-loading-state />
-      }
-      @case ('error') {
-        <app-error-state />
-      }
-      @case ('resolved') {
-        @for (zone of zoneResource.value(); track zone.id) {
-          <div class="max-w-2xs shrink-0 text-left">
-            <img
-              [src]="zone.coverImage"
-              [alt]="'Imagen de zona' + zone.name"
-              class="w-2xs select-none opacity-80 hover:opacity-100 transition-opacity duration-150"
-            />
-            <h2 class="mt-2 text-4xl font-diablo text-primary-light">{{ zone.name }}</h2>
-            <p>{{ zone.description }}</p>
+    <div class="min-h-[420px] flex items-center justify-center w-full">
+      @if (zonesResource.isLoading()) {
+        <div class="flex flex-col items-center gap-4">
+          <div
+            class="animate-spin size-8 border-2 border-indigo-500 border-t-transparent rounded-full"
+          ></div>
+          <p class="text-sm text-zinc-500">Cargando zonas...</p>
+        </div>
+      } @else if (zonesResource.error()) {
+        <div
+          class="flex flex-col items-center gap-6 text-center max-w-sm p-12 rounded-3xl bg-zinc-900/50 border border-zinc-800"
+        >
+          <div class="size-12 rounded-2xl bg-red-500/10 flex items-center justify-center">
+            <svg class="size-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <title>Error</title>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
           </div>
-        } @empty {
-          <app-empty-state />
-        }
+          <div>
+            <p class="text-zinc-100 font-semibold text-lg">Error al cargar las zonas</p>
+            <p class="mt-2 text-sm text-zinc-500 leading-relaxed">
+              No se ha podido conectar con el servicio. <br />
+              Prueba a reintentar en unos segundos.
+            </p>
+          </div>
+          <button
+            type="button"
+            class="px-6 py-2.5 text-sm font-semibold text-zinc-900 bg-white rounded-xl hover:bg-zinc-200 transition-all cursor-pointer"
+            (click)="zonesResource.reload()"
+          >
+            Reintentar
+          </button>
+        </div>
+      } @else {
+        @let zones = zonesResource.value();
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full animate-fade-in-up">
+          @for (zone of zones; track zone.id) {
+            <app-zone-card [zone]="zone" />
+          }
+        </div>
       }
-    }
-  </main>
-  <app-gaming-button label="VER PRECIOS" [asLink]="true" href="/info-zones" class="mb-24" />
+    </div>
+  </div>
 </section>
 
 <app-footer />

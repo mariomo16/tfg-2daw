@@ -1,18 +1,27 @@
-<div class="max-w-400 mx-auto p-8 space-y-8">
+<div class="max-w-[1600px] mx-auto p-8 space-y-8">
   <div class="mb-2">
+    <a
+      routerLink="/admin/zones"
+      class="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 transition-colors mb-4 cursor-pointer"
+    >
+      <app-icon name="arrow-back" />
+      Volver a zonas
+    </a>
     <h1 class="text-3xl font-bold text-zinc-100 tracking-tight">
-      {{ isEditing ? 'Editar zona' : 'Nueva zona' }}
+      {{ isEditing() ? 'Editar zona' : 'Nueva zona' }}
     </h1>
     <p class="mt-2 text-zinc-500">
-      {{ isEditing ? 'Modifica los datos de la zona' : 'Crea una nueva zona para el local' }}
+      {{ isEditing() ? 'Modifica los datos de la zona' : 'Crea una nueva zona para el local' }}
     </p>
   </div>
 
-  <section class="bg-surface-card/30 border border-surface-border rounded-md p-6 max-w-2xl">
-    @if (isLoadingData()) {
-      <app-loading-state />
+  <section class="bg-zinc-900/30 border border-zinc-800 rounded-md p-6 max-w-2xl">
+    @if (zoneResource.isLoading()) {
+      <div class="flex justify-center py-12 text-zinc-500">
+        <span [innerHTML]="loadingIcon | safeHtml"></span>
+      </div>
     } @else {
-      <form class="space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <form class="space-y-6" (ngSubmit)="onSubmit()">
         <div>
           <label for="zone-name" class="block text-sm font-medium text-zinc-300 mb-2">
             Nombre
@@ -20,65 +29,40 @@
           <input
             id="zone-name"
             type="text"
-            placeholder="Ej: Standard"
-            class="w-full px-4 py-2 bg-surface-base/50 border border-surface-border rounded-md text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+            placeholder="Ej: Zona Gaming"
+            class="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+            [ngModel]="name()"
+            (ngModelChange)="name.set($event)"
             name="zone-name"
-            formControlName="name"
           />
         </div>
 
         <div>
           <label for="zone-price" class="block text-sm font-medium text-zinc-300 mb-2">
-            Creditos
+            Precio por franja (€)
           </label>
           <input
             id="zone-price"
             type="number"
             step="0.01"
             placeholder="3.50"
-            class="w-full px-4 py-2 bg-surface-base/50 border border-surface-border rounded-md text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-            formControlName="pricePerSlot"
+            class="w-full px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-md text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+            [ngModel]="pricePerSlot()"
+            (ngModelChange)="pricePerSlot.set($event)"
             name="zone-price"
           />
         </div>
 
-        <div>
-          <label for="zone-description" class="block text-sm font-medium text-zinc-300 mb-2">
-            Descripcion
-          </label>
-          <textarea
-            id="zone-description"
-            type="text"
-            class="w-full px-4 py-2 bg-surface-base/50 border border-surface-border rounded-md text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-            name="zone-description"
-            formControlName="description"
-          >
-          </textarea>
-        </div>
-
-        <div>
-          <label for="zone-coverImage" class="block text-sm font-medium text-zinc-300 mb-2">
-            Imagen (URL)
-          </label>
-          <input
-            id="zone-coverImage"
-            type="text"
-            class="w-full px-4 py-2 bg-surface-base/50 border border-surface-border rounded-md text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-            name="zone-coverImage"
-            formControlName="coverImage"
-          />
-        </div>
-
-        <div class="flex items-center gap-3 pt-6 border-t border-surface-border mt-6">
+        <div class="flex items-center gap-3 pt-6 border-t border-zinc-800 mt-6">
           <button
             type="submit"
-            class="px-4 py-2 text-sm font-medium text-surface-base bg-content-primary hover:bg-zinc-200 rounded-md transition-colors cursor-pointer"
+            class="px-4 py-2 text-sm font-medium text-zinc-900 bg-zinc-100 hover:bg-zinc-200 rounded-md transition-colors cursor-pointer"
           >
-            {{ isEditing ? 'Guardar cambios' : 'Crear zona' }}
+            {{ isEditing() ? 'Guardar cambios' : 'Crear zona' }}
           </button>
           <a
             routerLink="/admin/zones"
-            class="px-4 py-2 text-sm font-medium text-content-muted hover:text-content-primary transition-colors cursor-pointer"
+            class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100 transition-colors cursor-pointer"
           >
             Cancelar
           </a>

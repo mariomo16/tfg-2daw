@@ -1,5 +1,4 @@
 export const environment = {
 	production: true,
-	apiUrl: "https://tfg-2daw-develop.onrender.com/api/v1",
-	storageUrl: "https://tfg-2daw-develop.onrender.com/storage",
+	apiUrl: "https://ortegamario-tfg-api.up.railway.app/api/v1",
 } as const;

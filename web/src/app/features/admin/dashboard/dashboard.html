@@ -1,0 +1,29 @@
+<div class="max-w-[1600px] mx-auto p-8 space-y-8">
+  <header>
+    <h1 class="text-3xl font-bold text-zinc-100 tracking-tight">Dashboard</h1>
+    <p class="text-zinc-500 mt-2">
+      Bienvenido de nuevo. Vista general y métricas globales del sistema.
+    </p>
+  </header>
+
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+    @for (item of data(); track item.title) {
+      <app-dashboard-card [data]="item" />
+    }
+  </section>
+
+  <section class="bg-zinc-900/30 border border-zinc-800 rounded-md">
+    <div class="p-6 border-b border-zinc-800">
+      <h2 class="text-lg font-semibold text-zinc-100">No se que poner aquí</h2>
+    </div>
+    <div class="p-6">
+      <div class="space-y-6">
+        <div
+          class="h-40 bg-zinc-800/20 border border-dashed border-zinc-700 rounded-lg flex items-center justify-center text-zinc-500 italic"
+        >
+          No se que poner aquí
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

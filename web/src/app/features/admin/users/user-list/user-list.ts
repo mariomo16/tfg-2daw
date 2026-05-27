@@ -1,41 +1,39 @@
-import { DatePipe } from "@angular/common";
 import {
 	ChangeDetectionStrategy,
 	Component,
 	DestroyRef,
 	inject,
+	resource,
 } from "@angular/core";
-import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterLink } from "@angular/router";
-import { UserService } from "@shared/services/user.service";
-import { DataTable } from "@shared/ui/data-table/data-table";
-import { ErrorState } from "@shared/ui/states/error-state/error-state";
-import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
+import { firstValueFrom } from "rxjs";
+import { LoadingIcons } from "../../../../shared/icons/icons";
+import { SafeHtmlPipe } from "../../../../shared/pipes/safe-html.pipe";
+import { UserService } from "../user.service";
 
 @Component({
 	selector: "app-user-list",
-	imports: [RouterLink, DataTable, DatePipe, LoadingState, ErrorState],
+	imports: [RouterLink, SafeHtmlPipe],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: "./user-list.html",
 })
 export class UserList {
 	readonly #userService = inject(UserService);
 	readonly #destroyRef = inject(DestroyRef);
+	protected readonly loadingIcon = LoadingIcons.spinner;
 
-	protected readonly usersResource = rxResource({
-		stream: () => this.#userService.getAll(),
+	protected readonly usersResource = resource({
+		loader: () => firstValueFrom(this.#userService.getAll()),
 	});
 
-	protected readonly columns: string[] = [
-		"ID",
-		"NOMBRE",
-		"EMAIL",
-		"RESERVAS",
-		"REGISTRO",
-		"ROL",
-	];
-
-	protected readonly actions = true;
+	protected readonly columns = [
+		{ key: "id", label: "ID" },
+		{ key: "name", label: "NOMBRE" },
+		{ key: "email", label: "EMAIL" },
+		{ key: "reservations", label: "RESERVAS" },
+		{ key: "createdAt", label: "REGISTRO" },
+	] as const;
 
 	protected onDelete(id: number): void {
 		this.#userService

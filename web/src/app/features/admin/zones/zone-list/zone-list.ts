@@ -1,19 +1,21 @@
+import { CurrencyPipe } from "@angular/common";
 import {
 	ChangeDetectionStrategy,
 	Component,
 	DestroyRef,
 	inject,
+	resource,
 } from "@angular/core";
-import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterLink } from "@angular/router";
-import { ZoneService } from "@shared/services/zone.service";
-import { DataTable } from "@shared/ui/data-table/data-table";
-import { ErrorState } from "@shared/ui/states/error-state/error-state";
-import { LoadingState } from "@shared/ui/states/loading-state/loading-state";
+import { firstValueFrom } from "rxjs";
+import { LoadingIcons } from "../../../../shared/icons/icons";
+import { SafeHtmlPipe } from "../../../../shared/pipes/safe-html.pipe";
+import { ZoneService } from "../../../zones/zone.service";
 
 @Component({
 	selector: "app-zone-list",
-	imports: [RouterLink, DataTable, LoadingState, ErrorState],
+	imports: [RouterLink, CurrencyPipe, SafeHtmlPipe],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: "./zone-list.html",
 })
@@ -21,18 +23,18 @@ export class ZoneList {
 	readonly #zoneService = inject(ZoneService);
 	readonly #destroyRef = inject(DestroyRef);
 
-	protected readonly zonesResource = rxResource({
-		stream: () => this.#zoneService.getAll(),
+	protected readonly loadingIcon = LoadingIcons.spinner;
+
+	protected readonly zonesResource = resource({
+		loader: () => firstValueFrom(this.#zoneService.getAll()),
 	});
 
-	protected readonly columns: string[] = [
-		"ID",
-		"NOMBRE",
-		"CREDITOS",
-		"ORDENADORES",
-	];
-
-	protected readonly actions = true;
+	protected readonly columns = [
+		{ key: "id", label: "ID" },
+		{ key: "name", label: "NOMBRE" },
+		{ key: "pricePerSlot", label: "PRECIO/FRANJA" },
+		{ key: "computers", label: "ORDENADORES" },
+	] as const;
 
 	protected onDelete(id: number): void {
 		this.#zoneService

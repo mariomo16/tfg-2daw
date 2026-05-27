@@ -1,37 +1,52 @@
-<header
-  class="h-16 max-h-16 w-screen flex justify-center fixed z-999 top-0 bg-surface-base border-b border-surface-border"
+<nav
+  class="fixed top-0 left-0 right-0 z-50 bg-[#09090b]/80 backdrop-blur-md border-b border-zinc-800"
 >
-  <div class="w-full flex items-center max-w-7xl px-4">
-    <span class="flex-1 flex justify-start">
-      <app-logo [size]="size" />
-    </span>
-    <div class="flex-1 flex justify-center font-semibold">
-      @for (link of navLinks; track $index) {
-        @if (link.label !== 'RESERVAR' || user()) {
+  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a routerLink="/" class="text-lg text-zinc-100">
+      <span class="font-game">{{ app.name }}</span>
+    </a>
+
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-3">
+        @if (isAuthenticated()) {
           <a
-            class="text-content-secondary hover:cursor-pointer hover:text-primary-light transition-colors duration-150 p-4"
-            [routerLink]="link.path"
-            >{{ link.label }}</a
+            routerLink="/admin/dashboard"
+            class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100"
           >
+            Backoffice
+          </a>
+
+          <div class="h-4 w-px bg-zinc-800"></div>
+
+          <div class="flex items-center gap-2">
+            <span class="px-4 py-2 text-sm font-medium text-zinc-100">
+              {{ user()?.name }}
+            </span>
+            <button
+              type="button"
+              (click)="onLogout()"
+              class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100"
+            >
+              Salir
+            </button>
+          </div>
+        } @else {
+          <div class="flex items-center gap-2">
+            <a
+              routerLink="/auth/login"
+              class="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-zinc-100"
+            >
+              Entrar
+            </a>
+            <a
+              routerLink="/auth/register"
+              class="px-4 py-2 text-sm font-medium text-zinc-900 bg-zinc-100 hover:bg-zinc-200 rounded-lg"
+            >
+              Empezar
+            </a>
+          </div>
         }
-      }
-      @if (user()?.role === 'staff') {
-        <a
-          class="text-content-secondary hover:cursor-pointer hover:text-primary-light transition-colors duration-150 p-4"
-          routerLink="/admin"
-          >ADMIN</a
-        >
-      }
-    </div>
-    <div class="flex-1 flex justify-end gap-2">
-      @if (isLoading()) {
-        <app-loading-state />
-      } @else if (isAuthenticated()) {
-        <app-user-menu />
-      } @else {
-        <app-normal-button label="Registrarse" href="/register" />
-        <app-normal-button label="Iniciar sesión" href="/login" />
-      }
+      </div>
     </div>
   </div>
-</header>
+</nav>

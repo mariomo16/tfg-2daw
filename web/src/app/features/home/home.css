@@ -1,8 +1,0 @@
-.background {
-	mask-image:
-		linear-gradient(to bottom, black 70%, transparent 100%),
-		linear-gradient(to left, black 70%, transparent 100%),
-		linear-gradient(to right, black 70%, transparent 100%);
-
-	mask-composite: intersect;
-}

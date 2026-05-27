@@ -1,57 +1,90 @@
 <?php
 
-use App\Http\Controllers\V1\AuthController;
-use App\Http\Controllers\V1\AuthNotification;
-use App\Http\Controllers\V1\AuthPayment;
-use App\Http\Controllers\V1\AuthReservation;
-use App\Http\Controllers\V1\ComputerController;
+use App\Http\Controllers\V1\UserController;
 use App\Http\Controllers\V1\NotificationController;
 use App\Http\Controllers\V1\PaymentController;
-use App\Http\Controllers\V1\ProfileController;
 use App\Http\Controllers\V1\ReservationController;
 use App\Http\Controllers\V1\TimeSlotController;
-use App\Http\Controllers\V1\UserController;
+use App\Http\Controllers\V1\AuthController;
+use App\Http\Controllers\V1\ComputerController;
 use App\Http\Controllers\V1\ZoneController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return response()->json([
-        'status' => 'OK',
-    ]);
-});
-
 Route::prefix('v1')->group(function () {
 
-    Route::get('/zones', [ZoneController::class, 'index']);
-    Route::get('/zones/{zone}', [ZoneController::class, 'show']);
-    Route::get('/timeslots', [TimeSlotController::class, 'index']);
-
-    Route::middleware('guest:sanctum')->group(function () {
-        Route::post('/register', [AuthController::class, 'register']);
-        Route::post('/login', [AuthController::class, 'login']);
+    // Para el componente health de Angular
+    Route::get('/status', function () {
+        return response()->json([
+            'status' => 'up',
+            'time' => round((microtime(true) - LARAVEL_START) * 1000),
+        ]);
     });
 
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/user', [ProfileController::class, 'show']);
-        Route::post('/profile', [ProfileController::class, 'update']);
-        Route::post('/logout', [AuthController::class, 'logout']);
+    // ==========================================
+    // AUTENTICACIÓN
+    // ==========================================
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
 
-        Route::get('/my-reservations', [AuthReservation::class, 'index']);
+    // ==========================================
+    // RUTAS PÚBLICAS
+    // ==========================================
+    Route::get('/zones', [ZoneController::class, 'index']);
+    Route::get('/zones/{zone}', [ZoneController::class, 'show']);
+
+    Route::get('/computers', [ComputerController::class, 'index']);
+    Route::get('/computers/{computer}', [ComputerController::class, 'show']);
+    Route::get('/zones/{zone}/computers', [ComputerController::class, 'byZone']);
+
+    // Consultar disponibilidad
+    Route::get('/computers/{computer}/availability', [ComputerController::class, 'availability']);
+    Route::get('/timeslots', [TimeSlotController::class, 'index']);
+
+    // ==========================================
+    // RUTAS PROTEGIDAS
+    // ==========================================
+    Route::middleware('auth:sanctum')->group(function () {
+
+        // --- CUENTA DE USUARIO ---
+        Route::get('/user', [AuthController::class, 'user']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        // Recargas de saldo
+        Route::post('/user/topup', [UserController::class, 'topupBalance']);
+
+        // --- ACCIONES DE CLIENTES ---
+        // Reservas del usuario logueado
+        Route::get('/my-reservations', [ReservationController::class, 'myReservations']);
         Route::post('/reservations', [ReservationController::class, 'store']);
         Route::get('/reservations/{reservation}', [ReservationController::class, 'show']);
-        Route::post('/reservations/{reservation}/cancel', [ReservationController::class, 'destroy']);
+        Route::post('/reservations/{reservation}/cancel', [ReservationController::class, 'cancel']);
 
-        Route::get('/my-payments', [AuthPayment::class, 'index']);
+        // Pagos del usuario logueado
+        Route::get('/my-payments', [PaymentController::class, 'myPayments']);
         Route::get('/payments/{payment}', [PaymentController::class, 'show']);
 
-        Route::get('/my-notifications', [AuthNotification::class, 'index']);
+        // Notificaciones del usuario logueado
+        Route::get('/my-notifications', [NotificationController::class, 'myNotifications']);
+        Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+        Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead']);
 
-        Route::apiResource('users', UserController::class);
-        Route::apiResource('zones', ZoneController::class)->except(['index', 'show']);
-        Route::apiResource('computers', ComputerController::class);
-        Route::apiResource('timeslots', TimeSlotController::class)->except(['index']);
-        Route::apiResource('reservations', ReservationController::class);
-        Route::apiResource('payments', PaymentController::class);
-        Route::apiResource('notifications', NotificationController::class);
+        // ==========================================
+        // RUTAS ADMIN/EMPLEADO
+        // ==========================================
+        // Quizas estaria bien aprender a crear un middleware para comprobar si es admin/empleado
+        Route::prefix('admin')->group(function () {
+
+            // Gestión de Usuarios
+            Route::apiResource('users', UserController::class);
+
+            // Gestión de Catálogo
+            Route::apiResource('zones', ZoneController::class)->except(['index', 'show']);
+            Route::apiResource('computers', ComputerController::class)->except(['index', 'show']);
+            Route::apiResource('timeslots', TimeSlotController::class)->except(['index']);
+
+            // Gestión de Operaciones Generales
+            Route::apiResource('reservations', ReservationController::class)->except(['store', 'show']);
+            Route::apiResource('payments', PaymentController::class)->except(['show']);
+            Route::apiResource('notifications', NotificationController::class)->except(['show']);
+        });
     });
 });

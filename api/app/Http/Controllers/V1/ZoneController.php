@@ -2,80 +2,36 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ZoneRequest;
-use App\Http\Resources\ZoneResource;
 use App\Models\Zone;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class ZoneController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): JsonResponse
+    public function index()
     {
-        return response()->json(
-            ZoneResource::collection(Zone::with('computers')->get()),
-            200
-        );
+        return response()->json(Zone::with('computers')->get());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(ZoneRequest $request): JsonResponse
+    public function store(Request $request)
     {
-        $this->authorize('create', Zone::class);
-
-        $data = $request->validated();
-
-        $zone = Zone::create($data);
-
-        return response()->json(
-            new ZoneResource($zone->load('computers')),
-            201
-        );
+        $zone = Zone::create($request->all()); // TODO: Hacer FormRequest
+        return response()->json($zone->load('computers'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Zone $zone): JsonResponse
+    public function show(Zone $zone)
     {
-        return response()->json(
-            new ZoneResource($zone->load('computers')),
-            200
-        );
+        return response()->json($zone->load('computers'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(ZoneRequest $request, Zone $zone): JsonResponse
+    public function update(Request $request, Zone $zone)
     {
-        $this->authorize('update', $zone);
-
-        $data = $request->validated();
-
-        $zone->update(array_filter($data));
-
-        return response()->json(
-            new ZoneResource($zone->fresh()->load('computers')),
-            200
-        );
+        $zone->update($request->all()); // TODO: Hacer FormRequest
+        return response()->json($zone->fresh()->load('computers'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Zone $zone): Response
+    public function destroy(Zone $zone)
     {
-        $this->authorize('delete', $zone);
-
         $zone->delete();
-
-        return response()->noContent();
     }
 }
