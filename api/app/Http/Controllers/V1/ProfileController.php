@@ -3,40 +3,35 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the specified resource.
-     */
-    public function show()
+    public function update(UpdateProfileRequest $request)
     {
-        return response()->json(
-            new UserResource(auth()->user()->load(["reservations.computer.zone", "reservations.timeSlot", "payments", "notifications"])),
-            200
-        );
-    }
+        $user = User::findOrFail($request->validated()['userId']);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(ProfileRequest $request, User $user)
-    {
-        $user = auth()->user();
-        $data = $request->validated();
+        if ($user->id !== auth()->id())
+            return;
 
-        if ($request->hasFile('avatar_path')) {
-            $path = $request->file('avatar_path')->store('images', 'public');
-            $data = [...$data, 'avatar_path' => $path];
+        // https://www.youtube.com/watch?v=SvIxR9oacJs
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
         }
+
+        $data = [
+            'name' => $request->validated()['name'],
+            'email' => $request->validated()['email'],
+            'image' => $imagePath
+        ];
 
         $user->update(array_filter($data));
 
         return response()->json(
-            new UserResource($user->fresh()->load(['reservations.computer.zone', 'reservations.timeSlot', 'payments', 'notifications'])),
+            new UserResource($user->fresh()->load(['reservations', 'payments', 'notifications'])),
             200
         );
     }

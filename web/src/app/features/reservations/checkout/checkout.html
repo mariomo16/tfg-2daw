@@ -1,0 +1,38 @@
+<aside class="lg:col-span-1">
+  <div class="bg-surface-card/50 border border-white/5 rounded-sm p-6 sticky top-32">
+    <h3 class="text-lg font-bold mb-6 pb-4 border-b border-white/5">Resumen de Reserva</h3>
+
+    <ul class="space-y-4 mb-6">
+      <li class="flex justify-between items-center">
+        <span class="text-content-secondary text-sm">Zona</span>
+        <span class="font-medium text-sm">{{ selectedZone()?.name }}</span>
+      </li>
+      <li class="flex justify-between items-center">
+        <span class="text-content-secondary text-sm">Franja</span>
+        <span class="font-medium text-sm"
+          >{{ selectedTimeSlot()?.start_time }} a {{ selectedTimeSlot()?.end_time }}</span
+        >
+      </li>
+      <li class="flex justify-between items-center">
+        <span class="text-content-secondary text-sm">Ordenador</span>
+        <span class="font-medium text-sm">{{ selectedComputer()?.name }}</span>
+      </li>
+    </ul>
+
+    <div
+      class="flex justify-between items-center text-lg font-bold mb-6 pt-4 border-t border-white/5"
+    >
+      <span>Total a pagar</span>
+      <span class="text-2xl text-emerald-400">{{ totalPrice() }}€</span>
+    </div>
+
+    <button
+      type="button"
+      class="w-full inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-xs hover:bg-blue-600 transition-all cursor-pointer"
+      (click)="confirmReservation()"
+    >
+      Confirmar Reserva
+      <app-icon name="check-circle" class="text-content-primary" />
+    </button>
+  </div>
+</aside>

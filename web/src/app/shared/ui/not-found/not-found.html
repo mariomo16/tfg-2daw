@@ -1,15 +1,36 @@
-<!-- https://tailwindcss.com/plus/ui-blocks/marketing/feedback/404-pages#component-ebef3404d06e7b5f42e85b7b2ca4a2a5 -->
-<main class="grid min-h-screen place-items-center bg-surface-base px-6 py-24 sm:py-32 lg:px-8">
-  <div class="text-center">
-    <p class="text-base font-semibold text-primary">404</p>
-    <h1 class="mt-4 text-5xl font-semibold tracking-tight text-balance text-white sm:text-7xl">
-      Página no encontrada
+<section
+  class="min-h-screen flex items-center justify-center bg-surface-base px-6 py-24 relative overflow-hidden"
+>
+  <div class="relative z-10 text-center max-w-xl">
+    <h1
+      class="font-game text-7xl sm:text-8xl md:text-9xl text-content-primary mb-8 tracking-tighter opacity-80 uppercase"
+    >
+      404
     </h1>
-    <p class="mt-6 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
-      Lo sentimos, no pudimos encontrar la página que buscas.
-    </p>
-    <div class="mt-10 flex items-center justify-center gap-x-6">
-      <app-normal-button label="Volver al inicio" href="/" />
+
+    <div class="space-y-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-content-primary tracking-tight">
+        Página no encontrada
+      </h2>
+      <p class="text-content-muted text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
+        Lo sentimos, la página que buscas no existe.
+      </p>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          routerLink="/"
+          class="w-full sm:w-auto px-8 py-4 text-sm font-bold text-zinc-900 bg-content-primary rounded-xs hover:bg-zinc-200 transition-all flex items-center justify-center gap-2"
+        >
+          Volver al inicio
+        </a>
+        <button
+          type="button"
+          (click)="goBack()"
+          class="w-full sm:w-auto px-8 py-4 text-sm font-bold text-content-secondary bg-surface-card border border-surface-border rounded-xs hover:bg-surface-border transition-all flex items-center justify-center gap-2 cursor-pointer"
+        >
+          Regresar
+        </button>
+      </div>
     </div>
   </div>
-</main>
+</section>

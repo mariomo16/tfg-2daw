@@ -21,12 +21,11 @@ class ReservationResource extends JsonResource
             'time_slot_id' => $this->time_slot_id,
             'date' => $this->date,
             'status' => $this->status,
-            'price' => $this->price,
+            'total_price' => $this->total_price,
             'updated_at' => $this->updated_at,
-            'created_at' => $this->created_at,
             'computer' => $this->whenLoaded('computer'),
             'payment' => $this->whenLoaded('payment'),
-            'time_slot' => $this->whenLoaded('timeSlot'),
+            'timeslot' => $this->whenLoaded('timeslot'),
             'user' => $this->whenLoaded('user'),
         ];
     }

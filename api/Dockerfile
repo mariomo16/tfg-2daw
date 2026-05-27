@@ -2,7 +2,7 @@
 FROM php:8.4-apache
 
 # Evitar el warning de Apache sobre el nombre de dominio
-RUN echo "ServerName tfg-2daw-main.onrender.com" >> /etc/apache2/apache2.conf
+RUN echo "ServerName tfg-api-m1mc.onrender.com" >> /etc/apache2/apache2.conf
 
 # Instalación dependencias del sistema necesarias para las extensiones de PHP
 RUN apt-get update && apt-get install -y \

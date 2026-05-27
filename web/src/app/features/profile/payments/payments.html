@@ -1,0 +1,65 @@
+<section class="flex flex-col max-h-[75vh]">
+  <div class="flex items-center justify-between border-b border-surface-border pb-4 mb-6 shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="p-1.5 rounded-sm bg-primary/10">
+        <app-icon name="banknotes" extraClass="size-7 text-primary" />
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-content-primary tracking-tight">
+          Historial de Transacciones
+        </h2>
+        <p class="text-xs text-content-muted">Registro de tus pagos y reembolsos</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="overflow-y-auto space-y-3 pr-2 custom-scroll">
+    @if (paymentsResource.isLoading()) {
+    <app-loading-state text="Cargando transacciones" />
+    } @else if (paymentsResource.error()) {
+    <app-error-state
+      text="No hemos podido cargar tus transacciones"
+      (retry)="paymentsResource.reload()"
+    />
+    } @else if (!paymentsResource.value()?.length) {
+    <app-empty-state text="No tienes transacciones" />
+    } @else { @for (payment of paymentsResource.value(); track payment.id) {
+    <div
+      class="bg-surface-card/30 border border-surface-border/50 rounded-sm p-4 flex justify-between items-center"
+    >
+      <div class="flex items-center gap-4 min-w-0">
+        <div
+          class="w-10 h-10 rounded-xs flex items-center justify-center border transition-colors"
+          [class]="
+                payment.type === 'refund'
+                  ? 'bg-success/10 border-success/20 text-success'
+                  : 'bg-surface-base border-surface-border text-content-secondary group-hover:text-primary'
+              "
+        >
+          <app-icon
+            [name]="payment.type === 'payment' ? 'play' : 'arrow-uturn-left'"
+            extraClass="size-5"
+          />
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-medium text-content-primary">
+            {{ payment.type === 'refund' ? 'Reembolso' : `Reserva #${payment.reservation_id}` }}
+          </p>
+          <p class="text-[10px] uppercase tracking-wider font-medium text-content-muted mt-0.5">
+            {{ payment.created_at | date: 'longDate' }}
+          </p>
+        </div>
+      </div>
+      <div class="text-right">
+        <p
+          class="text-xs font-game tracking-tight"
+          [class.text-error]="payment.type === 'payment'"
+          [class.text-success-light]="payment.type !== 'payment'"
+        >
+          {{ payment.type === 'payment' ? '-' : '+' }}{{ payment.amount | currency: 'EUR' }}
+        </p>
+      </div>
+    </div>
+    } }
+  </div>
+</section>

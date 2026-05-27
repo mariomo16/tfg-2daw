@@ -6,24 +6,27 @@ use App\Models\Computer;
 use App\Models\Payment;
 use App\Models\Reservation;
 use App\Models\User;
+use App\Enums\ReservationError;
+use App\Enums\ComputerStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use App\Enums\ReservationStatus;
 
 class ReservationService
 {
-    public function createReservation(array $data): Reservation
+    public function makeReservation(array $data): Reservation
     {
         return DB::transaction(function () use ($data) {
             $user = User::lockForUpdate()->findOrFail(auth()->id());
 
             $computer = Computer::with('zone')->findOrFail($data["computer_id"]);
-            $price = $computer->zone->price;
+            $price = $computer->zone->price_per_slot;
 
             $this->validateAvailability($computer, $data);
 
             if ($user->balance < $price) {
                 throw ValidationException::withMessages([
-                    "balance" => 'No tienes creditos suficientes en tu cuenta.'
+                    "balance" => ReservationError::INSUFICENT_BALANCE->message()
                 ]);
             }
 
@@ -44,8 +47,8 @@ class ReservationService
 
     protected function validateAvailability(Computer $computer, array $data): void
     {
-        if ($computer->status === 'mainteinance') {
-            throw ValidationException::withMessages(['computer_id' => 'El equipo no está disponible por mantenimiento.']);
+        if ($computer->status === ComputerStatus::MAINTENANCE->value) {
+            throw ValidationException::withMessages(['computer_id' => ReservationError::COMPUTER_MAINTENANCE->message()]);
         }
 
         $isBusy = Reservation::where('computer_id', $data['computer_id'])
@@ -54,30 +57,30 @@ class ReservationService
             ->exists();
 
         if ($isBusy) {
-            throw ValidationException::withMessages(['computer_id' => 'Este ordenador ya tiene una reserva en ese horario.']);
+            throw ValidationException::withMessages(['computer_id' => ReservationError::COMPUTER_OCCUPIED->message()]);
         }
     }
 
     public function cancel(Reservation $reservation): Reservation
     {
-        if ($reservation->status === 'cancelled') {
+        if ($reservation->status === ReservationStatus::CANCELLED->value) {
             throw ValidationException::withMessages(['reservation_id' => 'La reserva ya esta cancelada.']);
         }
 
 
         DB::transaction(function () use ($reservation) {
-            $reservation->update(['status' => 'cancelled']);
+            $reservation->update(['status' => ReservationStatus::CANCELLED->value]);
 
             $user = $reservation->payment->user;
 
             Payment::create([
                 'user_id' => $user->id,
                 'reservation_id' => $reservation->id,
-                'amount' => $reservation->price,
+                'amount' => $reservation->total_price,
                 'type' => 'refund'
             ]);
 
-            $user->increment('balance', $reservation->price);
+            $user->increment('balance', $reservation->total_price);
         });
 
         return $reservation;

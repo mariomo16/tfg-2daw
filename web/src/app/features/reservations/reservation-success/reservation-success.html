@@ -1,0 +1,48 @@
+@let res = reservation();
+
+<div class="fixed inset-0 bg-surface-base/80 backdrop-blur-md flex items-center justify-center">
+  <div
+    class="bg-surface-card/90 border border-surface-border rounded-xs p-10 w-[90%] max-w-112.5 flex flex-col items-center gap-8 relative"
+  >
+    <div class="text-center flex items-center gap-2">
+      <h2 class="text-3xl font-bold text-content-primary m-0">¡Reserva Completada!</h2>
+      <app-icon name="check-circle" class="text-success" extraClass="size-7" />
+    </div>
+
+    <div class="w-full bg-surface-base/50 rounded-sm p-6 flex flex-col gap-4">
+      <div class="flex justify-between items-center">
+        <span class="text-content-secondary text-sm">Ordenador</span>
+        <span class="text-content-primary font-semibold">{{ res.computer.name }}</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-content-secondary text-sm">Zona</span>
+        <span class="text-content-primary font-semibold">{{ zone().name }}</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-content-secondary text-sm">Horario</span>
+        <span class="text-content-primary font-semibold">
+          {{ res.timeslot.start_time.slice(0, 5) }} - {{ res.timeslot.end_time.slice(0, 5) }}
+        </span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-content-secondary text-sm">Fecha</span>
+        <span class="text-content-primary font-semibold">{{ res.date | date: 'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="h-px bg-surface-border my-1"></div>
+      <div class="flex justify-between items-center">
+        <span class="text-content-primary font-bold">Total Pagado</span>
+        <span class="text-success text-xl font-extrabold"
+          >{{ res.total_price | currency: 'EUR' }}</span
+        >
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="w-full bg-primary text-white border-none p-4 rounded-sm transition-colors font-semibold cursor-pointer hover:bg-primary-light"
+      (click)="onClose()"
+    >
+      Cerrar y continuar
+    </button>
+  </div>
+</div>

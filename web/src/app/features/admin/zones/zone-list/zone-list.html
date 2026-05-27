@@ -1,40 +1,40 @@
 @if (zonesResource.isLoading()) {
-  <app-loading-state />
+<app-loading-state />
 } @else if (zonesResource.error()) {
-  <app-error-state />
+<app-error-state />
 } @else {
-  <app-data-table
-    title="Zonas"
-    description="Gestiona las zonas del local"
-    actionLabel="+ Nueva zona"
-    actionRoute="/admin/zones/new"
-    [columns]="columns"
-    [actions]="actions"
-    [isEmpty]="!zonesResource.value()?.length"
-  >
-    @for (zone of zonesResource.value(); track zone.id) {
-      <tr class="hover:bg-surface-card/30 transition-colors">
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ zone.id }}</td>
-        <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ zone.name }}</td>
-        <td class="px-6 py-4 text-sm text-content-secondary">
-          {{ zone.price }}
-        </td>
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ zone.computers?.length }}</td>
-        <td class="px-6 py-4 text-right">
-          <a
-            [routerLink]="['/admin/zones', zone.id, 'edit']"
-            class="text-sm text-primary-light hover:text-primary transition-colors mr-3"
-            >Editar</a
-          >
-          <button
-            (click)="onDelete(zone.id)"
-            type="button"
-            class="text-sm text-error hover:text-error/80 transition-colors cursor-pointer"
-          >
-            Eliminar
-          </button>
-        </td>
-      </tr>
-    }
-  </app-data-table>
+<app-data-table
+  title="Zonas"
+  description="Gestiona las zonas del local"
+  actionLabel="+ Nueva zona"
+  actionRoute="/admin/zones/new"
+  [columns]="columns"
+  [actions]="actions"
+  [isEmpty]="!zonesResource.value()?.length"
+>
+  @for (zone of zonesResource.value(); track zone.id) {
+  <tr class="hover:bg-surface-card/30 transition-colors">
+    <td class="px-6 py-4 text-sm text-content-secondary">{{ zone.id }}</td>
+    <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ zone.name }}</td>
+    <td class="px-6 py-4 text-sm text-content-secondary">
+      {{ zone.price_per_slot | currency: 'EUR' : 'symbol' : '1.2-2' }}
+    </td>
+    <td class="px-6 py-4 text-sm text-content-secondary">{{ zone.computers?.length }}</td>
+    <td class="px-6 py-4 text-right">
+      <a
+        [routerLink]="['/admin/zones', zone.id, 'edit']"
+        class="text-sm text-primary-light hover:text-primary transition-colors mr-3"
+        >Editar</a
+      >
+      <button
+        (click)="onDelete(zone.id)"
+        type="button"
+        class="text-sm text-error hover:text-error/80 transition-colors cursor-pointer"
+      >
+        Eliminar
+      </button>
+    </td>
+  </tr>
+  }
+</app-data-table>
 }

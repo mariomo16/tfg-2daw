@@ -1,0 +1,28 @@
+@let user = currentUser();
+<div class="flex items-center gap-3">
+  <a
+    routerLink="/profile"
+    class="flex items-center gap-3 min-w-0 px-3 py-2 rounded-sm hover:bg-surface-card transition-colors"
+  >
+    @if (user?.image) {
+    <img
+      [src]="`${storageUrl}/${user?.image}`"
+      alt="user profile"
+      class="size-8 shrink-0 rounded-full object-cover"
+    />
+    } @else {
+    <span class="size-8 text-3xl font-game text-content-primary"> {{ user?.name?.charAt(0) }}</span>
+    }
+    <div class="flex-1 min-w-0">
+      <p class="text-sm font-medium text-content-primary truncate">{{ user?.name }}</p>
+      <p class="text-sm text-content-muted truncate">{{ currentUserRole() }}</p>
+    </div>
+  </a>
+  <button
+    type="button"
+    class="p-2 text-content-secondary hover:text-error hover:bg-error/10 rounded-sm transition-colors duration-200 hover:cursor-pointer"
+    (click)="onLogout()"
+  >
+    <app-icon name="arrow-left-start-on-rectangle" />
+  </button>
+</div>

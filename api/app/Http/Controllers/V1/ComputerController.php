@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ComputerRequest;
 use App\Http\Resources\ComputerResource;
+use App\Http\Requests\Computer\ComputerRequest;
+use App\Http\Resources\NotificationResource;
 use App\Models\Computer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class ComputerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): JsonResponse
     {
         return response()->json(
@@ -22,9 +20,6 @@ class ComputerController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(ComputerRequest $request): JsonResponse
     {
         $this->authorize('create', Computer::class);
@@ -37,9 +32,6 @@ class ComputerController extends Controller
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Computer $computer): JsonResponse
     {
         return response()->json(
@@ -48,9 +40,6 @@ class ComputerController extends Controller
         );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(ComputerRequest $request, Computer $computer): JsonResponse
     {
         $this->authorize('update', $computer);
@@ -63,9 +52,6 @@ class ComputerController extends Controller
         );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Computer $computer): Response
     {
         $this->authorize('delete', $computer);

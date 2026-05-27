@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\TimeSlot;
 use App\Models\User;
+use App\Enums\UserRole;
 
 class TimeSlotPolicy
 {
@@ -19,16 +20,16 @@ class TimeSlotPolicy
 
     public function create(User $user): bool
     {
-        return in_array($user->role, ['staff']);
+        return in_array($user->role, [UserRole::ADMIN->value, UserRole::EMPLOYEE->value]);
     }
 
     public function update(User $user, TimeSlot $timeSlot): bool
     {
-        return in_array($user->role, ['staff']);
+        return in_array($user->role, [UserRole::ADMIN->value, UserRole::EMPLOYEE->value]);
     }
 
     public function delete(User $user, TimeSlot $timeSlot): bool
     {
-        return in_array($user->role, ['staff']);
+        return in_array($user->role, [UserRole::ADMIN->value, UserRole::EMPLOYEE->value]);
     }
 }

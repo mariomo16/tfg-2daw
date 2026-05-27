@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\TimeSlotRequest;
 use App\Http\Resources\TimeSlotResource;
 use App\Models\TimeSlot;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class TimeSlotController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): JsonResponse
     {
         return response()->json(
@@ -22,9 +19,6 @@ class TimeSlotController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(TimeSlotRequest $request): JsonResponse
     {
         $this->authorize('create', TimeSlot::class);
@@ -37,40 +31,31 @@ class TimeSlotController extends Controller
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TimeSlot $timeSlot): JsonResponse
+    public function show(TimeSlot $timeslot): JsonResponse
     {
         return response()->json(
-            new TimeSlotResource($timeSlot->load('reservations')),
+            new TimeSlotResource($timeslot->load('reservations')),
             200
         );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(TimeSlotRequest $request, TimeSlot $timeSlot): JsonResponse
+    public function update(TimeSlotRequest $request, TimeSlot $timeslot): JsonResponse
     {
-        $this->authorize('update', $timeSlot);
+        $this->authorize('update', $timeslot);
 
-        $timeSlot->update($request->all());
+        $timeslot->update($request->all());
 
         return response()->json(
-            new TimeSlotResource($timeSlot->fresh()->load('reservations')),
+            new TimeSlotResource($timeslot->fresh()->load('reservations')),
             200
         );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TimeSlot $timeSlot): Response
+    public function destroy(TimeSlot $timeslot): Response
     {
-        $this->authorize('delete', $timeSlot);
+        $this->authorize('delete', $timeslot);
 
-        $timeSlot->delete();
+        $timeslot->delete();
 
         return response()->noContent();
     }

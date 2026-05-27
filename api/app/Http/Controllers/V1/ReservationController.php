@@ -3,80 +3,71 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\Reservation\StoreReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
-use App\Services\ReservationService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use App\Services\ReservationService;
 
 class ReservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): JsonResponse
     {
         $this->authorize('viewAny', Reservation::class);
 
         return response()->json(
-            ReservationResource::collection(Reservation::with(['user', 'computer', 'timeSlot', 'payment'])->get()),
+            ReservationResource::collection(Reservation::with(['user', 'computer', 'timeslot', 'payment'])->get()),
             200
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(ReservationRequest $request, ReservationService $service): JsonResponse
+    public function myReservations(): JsonResponse
     {
-        $this->authorize('create', Reservation::class);
-
-        $reservation = $request->validated();
-
-        $reservation = $service->createReservation($request->validated());
-
         return response()->json(
-            new ReservationResource($reservation->load(['computer', 'timeSlot'])),
-            201
+            ReservationResource::collection(
+                auth()->user()
+                    ->reservations()
+                    ->with(['computer', 'timeslot', 'payment'])
+                    ->orderBy('date', 'desc')
+                    ->get()
+            ),
+            200
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function store(StoreReservationRequest $request, ReservationService $service): JsonResponse
+    {
+        $this->authorize('create', Reservation::class);
+
+        $reservation = $service->makeReservation($request->validated());
+
+        return response()->json(
+            new ReservationResource($reservation->load(['computer', 'timeslot'])),
+            201
+        );
+
+    }
+
     public function show(Reservation $reservation): JsonResponse
     {
         $this->authorize('view', $reservation);
 
         return response()->json(
-            new ReservationResource($reservation->load(['user', 'payment', 'computer', 'timeSlot'])),
+            new ReservationResource($reservation->load(['user', 'computer', 'timeslot', 'payment'])),
             200
         );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(ReservationRequest $request, Reservation $reservation): JsonResponse
-    {
-        $reservation->update($request->all());
-
-        return response()->json(
-            new ReservationResource($reservation->fresh()->load(['user', 'payment', 'computer', 'timeSlot'])),
-            200
-        );
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Reservation $reservation, ReservationService $service): Response
+    public function cancel(Reservation $reservation, ReservationService $service): JsonResponse
     {
         $this->authorize('cancel', $reservation);
 
         $reservation = $service->cancel($reservation);
 
-        return response()->noContent();
+        return response()->json(
+            new ReservationResource($reservation->fresh()->load(['user', 'computer', 'timeslot', 'payment'])),
+            200
+        );
+
     }
 }

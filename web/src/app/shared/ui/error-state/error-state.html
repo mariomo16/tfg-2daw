@@ -1,0 +1,10 @@
+<div class="min-w-full h-full flex flex-col gap-1 justify-center items-center">
+  <p class="text-error">{{ text() }}</p>
+  <button
+    type="button"
+    class="px-4 py-2 text-sm font-medium text-zinc-900 bg-content-primary rounded-md hover:bg-zinc-200 transition-colors cursor-pointer"
+    (click)="retry.emit()"
+  >
+    Reintentar
+  </button>
+</div>

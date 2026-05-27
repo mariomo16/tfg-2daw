@@ -1,0 +1,32 @@
+<section class="animate-fade-in-up">
+  @if (zoneResource.isLoading()) {
+  <app-loading-state text="Cargando zonas" />
+  } @else if (zoneResource.error()) {
+  <app-error-state text="Error al cargar las zonas" (retry)="zoneResource.reload()" />
+  } @else {
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+    @for (zone of zoneResource.value(); track zone.id) {
+    <div
+      class="bg-surface-card border border-white/5 rounded-sm p-5 cursor-pointer transition-all hover:border-white/20"
+      (click)="selectZone(zone)"
+    >
+      <div class="flex justify-between items-center mb-4">
+        <span class="material-symbols-rounded text-2xl" [style.color]="zone.accent">
+          <app-icon [name]="zone.icon" />
+        </span>
+        <span
+          class="text-xs px-2 py-1 rounded font-semibold bg-white/5 text-content-secondary border border-white/10"
+        >
+          {{ zone.price_per_slot }}€ / sesión
+        </span>
+      </div>
+
+      <h3 class="text-lg font-semibold mb-1">{{ zone.name }}</h3>
+      <p class="text-xs text-content-secondary">
+        {{ zoneExtra[$index]?.description ?? 'Sin descripción' }}
+      </p>
+    </div>
+    }
+  </div>
+  }
+</section>

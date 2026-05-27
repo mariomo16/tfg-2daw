@@ -14,10 +14,6 @@ chmod 664 /var/www/html/database/database.sqlite
 php artisan migrate --force --seed
 echo "Migraciones ejecutadas"
 
-# Limpiar la configuracion por si acaso se bloquea el cors
-php artisan config:clear
-php artisan cache:clear
-
 # Generar caché de configuración y rutas para mejorar el rendimiento
 php artisan config:cache
 php artisan route:cache

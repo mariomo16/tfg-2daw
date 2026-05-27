@@ -1,0 +1,23 @@
+<div
+  class="bg-surface-card/50 border border-surface-border p-6 rounded-sm flex items-center justify-between"
+>
+  <div class="min-h-15 flex flex-col justify-end">
+    <p class="text-xs font-medium text-content-muted uppercase">{{ data().title }}</p>
+
+    @if (data().isLoading()) {
+    <p class="text-2xl font-bold text-primary mt-2 animate-pulse">...</p>
+    } @else if (data().error()) {
+    <p class="text-2xl font-bold text-error mt-2">...</p>
+    } @else {
+    <p class="text-2xl font-bold text-content-primary mt-2">{{ data().info() }}</p>
+    }
+  </div>
+  <a
+    aria-label="create-resource"
+    [routerLink]="data().linkRoute"
+    class="group flex items-center gap-3 p-4 rounded-xs border border-surface-border transition-all"
+    [class]="data().linkColor"
+  >
+    <app-icon name="document-plus" [class]="data().iconColor" extraClass="size-6" />
+  </a>
+</div>

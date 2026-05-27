@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['user_id', 'reservation_id', 'amount', 'type', 'created_at'])]
 class Payment extends Model
 {
-    use SoftDeletes;
+    /** @use HasFactory<\Database\Factories\PaymentFactory> */
+    use HasFactory, SoftDeletes;
 
     public $timestamps = false;
+
+    protected $fillable = ['user_id', 'reservation_id', 'amount', 'type'];
 
     public function user(): BelongsTo
     {

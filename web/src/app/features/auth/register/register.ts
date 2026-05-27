@@ -1,85 +1,52 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	inject,
-	signal,
-} from "@angular/core";
-import {
-	email,
-	FormField,
-	FormRoot,
-	form,
-	maxLength,
-	minLength,
-	required,
-} from "@angular/forms/signals";
-import { Router, RouterLink } from "@angular/router";
-import { AuthService } from "@core/auth/auth.service";
-import type { RegisterDto } from "@shared/models/auth.model";
-import { GamingButton } from "@shared/ui/gaming-button/gaming-button";
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { Icon } from '../../../shared/ui/icon/icon';
+import { AuthService } from '../auth.service';
 
 @Component({
-	selector: "app-register",
-	imports: [GamingButton, RouterLink, FormField, FormRoot],
-	templateUrl: "./register.html",
-	changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-register',
+  imports: [RouterLink, Icon, ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './register.html',
 })
 export class Register {
-	readonly #authService = inject(AuthService);
-	readonly #router = inject(Router);
+  readonly #fb = inject(NonNullableFormBuilder);
+  readonly #authService = inject(AuthService);
+  readonly #router = inject(Router);
+  readonly #destroyRef = inject(DestroyRef);
 
-	protected readonly isLoading = this.#authService.isLoading;
+  readonly isLoading = this.#authService.isLoading;
+  readonly error = signal<string | null>(null);
 
-	// https://dev.to/abp_io/signal-based-forms-in-angular-21-why-youll-never-miss-reactive-forms-again-n7l
-	// https://angular.dev/guide/forms/signals/validation
-	protected readonly registerModel = signal<RegisterDto>({
-		name: "",
-		email: "",
-		password: "",
-		password_confirmation: "",
-	});
+  readonly form = this.#fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    password_confirmation: ['', Validators.required],
+  });
 
-	protected readonly form = form(this.registerModel, (schemaPath) => {
-		required(schemaPath.name, { message: "El nombre es obligatorio" });
-		minLength(schemaPath.name, 3, {
-			message: "El nombre debe tener al menos 3 caracteres",
-		});
-		maxLength(schemaPath.name, 40, {
-			message: "El nombre no puede superar los 40 caracteres",
-		});
+  onSubmit(): void {
+    this.error.set(null);
 
-		required(schemaPath.email, { message: "El correo es obligatorio" });
-		email(schemaPath.email, {
-			message: "Introduce una dirección de correo válida",
-		});
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-		required(schemaPath.password, {
-			message: "La contraseña no puede estar vacía",
-		});
-		minLength(schemaPath.password, 8, {
-			message: "La contraseña debe tener al menos 8 caracteres",
-		});
+    const data = this.form.getRawValue();
+    if (data.password !== data.password_confirmation) {
+      this.error.set('Las contraseñas no coinciden');
+      return;
+    }
 
-		required(schemaPath.password_confirmation, {
-			message: "Por favor, repite tu contraseña",
-		});
-	});
-
-	onSubmit(): void {
-		if (!this.form().valid()) {
-			this.form().markAsTouched();
-			return;
-		}
-
-		const data = this.form().value();
-
-		if (data.password !== data.password_confirmation) {
-			return;
-		}
-
-		this.#authService.register(data).subscribe({
-			next: () => this.#router.navigate(["/"]),
-			error: (err) => console.error("Error al crear la cuenta:", err),
-		});
-	}
+    this.#authService
+      .register(data)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe({
+        next: () => this.#router.navigate(['/']),
+        error: () => this.error.set('Error al crear la cuenta'),
+      });
+  }
 }

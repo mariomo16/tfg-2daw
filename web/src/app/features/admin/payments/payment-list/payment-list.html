@@ -1,41 +1,42 @@
 @if (paymentsResource.isLoading()) {
-  <app-loading-state />
+<app-loading-state />
 } @else if (paymentsResource.error()) {
-  <app-error-state />
+<app-error-state />
 } @else {
-  <app-data-table
-    title="Pagos"
-    description="Gestiona el historial de transacciones"
-    [columns]="columns"
-    [actions]="actions"
-    [isEmpty]="!paymentsResource.value()?.length"
-  >
-    @for (payment of paymentsResource.value(); track payment.id) {
-      <tr class="hover:bg-surface-card/30 transition-colors">
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ payment.id }}</td>
-        <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ payment.user?.name }}</td>
-        <td class="px-6 py-4 text-sm text-content-secondary">#{{ payment.reservationId }}</td>
-        <td
-          class="px-6 py-4 text-sm font-medium"
-          [class.text-error]="payment.type === 'refund'"
-          [class.text-success-light]="payment.type === 'payment'"
-        >
-          {{ payment.type === 'payment' ? '+' : '-' }}{{ payment.amount }} creditos
-        </td>
-        <td class="px-6 py-4 text-sm text-zinc-400">
-          <span
-            class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-xs"
-            [class]="
-              payment.type === 'payment'
-                ? 'bg-primary/10 text-primary-light border border-primary/20'
-                : 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
-            "
-          >
-            {{ payment.type === 'payment' ? 'Pago' : 'Reembolso' }}
-          </span>
-        </td>
-        <td class="px-6 py-4 text-sm text-content-muted">{{ payment.createdAt | date }}</td>
-      </tr>
-    }
-  </app-data-table>
+<app-data-table
+  title="Pagos"
+  description="Gestiona el historial de transacciones"
+  [columns]="columns"
+  [actions]="actions"
+  [isEmpty]="!paymentsResource.value()?.length"
+>
+  @for (payment of paymentsResource.value(); track payment.id) {
+  <tr class="hover:bg-surface-card/30 transition-colors">
+    <td class="px-6 py-4 text-sm text-content-secondary">{{ payment.id }}</td>
+    <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ payment.user.name }}</td>
+    <td class="px-6 py-4 text-sm text-content-secondary">#{{ payment.reservation_id }}</td>
+    <td
+      class="px-6 py-4 text-sm font-medium"
+      [class.text-error]="payment.type === 'refund'"
+      [class.text-success-light]="payment.type === 'payment'"
+    >
+      {{ payment.type === 'payment' ? '+' : '-' }}{{ payment.amount | currency: 'EUR' : 'symbol' :
+      '1.2-2' }}
+    </td>
+    <td class="px-6 py-4 text-sm text-zinc-400">
+      <span
+        class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-xs"
+        [class]="
+            payment.type === 'payment'
+              ? 'bg-primary/10 text-primary-light border border-primary/20'
+              : 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
+          "
+      >
+        {{ payment.type === 'payment' ? 'Pago' : 'Reembolso' }}
+      </span>
+    </td>
+    <td class="px-6 py-4 text-sm text-content-muted">{{ payment.created_at | date }}</td>
+  </tr>
+  }
+</app-data-table>
 }

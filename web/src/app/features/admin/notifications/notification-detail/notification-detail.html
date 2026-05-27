@@ -1,0 +1,42 @@
+<div class="max-w-400 mx-auto p-8 space-y-8">
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2 space-y-8">
+      <div class="bg-surface-card/30 border border-surface-border rounded-md p-6">
+        @if (notificationResource.isLoading()) {
+        <p class="text-primary animate-pulse flex justify-center">Cargando...</p>
+        } @else if (notificationResource.value(); as notification) {
+        <div class="space-y-6">
+          <div class="flex items-start justify-between">
+            <div class="space-y-1">
+              <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+                >Mensaje</span
+              >
+              <p class="text-md text-content-primary">{{ notification.message }}</p>
+            </div>
+          </div>
+
+          <div class="pt-6 border-t border-surface-border grid grid-cols-2 gap-8">
+            <div class="space-y-1">
+              <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+                >Enviada el</span
+              >
+              <p class="text-content-primary">
+                {{ notification.created_at | date: 'dd/MM/yyyy HH:mm' }}
+              </p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+                >Leída el</span
+              >
+              <p class="text-content-primary">
+                {{ notification.read_at ? (notification.read_at | date: 'dd/MM/yyyy HH:mm') :
+                'Pendiente de lectura' }}
+              </p>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </section>
+</div>

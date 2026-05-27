@@ -1,6 +1,6 @@
-import { name, version } from "../../../../package.json";
+import { name, version } from '../../../../package.json';
 
 export const APP = {
-	name,
-	version,
+  name,
+  version,
 } as const;

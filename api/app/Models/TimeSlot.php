@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['start', 'end'])]
 class TimeSlot extends Model
 {
-    use SoftDeletes;
+    /** @use HasFactory<\Database\Factories\TimeSlotFactory> */
+    use HasFactory, SoftDeletes;
 
     public $timestamps = false;
+
+    protected $fillable = ['start_time', 'end_time'];
 
     public function reservations(): HasMany
     {

@@ -1,0 +1,94 @@
+<section class="flex flex-col max-h-[75vh]">
+  <div class="flex items-center justify-between border-b border-surface-border pb-4 mb-6 shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="p-1.5 rounded-sm bg-primary/10">
+        <app-icon name="calendar-days" extraClass="size-7 text-primary" />
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-content-primary tracking-tight">
+          Historial de Reservas
+        </h2>
+        <p class="text-xs text-content-muted">
+          Gestiona tus próximas sesiones y revisa las anteriores
+        </p>
+      </div>
+    </div>
+    <span
+      class="px-2.5 py-1 text-xs font-medium bg-surface-card border border-surface-border text-content-secondary rounded"
+    >
+      {{ reservationsResource.value()?.length || 0 }} {{ reservationsResource.value()?.length === 1
+      ? 'reserva' : 'reservas' }}
+    </span>
+  </div>
+
+  <div class="overflow-y-auto space-y-3 pr-2 custom-scroll">
+    @if (reservationsResource.isLoading()) {
+    <app-loading-state text="Cargando reservas" />
+    } @else if (reservationsResource.error()) {
+    <app-error-state
+      text="No se han podido cargar tus reservas"
+      (retry)="reservationsResource.reload()"
+    />
+    } @else if (!reservationsResource.value()?.length) {
+    <app-empty-state text="Aún no tienes reservas" />
+    } @else { @for (reservation of reservations(); track reservation.id) {
+    <div class="bg-surface-card/40 border border-surface-border rounded-sm p-4">
+      <div class="flex items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <div
+              class="w-12 h-12 rounded-xs bg-surface-base border border-surface-border flex items-center justify-center text-content-secondary"
+            >
+              <app-icon name="computer-desktop" extraClass="size-6" />
+            </div>
+          </div>
+          <div class="min-w-0">
+            <h3 class="font-semibold text-content-primary text-sm">
+              {{ reservation.computer.name || 'PC-' + reservation.computer_id }}
+              <span class="text-content-muted">-</span>
+              {{ `Reserva #${reservation.id}` }}
+            </h3>
+            <div class="flex items-center gap-2 mt-0.5">
+              <span class="text-[10px] uppercase tracking-wider font-medium text-content-muted">
+                {{ reservation.date | date: 'longDate' }}
+              </span>
+              <span class="size-1 rounded-full bg-surface-border"></span>
+              <span class="text-[10px] tracking-wider font-bold text-primary">
+                {{ reservation.start_time }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <div class="flex flex-col items-end gap-2">
+            @if (reservation.displayStatus === 'canCancel') {
+            <button
+              type="button"
+              class="inline-flex items-center px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-xs border bg-surface-base border-surface-border text-content-secondary hover:text-error hover:border-error/30 hover:bg-error/5 transition-all cursor-pointer"
+              (click)="cancelReservation(reservation.id)"
+            >
+              Cancelar
+            </button>
+            } @else {
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-xs border"
+              [class]="
+                      reservation.displayStatus === 'Confirmado'
+                        ? 'bg-success/10 text-success border-success/20'
+                        : 'bg-error/10 text-error border-error/20'
+                    "
+            >
+              {{ reservation.displayStatus }}
+            </span>
+            }
+            <p class="font-game text-content-primary text-[10px] opacity-80">
+              {{ reservation.total_price | currency: 'EUR' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    } }
+  </div>
+</section>

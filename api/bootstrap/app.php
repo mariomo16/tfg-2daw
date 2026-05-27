@@ -7,11 +7,13 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         api: __DIR__ . '/../routes/api.php',
-        commands: __DIR__ . '/../routes/console.php',
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
+    })
+    ->withSchedule(function ($schedule) {
+        $schedule->command('app:update-computer-status')->everyMinute();
     })->create();

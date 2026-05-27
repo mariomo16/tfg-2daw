@@ -17,6 +17,7 @@ class ComputerResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'specs' => $this->specs,
             'status' => $this->status,
             'zone_id' => $this->zone_id,
             'zone' => $this->whenLoaded('zone'),

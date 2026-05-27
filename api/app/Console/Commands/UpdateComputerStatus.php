@@ -32,21 +32,33 @@ class UpdateComputerStatus extends Command
         $today = $now->toDateString();
         $currentTime = $now->toTimeString();
 
+        $this->info("Comprobando reservas de $today a $currentTime...");
+
         $activeReservations = Reservation::whereDate('date', $today)
             ->where('status', 'confirmed')
             ->whereHas('timeSlot', function ($query) use ($currentTime) {
-                $query->where('start', '<=', $currentTime)
-                    ->where('end', '>', $currentTime);
+                $query->where('start_time', '<=', $currentTime)
+                    ->where('end_time', '>', $currentTime);
             })
             ->pluck('computer_id')
             ->toArray();
 
-        Computer::whereIn('id', $activeReservations)
+        $updatedToOccupied = Computer::whereIn('id', $activeReservations)
             ->where('status', 'available')
             ->update(['status' => 'occupied']);
 
-        Computer::whereNotIn('id', $activeReservations)
+        if ($updatedToOccupied > 0) {
+            $this->info("Updated $updatedToOccupied computers to occupied.");
+        }
+
+        $updatedToAvailable = Computer::whereNotIn('id', $activeReservations)
             ->where('status', 'occupied')
             ->update(['status' => 'available']);
+
+        if ($updatedToAvailable > 0) {
+            $this->info("Updated $updatedToAvailable computers to available.");
+        }
+
+        $this->info('Status update completed.');
     }
 }

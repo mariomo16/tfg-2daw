@@ -1,55 +1,43 @@
+@if (reservationsResource.isLoading()) {
+<app-loading-state />
+} @else if (reservationsResource.error()) {
+<app-error-state />
+} @else {
 <app-data-table
   title="Reservas"
   description="Gestiona las reservas de los usuarios"
   [columns]="columns"
   [actions]="actions"
-  [isEmpty]="!reservationsResource.isLoading() && !reservationsResource.value()?.length"
+  [isEmpty]="!reservationsResource.value()?.length"
 >
-  @if (reservationsResource.isLoading()) {
-    <tr>
-      <td [attr.colspan]="columns.length">
-        <app-loading-state />
-      </td>
-    </tr>
-  } @else if (reservationsResource.error()) {
-    <tr>
-      <td [attr.colspan]="columns.length">
-        <app-error-state />
-      </td>
-    </tr>
-  } @else {
-    @for (reservation of reservationsResource.value(); track reservation.id) {
-      <tr class="hover:bg-surface-card/30 transition-colors">
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ reservation.id }}</td>
-        <td class="px-6 py-4 text-sm font-medium text-content-primary">
-          {{ reservation.user?.name }}
-        </td>
-        <td class="px-6 py-4 text-sm text-content-secondary">
-          {{ `PC-${reservation.computerId}` }}
-        </td>
-        <td class="px-6 py-4 text-sm text-content-secondary">
-          {{ reservation.date | date: 'mediumDate' }}
-        </td>
-        <td class="px-6 py-4 text-sm text-content-secondary">
-          {{ reservation.timeslot!.start.slice(0, 5) }} -
-          {{ reservation.timeslot!.end.slice(0, 5) }}
-        </td>
-        <td class="px-6 py-4 text-sm text-content-secondary">
-          <span
-            class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-xs"
-            [class]="
-              reservation.status === 'confirmed'
-                ? 'bg-success/10 text-success-light border border-success/20'
-                : 'bg-error/10 text-error border border-error/20'
-            "
-          >
-            {{ reservation.status === 'confirmed' ? 'Confirmada' : 'Cancelada' }}
-          </span>
-        </td>
-        <td class="px-6 py-4 text-sm text-content-secondary">
-          {{ reservation.price }}
-        </td>
-      </tr>
-    }
+  @for (reservation of reservationsResource.value(); track reservation.id) {
+  <tr class="hover:bg-surface-card/30 transition-colors">
+    <td class="px-6 py-4 text-sm text-content-secondary">{{ reservation.id }}</td>
+    <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ reservation.user.name }}</td>
+    <td class="px-6 py-4 text-sm text-content-secondary">{{ `PC-${reservation.computer_id}` }}</td>
+    <td class="px-6 py-4 text-sm text-content-secondary">
+      {{ reservation.date | date: 'mediumDate' }}
+    </td>
+    <td class="px-6 py-4 text-sm text-content-secondary">
+      {{ reservation.timeslot.start_time.slice(0, 5) }} - {{ reservation.timeslot.end_time.slice(0,
+      5) }}
+    </td>
+    <td class="px-6 py-4 text-sm text-content-secondary">
+      <span
+        class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-xs"
+        [class]="
+            reservation.status === 'confirmed'
+              ? 'bg-success/10 text-success-light border border-success/20'
+              : 'bg-error/10 text-error border border-error/20'
+          "
+      >
+        {{ reservation.status === 'confirmed' ? 'Confirmada' : 'Cancelada' }}
+      </span>
+    </td>
+    <td class="px-6 py-4 text-sm text-content-secondary">
+      {{ reservation.total_price | currency: 'EUR' : 'symbol' : '1.2-2' }}
+    </td>
+  </tr>
   }
 </app-data-table>
+}

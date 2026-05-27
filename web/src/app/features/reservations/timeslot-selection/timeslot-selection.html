@@ -1,0 +1,40 @@
+<section class="animate-fade-in-up">
+  <div class="flex items-center gap-2 mb-8">
+    <div class="h-px w-8 bg-primary"></div>
+    <h2 class="text-2xl font-bold tracking-tight">Selecciona la franja horaria</h2>
+  </div>
+
+  @if (timeslotsResource.isLoading()) {
+  <app-loading-state text="Cargando franjas" />
+  } @else if (timeslotsResource.error()) {
+  <app-error-state text="Error al cargar las franjas" (retry)="timeslotsResource.reload()" />
+  } @else {
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+    @for (timeslot of timeslotsResource.value(); track timeslot.id) {
+    <button
+      type="button"
+      class="bg-surface-card border border-white/5 rounded-sm p-5 text-center transition-all select-none block w-full disabled:opacity-40 disabled:cursor-not-allowed hover:border-white/20 cursor-pointer"
+      [class.bg-blue-500]="selectedTimeSlot()?.id === timeslot.id"
+      [disabled]="isPast(timeslot.start_time) || isFull(timeslot)"
+      (click)="selectTimeSlot(timeslot)"
+    >
+      <div class="flex justify-center items-center gap-2 text-xl font-bold">
+        <span>{{ timeslot.start_time }}</span>
+        <span class="text-content-secondary">-</span>
+        <span>{{ timeslot.end_time }}</span>
+      </div>
+
+      @if (isFull(timeslot) && !isPast(timeslot.start_time)) {
+      <span class="text-xs uppercase tracking-widest text-error font-bold mt-1 block">
+        Agotado
+      </span>
+      } @else if (isPast(timeslot.start_time)) {
+      <span class="text-xs uppercase tracking-widest text-content-secondary font-bold mt-1 block">
+        Pasado
+      </span>
+      }
+    </button>
+    }
+  </div>
+  }
+</section>

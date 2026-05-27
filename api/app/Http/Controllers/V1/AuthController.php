@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Enums\AuthMessage;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::create($request->validated());
 
@@ -28,8 +30,8 @@ class AuthController extends Controller
         $user = User::where('email', $request->validated('email'))->first();
 
         if (!$user || !Hash::check($request->validated('password'), $user->password)) {
-            return response()->json([
-                'email' => 'No existe ningún usuario con esas credenciales.',
+            throw ValidationException::withMessages([
+                'email' => AuthMessage::FAILED->message(),
             ]);
         }
 
@@ -44,6 +46,11 @@ class AuthController extends Controller
         auth()->user()->currentAccessToken()->delete();
 
         return response()->noContent();
+    }
+
+    public function me(): JsonResponse
+    {
+        return response()->json(new UserResource(auth()->user()));
     }
 
     private function generateToken(User $user): string

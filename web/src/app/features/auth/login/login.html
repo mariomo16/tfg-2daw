@@ -1,65 +1,109 @@
-<section class="min-h-screen w-full flex items-center justify-center p-4">
-  <img
-    src="https://images.igdb.com/igdb/image/upload/t_original/scsvjv.jpg"
-    alt="Background"
-    class="opacity-20 fixed inset-0 h-full w-full object-cover z-0"
-  />
-
+<section
+  class="relative min-h-screen flex items-center justify-center bg-surface-base overflow-hidden selection:bg-primary/30"
+>
   <div
-    class="relative z-10 w-full max-w-md bg-surface-card border border-surface-border p-8 shadow-2xl backdrop-blur-sm"
-  >
-    <header class="text-center mb-8">
-      <h1 class="font-diablo text-4xl text-primary-light uppercase tracking-widest">Bienvenido</h1>
-    </header>
+    class="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
+    style="
+      background-image: radial-gradient(#f1f5f9 1px, transparent 1px);
+      background-size: 24px 24px;
+    "
+  ></div>
 
-    <form [formRoot]="form" (submit)="onSubmit()" class="flex flex-col gap-5">
-      <div class="flex flex-col gap-1.5">
-        <label for="email" class="text-sm font-medium text-content-primary"
-          >Correo Electrónico</label
-        >
-        <input
-          id="email"
-          type="email"
-          [formField]="form.email"
-          placeholder="tu@correo.com"
-          class="bg-surface-base border border-surface-border p-3 rounded-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-content-primary"
-        />
-        @if (form.email().touched() && form.email().errors().length > 0) {
-          <span class="text-error text-xs">{{ form.email().errors()[0].message }}</span>
-        }
-      </div>
-
-      <div class="flex flex-col gap-1.5">
-        <label for="password" class="text-sm font-medium text-content-primary">Contraseña</label>
-        <input
-          id="password"
-          type="password"
-          [formField]="form.password"
-          placeholder="••••••••"
-          class="bg-surface-base border border-surface-border p-3 rounded-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-content-primary tracking-widest"
-        />
-        @if (form.password().touched() && form.password().errors().length > 0) {
-          <span class="text-error text-xs">{{ form.password().errors()[0].message }}</span>
-        }
-      </div>
-
-      <div class="mt-4 flex justify-center">
-        <app-gaming-button
-          label="INICIAR SESIÓN"
-          type="submit"
-          class="w-full flex justify-center"
-          [asLink]="false"
-        />
-      </div>
-
-      <p class="text-center text-sm text-content-secondary mt-4">
-        ¿No tienes cuenta?
+  <div class="relative z-10 w-full max-w-100 mx-4">
+    <div class="border border-surface-border/20 bg-surface-card rounded-sm p-8">
+      <div class="flex items-center gap-6 mb-8">
         <a
-          routerLink="/register"
-          class="text-primary-light hover:underline font-medium transition-colors"
-          >Registrate</a
+          routerLink="/"
+          aria-label="Volver al inicio"
+          class="flex items-center justify-center w-8 h-8 text-content-secondary hover:text-white transition-colors"
         >
-      </p>
-    </form>
+          <app-icon name="arrow-left" extraClass="size-6" />
+        </a>
+
+        <h1 class="text-2xl font-bold text-content-primary tracking-tight">Bienvenido de nuevo</h1>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+        @if (error()) {
+        <div
+          class="p-3 bg-error/10 border border-error/20 rounded-xl text-sm text-error font-medium"
+        >
+          {{ error() }}
+        </div>
+        }
+        <div class="space-y-2">
+          <label
+            for="login-email"
+            class="text-xs font-semibold text-content-secondary uppercase tracking-wider ml-1"
+          >
+            Correo electrónico
+          </label>
+          <div class="relative group">
+            <input
+              id="login-email"
+              type="email"
+              formControlName="email"
+              placeholder="nombre@ejemplo.com"
+              class="w-full px-4 py-3 bg-surface-base border rounded-xs text-sm text-content-primary placeholder-content-muted focus:outline-none transition-all"
+              [class]="
+                form.controls.email.invalid && form.controls.email.touched
+                  ? 'border-error/50 focus:border-error/50 focus:ring-1 focus:ring-error/50 '
+                  : 'border-surface-border/50 focus:border-primary/50 focus:ring-primary/50'
+              "
+            />
+            @if (form.controls.email.invalid && form.controls.email.touched) {
+            <p class="text-[11px] text-error mt-1.5 ml-1">Introduzca un correo válido</p>
+            }
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between ml-1">
+            <label
+              for="login-password"
+              class="text-xs font-semibold text-content-secondary uppercase tracking-wider"
+            >
+              Contraseña
+            </label>
+          </div>
+          <input
+            id="login-password"
+            type="password"
+            formControlName="password"
+            placeholder="••••••••"
+            class="w-full px-4 py-3 bg-surface-base border rounded-xs text-sm text-content-primary placeholder-content-muted focus:outline-none transition-all"
+            [class]="
+              form.controls.password.invalid && form.controls.password.touched
+                ? 'border-error/50 focus:border-error/50 focus:ring-1 focus:ring-error/50 '
+                : 'border-surface-border/50 focus:border-primary/50 focus:ring-primary/50'
+            "
+          />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+          <p class="text-[11px] text-error mt-1.5 ml-1">La contraseña es obligatoria</p>
+          }
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 text-sm font-bold text-surface-base flex items-center justify-center gap-2 bg-content-primary rounded-xs hover:bg-white transition-all cursor-pointer mt-2 disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          @if (isLoading()) {
+          <app-icon name="loader" extraClass="size-5 animate-spin"></app-icon>
+          Iniciando sesión... } @else { Iniciar Sesión }
+        </button>
+      </form>
+
+      <div class="text-center mt-4">
+        <p class="text-sm text-content-secondary">
+          ¿No tienes una cuenta?
+          <a
+            routerLink="/auth/register"
+            class="font-bold text-content-primary hover:text-primary ml-1"
+          >
+            Regístrate ahora
+          </a>
+        </p>
+      </div>
+    </div>
   </div>
 </section>

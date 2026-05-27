@@ -24,9 +24,7 @@ class ZoneRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'description' => ['required', 'string', 'max:100'],
-            'cover_image' => ['nullable', 'string'],
-            'price' => ['required', 'numeric', 'between:0,99.99']
+            'price_per_slot' => ['required', 'numeric', 'between:0,99.99']
         ];
     }
 
@@ -35,10 +33,9 @@ class ZoneRequest extends FormRequest
         return [
             'name.required' => 'El nombre de la zona es necesario.',
             'name.string' => 'El nombre de la zona debe ser una cadena de texto.',
-            'price.required' => 'El precio/hora de la zona es necesario.',
-            'price.numeric' => 'El precio/hora de la zona debe ser un número.',
-            'price.between' => 'El precio/hora de la zona debe ser entre 0 y 99.99.',
-            'cover_image.string' => 'La imagen de la zona debe ser una URL.'
+            'price_per_slot.required' => 'El precio/hora de la zona es necesario.',
+            'price_per_slot.numeric' => 'El precio/hora de la zona debe ser un número.',
+            'price_per_slot.between' => 'El precio/hora de la zona debe ser entre 0 y 99.99.'
         ];
     }
 }

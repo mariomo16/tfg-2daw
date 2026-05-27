@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\NotificationRequest;
 use App\Http\Resources\NotificationResource;
 use App\Models\Notification;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class NotificationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): JsonResponse
     {
         return response()->json(
@@ -22,10 +19,7 @@ class NotificationController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(NotificationRequest $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $notification = Notification::create($request->all());
 
@@ -35,9 +29,6 @@ class NotificationController extends Controller
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Notification $notification): JsonResponse
     {
         return response()->json(
@@ -46,10 +37,7 @@ class NotificationController extends Controller
         );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(NotificationRequest $request, Notification $notification): JsonResponse
+    public function update(Request $request, Notification $notification): JsonResponse
     {
         $notification->update($request->all());
 
@@ -59,13 +47,20 @@ class NotificationController extends Controller
         );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Notification $notification): Response
     {
         $notification->delete();
 
         return response()->noContent();
+    }
+
+    public function myNotifications(): JsonResponse
+    {
+        $notifications = auth()->user()->notifications();
+
+        return response()->json(
+            NotificationResource::collection($notifications->with('user')->get()),
+            200
+        );
     }
 }

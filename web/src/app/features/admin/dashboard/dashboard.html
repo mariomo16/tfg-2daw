@@ -1,0 +1,27 @@
+<div class="max-w-400 mx-auto p-8 space-y-8">
+  <header>
+    <h1 class="text-3xl font-bold text-content-primary tracking-tight">Dashboard</h1>
+    <p class="text-content-muted mt-2">Panel de administración, para jugar a ser dios.</p>
+  </header>
+
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    @for (item of data(); track item.title) {
+    <app-dashboard-card [data]="item" />
+    }
+  </section>
+
+  <section class="bg-surface-card/30 border border-surface-border rounded-sm">
+    <div class="p-6 border-b border-surface-border">
+      <h2 class="text-lg font-semibold text-content-primary">No se que poner aquí</h2>
+    </div>
+    <div class="p-6">
+      <div class="space-y-6">
+        <div
+          class="h-40 bg-surface-border/20 border border-dashed border-surface-border rounded-xs flex items-center justify-center text-content-muted italic"
+        >
+          No se que poner aquí
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

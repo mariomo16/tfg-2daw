@@ -1,0 +1,93 @@
+<app-navbar />
+
+<main class="min-h-screen bg-surface-base pt-32 pb-24">
+  <div class="max-w-7xl mx-auto px-6">
+    @if (zoneResource.isLoading()) {
+    <app-loading-state text="Cargando zonas" />
+    } @else if (zoneResource.error()) {
+    <app-error-state (retry)="zoneResource.reload()" />
+    } @else { @let zone = zoneResource.value();
+    <header class="mb-20 animate-fade-in">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-10">
+        <div class="flex-1">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-8">
+            <div
+              class="size-20 rounded-sm flex items-center justify-center text-4xl border border-white/10 relative"
+            >
+              <app-icon
+                [name]="zone?.icon ?? 'computer-desktop'"
+                [style.color]="zone?.accent"
+                extraClass="size-14"
+              />
+            </div>
+
+            <div>
+              <h1 class="font-game text-4xl text-content-primary tracking-tighter uppercase mb-4">
+                {{ zone?.name }}
+              </h1>
+              <div class="flex flex-wrap items-center gap-6 text-content-secondary">
+                <span class="flex items-center gap-2.5">
+                  <span class="text-2xl font-bold text-white"
+                    >{{ zone?.price_per_slot | currency: 'EUR' : 'symbol' : '1.2-2' }}</span
+                  >
+                  <span class="text-xs uppercase font-bold tracking-wider text-content-muted"
+                    >/ sesión</span
+                  >
+                </span>
+                <div class="text-content-muted">|</div>
+                <span class="flex items-center gap-2 text-sm font-medium">
+                  <app-icon name="computer-desktop" extraClass="size-4" />
+                  {{ zone?.totalComputers }} ordenadores
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    @if (zone?.totalComputers === 0) {
+    <div class="flex justify-center items-center min-h-64 animate-fade-in-up">
+      <app-empty-state text="Esta zona aún no tiene equipos" />
+    </div>
+    } @else {
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 animate-fade-in-up"
+    >
+      @for (computer of mappedComputers(); track computer.id) {
+      <div
+        class="bg-surface-card/20 border border-surface-border/30 rounded-sm p-8 flex flex-col h-full relative"
+      >
+        <div class="flex justify-between items-start mb-8 relative z-10">
+          <div
+            class="size-14 rounded-xs bg-surface-base/80 flex items-center justify-center border border-white/5"
+          >
+            <app-icon name="computer-desktop" class="text-content-secondary" extraClass="size-7" />
+          </div>
+          <span
+            class="text-[0.6rem] font-black uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-xs border"
+            [class]="computerStatusAccent(computer.status)"
+          >
+            {{ computerStatus(computer.status) }}
+          </span>
+        </div>
+
+        <div class="flex-1 relative z-10">
+          <h3 class="text-2xl font-bold text-content-primary mb-3 tracking-tight">
+            {{ computer.name }}
+          </h3>
+
+          <p
+            class="text-sm text-content-secondary leading-relaxed mb-8 opacity-80 transition-opacity"
+          >
+            {{ computer.specs ?? 'Sin informacion.' }}
+          </p>
+        </div>
+      </div>
+      }
+    </div>
+    } }
+  </div>
+</main>
+
+<app-footer />

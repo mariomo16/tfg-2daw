@@ -1,40 +1,40 @@
 @if (usersResource.isLoading()) {
-  <app-loading-state />
+<app-loading-state />
 } @else if (usersResource.error()) {
-  <app-error-state />
+<app-error-state />
 } @else {
-  <app-data-table
-    title="Usuarios"
-    description="Gestiona los usuarios registrados"
-    actionLabel="+ Nuevo usuario"
-    actionRoute="/admin/users/new"
-    [columns]="columns"
-    [actions]="actions"
-    [isEmpty]="!usersResource.value()?.length"
-  >
-    @for (user of usersResource.value(); track user.id) {
-      <tr class="hover:bg-surface-card/30 transition-colors">
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ user.id }}</td>
-        <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ user.name }}</td>
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ user.email }}</td>
-        <td class="px-6 py-4 text-sm text-content-secondary">{{ user.reservations?.length }}</td>
-        <td class="px-6 py-4 text-sm text-content-muted">{{ user.createdAt | date }}</td>
-        <td class="px-6 py-4 text-sm text-content-muted">{{ user.role }}</td>
-        <td class="px-6 py-4 text-right">
-          <a
-            [routerLink]="['/admin/users', user.id, 'edit']"
-            class="text-sm text-primary-light hover:text-primary transition-colors mr-3"
-            >Editar</a
-          >
-          <button
-            type="button"
-            (click)="onDelete(user.id)"
-            class="text-sm text-error hover:text-error/80 transition-colors cursor-pointer"
-          >
-            Eliminar
-          </button>
-        </td>
-      </tr>
-    }
-  </app-data-table>
+<app-data-table
+  title="Usuarios"
+  description="Gestiona los usuarios registrados"
+  actionLabel="+ Nuevo usuario"
+  actionRoute="/admin/users/new"
+  [columns]="columns"
+  [actions]="actions"
+  [isEmpty]="!usersResource.value()?.length"
+>
+  @for (user of usersResource.value(); track user.id) {
+  <tr class="hover:bg-surface-card/30 transition-colors">
+    <td class="px-6 py-4 text-sm text-content-secondary">{{ user.id }}</td>
+    <td class="px-6 py-4 text-sm font-medium text-content-primary">{{ user.name }}</td>
+    <td class="px-6 py-4 text-sm text-content-secondary">{{ user.email }}</td>
+    <td class="px-6 py-4 text-sm text-content-secondary">{{ user.reservations?.length }}</td>
+    <td class="px-6 py-4 text-sm text-content-muted">{{ user.created_at | date }}</td>
+    <td class="px-6 py-4 text-sm text-content-muted">{{ getUserRole(user.role) }}</td>
+    <td class="px-6 py-4 text-right">
+      <a
+        [routerLink]="['/admin/users', user.id, 'edit']"
+        class="text-sm text-primary-light hover:text-primary transition-colors mr-3"
+        >Editar</a
+      >
+      <button
+        type="button"
+        (click)="onDelete(user.id)"
+        class="text-sm text-error hover:text-error/80 transition-colors cursor-pointer"
+      >
+        Eliminar
+      </button>
+    </td>
+  </tr>
+  }
+</app-data-table>
 }

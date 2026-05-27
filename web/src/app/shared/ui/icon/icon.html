@@ -1,0 +1,9 @@
+<svg
+  class="size-5 {{ extraClass() }}"
+  [attr.fill]="filled() ? 'currentColor' : 'none'"
+  [attr.stroke]="filled() ? null : 'currentColor'"
+  [attr.strokeWidth]="filled() ? null : strokeWidth()"
+>
+  <title>svg-icon</title>
+  <use [attr.href]="'/sprite.svg#icon-' + name()" />
+</svg>

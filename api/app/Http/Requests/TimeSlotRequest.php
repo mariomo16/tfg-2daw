@@ -23,8 +23,8 @@ class TimeSlotRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start' => ['required'],
-            'end' => ['required']
+            'start_time' => ['required'],
+            'end_time' => ['required']
         ];
     }
 

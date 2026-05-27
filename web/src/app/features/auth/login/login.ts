@@ -1,62 +1,44 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	inject,
-	signal,
-} from "@angular/core";
-import {
-	email,
-	FormField,
-	FormRoot,
-	form,
-	required,
-} from "@angular/forms/signals";
-import { Router, RouterLink } from "@angular/router";
-import { AuthService } from "@core/auth/auth.service";
-import type { LoginDto } from "@shared/models/auth.model";
-import { GamingButton } from "@shared/ui/gaming-button/gaming-button";
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { Icon } from '../../../shared/ui/icon/icon';
+import { AuthService } from '../auth.service';
 
 @Component({
-	selector: "app-login",
-	imports: [FormRoot, FormField, RouterLink, GamingButton],
-	templateUrl: "./login.html",
-	changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-login',
+  imports: [RouterLink, Icon, ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './login.html',
 })
 export class Login {
-	readonly #authService = inject(AuthService);
-	readonly #router = inject(Router);
+  readonly #fb = inject(NonNullableFormBuilder);
+  readonly #authService = inject(AuthService);
+  readonly #router = inject(Router);
+  readonly #destroyRef = inject(DestroyRef);
 
-	protected readonly isLoading = this.#authService.isLoading;
+  readonly isLoading = this.#authService.isLoading;
+  readonly error = signal<string | null>(null);
 
-	// https://dev.to/abp_io/signal-based-forms-in-angular-21-why-youll-never-miss-reactive-forms-again-n7l
-	// https://angular.dev/guide/forms/signals/validation
-	protected readonly registerModel = signal<LoginDto>({
-		email: "",
-		password: "",
-	});
+  readonly form = this.#fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
+  });
 
-	protected readonly form = form(this.registerModel, (schemaPath) => {
-		required(schemaPath.email, { message: "El correo es obligatorio" });
-		email(schemaPath.email, {
-			message: "Introduce una dirección de correo válida",
-		});
+  onSubmit(): void {
+    this.error.set(null);
 
-		required(schemaPath.password, {
-			message: "La contraseña no puede estar vacía",
-		});
-	});
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-	onSubmit(): void {
-		if (!this.form().valid()) {
-			this.form().markAsTouched();
-			return;
-		}
-
-		const data = this.form().value();
-
-		this.#authService.login(data).subscribe({
-			next: () => this.#router.navigate(["/"]),
-			error: (err) => console.error("Error al iniciar sesión:", err),
-		});
-	}
+    this.#authService
+      .login(this.form.getRawValue())
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe({
+        next: () => this.#router.navigate(['/']),
+        error: () => this.error.set('No existe ningún usuario con esas credenciales'),
+      });
+  }
 }

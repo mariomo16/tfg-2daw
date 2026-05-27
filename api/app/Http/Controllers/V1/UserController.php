@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\V1;
 
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -11,12 +13,8 @@ use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): JsonResponse
     {
-        \info(auth()->user()->role);
         $this->authorize('viewAny', User::class);
 
         return response()->json(
@@ -25,20 +23,17 @@ class UserController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(UserRequest $request): JsonResponse
+    public function store(StoreUserRequest $request): JsonResponse
     {
         $this->authorize('create', User::class);
 
-        $data = $request->validated();
-
         // https://www.youtube.com/watch?v=SvIxR9oacJs
-        if ($request->hasFile('avatar_path')) {
-            $path = $request->file('avatar_path')->store('images', 'public');
-            $data = [...$data, 'avatar_path' => $path];
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
         }
+
+        $data = array_merge($request->validated(), ['image' => $imagePath]);
 
         $user = User::create($data);
 
@@ -48,9 +43,6 @@ class UserController extends Controller
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user): JsonResponse
     {
         $this->authorize('view', $user);
@@ -61,20 +53,17 @@ class UserController extends Controller
         );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UserRequest $request, User $user): JsonResponse
+    public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
         $this->authorize('update', $user);
 
-        $data = $request->validated();
-
         // https://www.youtube.com/watch?v=SvIxR9oacJs
-        if ($request->hasFile('avatar_path')) {
-            $path = $request->file('avatar_path')->store('images', 'public');
-            $data = [...$data, 'avatar_path' => $path];
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
         }
+
+        $data = array_merge($request->validated(), ['image' => $imagePath]);
 
         $user->update(array_filter($data));
 
@@ -84,9 +73,6 @@ class UserController extends Controller
         );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user): Response
     {
         $this->authorize('delete', $user);

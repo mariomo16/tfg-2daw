@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['name', 'status', 'zone_id'])]
 class Computer extends Model
 {
-    use SoftDeletes;
+    /** @use HasFactory<\Database\Factories\ComputerFactory> */
+    use HasFactory, SoftDeletes;
 
     public $timestamps = false;
+
+    protected $fillable = ['name', 'zone_id', 'status', 'specs'];
 
     public function zone(): BelongsTo
     {
